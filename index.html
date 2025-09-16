@@ -173,39 +173,22 @@
             setTimeout(() => { t.className = t.className.replace('show', ''); }, 3000);
         };
 
-        const handleUserRouting = async (user) => {
+        const routeUser = async (user) => {
             if (!user) {
                 hideLoader();
                 return;
             }
-        
+            
             showLoader();
             const userRef = doc(db, "users", user.uid);
-            
+            const userDoc = await getDoc(userRef);
+
             if (user.email === ADMIN_EMAIL) {
-                await setDoc(userRef, { 
-                    displayName: user.displayName || 'Admin',
-                    email: user.email,
-                    role: 'admin', 
-                    status: 'approved',
-                }, { merge: true });
                 window.location.href = '/admin.html';
                 return;
             }
-        
-            const userDoc = await getDoc(userRef);
-        
-            if (!userDoc.exists()) {
-                await setDoc(userRef, {
-                    displayName: user.displayName,
-                    email: user.email,
-                    photoURL: user.photoURL || null,
-                    role: 'user',
-                    status: 'pending',
-                    createdAt: serverTimestamp()
-                });
-                window.location.href = '/pending.html';
-            } else {
+
+            if (userDoc.exists()) {
                 const userData = userDoc.data();
                 switch (userData.status) {
                     case 'approved':
@@ -219,10 +202,27 @@
                         window.location.href = '/pending.html';
                         break;
                 }
+            } else {
+                // This case handles first-time Google sign-ins
+                await setDoc(userRef, {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL || null,
+                    role: 'user',
+                    status: 'pending',
+                    createdAt: serverTimestamp()
+                });
+                window.location.href = '/pending.html';
             }
         };
 
-        onAuthStateChanged(auth, handleUserRouting);
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                routeUser(user);
+            } else {
+                hideLoader();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             const loginForm = document.getElementById('login-form');
@@ -236,8 +236,14 @@
                 const password = loginForm['login-password'].value;
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
+                    // onAuthStateChanged will handle routing
                 } catch (error) {
-                    showToast("Invalid email or password.", "error");
+                    // This is the key fix: Check for specific auth errors.
+                    if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
+                         showToast("No account found. Please sign up.", "error");
+                    } else {
+                         showToast("An error occurred. Please try again.", "error");
+                    }
                     hideLoader();
                 }
             });
@@ -252,6 +258,19 @@
                 try {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(userCredential.user, { displayName: username });
+                    
+                    // Create Firestore document immediately after signup
+                    const userRef = doc(db, "users", userCredential.user.uid);
+                    await setDoc(userRef, {
+                        displayName: username,
+                        email: email,
+                        photoURL: null,
+                        role: 'user',
+                        status: 'pending',
+                        createdAt: serverTimestamp()
+                    });
+                    // onAuthStateChanged will now pick up the user and route to pending.html
+                    
                 } catch (error) {
                     if (error.code === 'auth/email-already-in-use') {
                         showToast('This email is already registered.', 'error');
@@ -269,6 +288,7 @@
                 try {
                     showLoader();
                     await signInWithPopup(auth, provider);
+                    // onAuthStateChanged will handle routing
                 } catch (error) {
                     showToast("Failed to sign in with Google.", "error");
                     hideLoader();
