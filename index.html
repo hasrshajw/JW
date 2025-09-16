@@ -69,7 +69,7 @@
             html, body { height: auto; overflow: auto; }
             body { background-color: #e9eef2; padding: 2rem; min-height: 100vh; }
             .container { flex-direction: row; max-width: 1200px; height: 800px; max-height: 95vh; border-radius: 2rem; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2); }
-            .info-panel { display: flex; flex-direction: column; justify-content: space-between; flex-basis: 55%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1586993451228-098a81de5d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') center center / cover; padding: 4rem; color: var(--pure-white); }
+            .info-panel { display: flex; flex-direction: column; justify-content: space-between; flex-basis: 55%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1586993451228-098a81de5d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG0by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') center center / cover; padding: 4rem; color: var(--pure-white); }
             .info-panel-header { font-size: 1.5rem; font-weight: 700; }
             .info-panel-text h2 { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
             .info-panel-text p { font-size: 1rem; max-width: 450px; line-height: 1.6; opacity: 0.8; }
@@ -156,21 +156,56 @@
     <div id="toast"></div>
     <div id="loader"><div class="spinner"></div></div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- HELPER FUNCTIONS ---
-            const showLoader = () => document.getElementById('loader').style.display = 'flex';
-            const hideLoader = () => document.getElementById('loader').style.display = 'none';
-            const showToast = (message, type = 'success') => {
-                const t = document.getElementById('toast');
-                t.textContent = message;
-                t.className = `show ${type}`;
-                setTimeout(() => {
-                    t.className = t.className.replace('show', '');
-                }, 3000);
-            }
+    <script type="module">
+        // Firebase v10 SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-            // --- EVENT BINDING ---
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
+            authDomain: "jwhelperr.firebaseapp.com",
+            projectId: "jwhelperr",
+            storageBucket: "jwhelperr.appspot.com",
+            messagingSenderId: "760897937861",
+            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac",
+            measurementId: "G-TDJZWN95BC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // --- HELPER FUNCTIONS ---
+        const showLoader = () => document.getElementById('loader').style.display = 'flex';
+        const hideLoader = () => document.getElementById('loader').style.display = 'none';
+        const showToast = (message, type = 'success') => {
+            const t = document.getElementById('toast');
+            t.textContent = message;
+            t.className = `show ${type}`;
+            setTimeout(() => {
+                t.className = t.className.replace('show', '');
+            }, 3000);
+        }
+
+        // --- AUTHENTICATION FLOW ---
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                // User is signed in.
+                console.log('User signed in, redirecting to /home');
+                showToast('Sign in successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = '/home';
+                }, 1000); // Delay for toast visibility
+            } else {
+                // User is signed out.
+                console.log('User is signed out.');
+                hideLoader(); // Ensure loader is hidden on this page
+            }
+        });
+
+        // --- EVENT BINDING ---
+        document.addEventListener('DOMContentLoaded', () => {
             const showLoginBtn = document.getElementById('show-login-btn');
             const showSignupBtn = document.getElementById('show-signup-btn');
             const loginForm = document.getElementById('login-form');
@@ -196,46 +231,56 @@
             document.querySelector('.switch-to-login').addEventListener('click', goToLogin);
             document.querySelector('.switch-to-signup').addEventListener('click', goToSignup);
 
-            // Handle form submissions (simulation)
-            loginForm.addEventListener('submit', (e) => {
+            // Handle Email/Password Login
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                showLoader();
                 const email = loginForm['login-email'].value;
                 const password = loginForm['login-password'].value;
-                
-                if (!email || !password) {
-                    showToast('Please fill in all fields.', 'error');
-                    return;
-                }
-                
-                showLoader();
-                setTimeout(() => {
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    // onAuthStateChanged will handle the successful redirect.
+                } catch (error) {
+                    console.error("Login Error:", error.code);
+                    showToast("Invalid email or password.", "error");
                     hideLoader();
-                    showToast('Signed in successfully!', 'success');
-                }, 1500); // Simulate network delay
+                }
             });
 
-            signupForm.addEventListener('submit', (e) => {
+            // Handle Email/Password Sign Up
+            signupForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const username = signupForm['signup-username'].value;
+                showLoader();
                 const email = signupForm['signup-email'].value;
                 const password = signupForm['signup-password'].value;
-
-                if (!username || !email || !password) {
-                    showToast('Please fill in all fields.', 'error');
-                    return;
-                }
-                
-                showLoader();
-                setTimeout(() => {
+                try {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    // onAuthStateChanged will handle the successful redirect.
+                } catch (error) {
+                    console.error("Signup Error:", error.code);
+                    if (error.code === 'auth/email-already-in-use') {
+                        showToast('This email is already registered.', 'error');
+                    } else if (error.code === 'auth/weak-password') {
+                        showToast('Password should be at least 6 characters.', 'error');
+                    } else {
+                        showToast('Failed to create account.', 'error');
+                    }
                     hideLoader();
-                    showToast('Account created successfully!', 'success');
-                    goToLogin(); // Switch to login form after successful signup
-                }, 1500); // Simulate network delay
+                }
             });
             
-            // Handle Google button click
-            googleSigninBtn.addEventListener('click', () => {
-                showToast('This feature is not available.', 'error');
+            // Handle Google Sign In
+            googleSigninBtn.addEventListener('click', async () => {
+                const provider = new GoogleAuthProvider();
+                try {
+                    showLoader();
+                    await signInWithPopup(auth, provider);
+                    // onAuthStateChanged will handle the successful redirect.
+                } catch (error) {
+                    console.error("Google Sign-In Error", error);
+                    showToast("Failed to sign in with Google.", "error");
+                    hideLoader();
+                }
             });
         });
     </script>
