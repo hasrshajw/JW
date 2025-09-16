@@ -49,7 +49,7 @@
             justify-content: space-between;
             align-items: center;
             height: 56px;
-            padding: 0 15px 0 0; 
+            padding: 0 15px; 
         }
         #mobileNavTopBar .mobileLogo {
             display: block;
@@ -59,6 +59,7 @@
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center left;
+            flex-shrink: 0;
         }
         .srText {
             position: absolute;
@@ -70,6 +71,27 @@
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
             border: 0;
+        }
+        .header-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .admin-button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .admin-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
         .header-icons {
             display: flex;
@@ -274,14 +296,20 @@
 <body>
     <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
-            <a href="/home.html" class="mobileLogo" title="JW.ORG Home">
-                <span class="srText">JW.ORG</span>
+            <a href="/home.html" class="mobileLogo" title="Home">
+                <span class="srText">Home</span>
             </a>
-            <div class="header-icons" id="menu-toggle-button">
-                <svg class="hamburger-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
-                <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path>
-                </svg>
+            <div class="header-right-controls">
+                <a href="/admin.html" id="admin-dashboard-link" class="admin-button" style="display: none;">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
+                </a>
+                <div class="header-icons" id="menu-toggle-button">
+                    <svg class="hamburger-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path>
+                    </svg>
+                </div>
             </div>
         </div>
     </header>
@@ -289,12 +317,6 @@
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
-            <li id="admin-dashboard-link" style="display: none;">
-                <a href="/admin.html">
-                    <i class="fas fa-tachometer-alt menu-icon"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
             <li><a href="#"><i class="fas fa-home menu-icon"></i><span>హోమ్</span></a></li>
             <li class="has-submenu">
                 <a href="#"><i class="fas fa-book-open menu-icon"></i><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
@@ -332,6 +354,7 @@
         const body = document.body;
         
         const submenuTriggers = document.querySelectorAll('.has-submenu > a');
+
         submenuTriggers.forEach(trigger => {
             trigger.addEventListener('click', function(event) {
                 event.preventDefault();
@@ -361,7 +384,11 @@
         }
 
         menuToggleButton.addEventListener('click', () => {
-            if (body.classList.contains('menu-open')) { closeMenu(); } else { openMenu(); }
+            if (body.classList.contains('menu-open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
         });
         
         menuOverlay.addEventListener('click', closeMenu);
@@ -400,21 +427,18 @@
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     
-                    if (userData.status !== 'approved') {
-                        window.location.href = '/'; 
-                        return;
-                    }
-
-                    profileImage.src = user.photoURL || 'https://placehold.co/44x44/666/fff?text=' + (user.displayName || user.email)[0].toUpperCase();
-                    profileName.textContent = user.displayName || 'No Name';
-                    profileEmail.textContent = user.email;
-
                     if (userData.role === 'admin') {
-                        adminDashboardLink.style.display = 'list-item';
+                        adminDashboardLink.style.display = 'flex';
                     }
-                    
-                    document.body.classList.add('auth-ready');
 
+                    if (userData.status === 'approved') {
+                        profileImage.src = user.photoURL || 'https://placehold.co/44x44/666/fff?text=' + (user.displayName || user.email)[0].toUpperCase();
+                        profileName.textContent = user.displayName || 'No Name';
+                        profileEmail.textContent = user.email;
+                        document.body.classList.add('auth-ready');
+                    } else {
+                        window.location.href = '/'; 
+                    }
                 } else {
                     window.location.href = '/'; 
                 }
