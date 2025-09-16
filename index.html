@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deeps Beer Cafe</title>
+    <title>Deeps Beer Cafe - Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-dark: #4a6da7;
-            --accent-green: #4a6da7; /* Changed to new color */
+            --accent-green: #4a6da7; /* Main color */
             --pure-white: #FFFFFF;
             --light-gray: #f5f5f5;
             --text-color: #333;
@@ -28,7 +28,7 @@
         .form-panel-wrapper { flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow-y: auto; }
         .info-panel { display: none; }
 
-        /* Auth Section - Now visible by default on mobile */
+        /* Auth Section */
         #auth-section { display: flex; flex-direction: column; padding: 4rem 2rem 2rem; flex-grow: 1; justify-content: flex-start; }
         .form-toggle { display: flex; justify-content: center; background-color: var(--light-gray); border-radius: 12px; padding: 5px; margin-bottom: 2.5rem; flex-shrink: 0; }
         .toggle-btn { width: 50%; padding: 0.75rem; border: none; background-color: transparent; color: var(--text-light); font-size: 0.9rem; font-weight: 600; border-radius: 9px; cursor: pointer; transition: all 0.3s ease; }
@@ -55,7 +55,7 @@
         .switch-form-text { text-align: center; margin-top: 2rem; font-size: 0.9rem; color: var(--text-light); }
         .switch-form-text a { color: var(--text-color); font-weight: 600; text-decoration: none; cursor: pointer; }
 
-        /* Feedback Elements (Loader & Toast) */
+        /* Feedback Elements */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(4px); }
         .spinner { width: 48px; height: 48px; border: 5px solid rgba(74, 109, 167, 0.2); border-bottom-color: var(--accent-green); border-radius: 50%; animation: rotation 1s linear infinite; }
         #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1001; }
@@ -69,7 +69,7 @@
             html, body { height: auto; overflow: auto; }
             body { background-color: #e9eef2; padding: 2rem; min-height: 100vh; }
             .container { flex-direction: row; max-width: 1200px; height: 800px; max-height: 95vh; border-radius: 2rem; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2); }
-            .info-panel { display: flex; flex-direction: column; justify-content: space-between; flex-basis: 55%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1586993451228-098a81de5d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG0by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') center center / cover; padding: 4rem; color: var(--pure-white); }
+            .info-panel { display: flex; flex-direction: column; justify-content: space-between; flex-basis: 55%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1586993451228-098a81de5d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') center center / cover; padding: 4rem; color: var(--pure-white); }
             .info-panel-header { font-size: 1.5rem; font-weight: 700; }
             .info-panel-text h2 { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
             .info-panel-text p { font-size: 1rem; max-width: 450px; line-height: 1.6; opacity: 0.8; }
@@ -159,7 +159,7 @@
     <script type="module">
         // Firebase v10 SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -191,16 +191,14 @@
         // --- AUTHENTICATION FLOW ---
         onAuthStateChanged(auth, user => {
             if (user) {
-                // User is signed in.
                 console.log('User signed in, redirecting to /home');
                 showToast('Sign in successful! Redirecting...', 'success');
                 setTimeout(() => {
                     window.location.href = '/home';
-                }, 1000); // Delay for toast visibility
+                }, 1000);
             } else {
-                // User is signed out.
                 console.log('User is signed out.');
-                hideLoader(); // Ensure loader is hidden on this page
+                hideLoader();
             }
         });
 
@@ -239,7 +237,6 @@
                 const password = loginForm['login-password'].value;
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
-                    // onAuthStateChanged will handle the successful redirect.
                 } catch (error) {
                     console.error("Login Error:", error.code);
                     showToast("Invalid email or password.", "error");
@@ -251,11 +248,18 @@
             signupForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 showLoader();
+                const username = signupForm['signup-username'].value;
                 const email = signupForm['signup-email'].value;
                 const password = signupForm['signup-password'].value;
+                
                 try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    // onAuthStateChanged will handle the successful redirect.
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    
+                    // **THE FIX**: Update the new user's profile with the display name
+                    await updateProfile(userCredential.user, {
+                        displayName: username
+                    });
+
                 } catch (error) {
                     console.error("Signup Error:", error.code);
                     if (error.code === 'auth/email-already-in-use') {
@@ -275,7 +279,6 @@
                 try {
                     showLoader();
                     await signInWithPopup(auth, provider);
-                    // onAuthStateChanged will handle the successful redirect.
                 } catch (error) {
                     console.error("Google Sign-In Error", error);
                     showToast("Failed to sign in with Google.", "error");
