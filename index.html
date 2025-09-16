@@ -145,7 +145,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -171,9 +171,9 @@
             t.textContent = message;
             t.className = `show ${type}`;
             setTimeout(() => { t.className = t.className.replace('show', ''); }, 3000);
-        }
+        };
 
-        const handleUser = async (user) => {
+        const handleUserRouting = async (user) => {
             if (!user) {
                 hideLoader();
                 return;
@@ -188,7 +188,6 @@
                     email: user.email,
                     role: 'admin', 
                     status: 'approved',
-                    lastLogin: new Date().toISOString()
                 }, { merge: true });
                 window.location.href = '/admin.html';
                 return;
@@ -198,16 +197,15 @@
         
             if (!userDoc.exists()) {
                 await setDoc(userRef, {
-                    displayName: user.displayName || user.email.split('@')[0],
+                    displayName: user.displayName,
                     email: user.email,
-                    photoURL: user.photoURL,
+                    photoURL: user.photoURL || null,
                     role: 'user',
                     status: 'pending',
-                    createdAt: new Date().toISOString()
-                }, { merge: true });
+                    createdAt: serverTimestamp()
+                });
                 window.location.href = '/pending.html';
             } else {
-                await setDoc(userRef, { lastLogin: new Date().toISOString() }, { merge: true });
                 const userData = userDoc.data();
                 switch (userData.status) {
                     case 'approved':
@@ -224,32 +222,12 @@
             }
         };
 
-        onAuthStateChanged(auth, handleUser);
+        onAuthStateChanged(auth, handleUserRouting);
 
         document.addEventListener('DOMContentLoaded', () => {
-            const showLoginBtn = document.getElementById('show-login-btn');
-            const showSignupBtn = document.getElementById('show-signup-btn');
             const loginForm = document.getElementById('login-form');
             const signupForm = document.getElementById('signup-form');
             const googleSigninBtn = document.getElementById('google-signin-btn');
-
-            const goToLogin = () => {
-                signupForm.classList.remove('active');
-                showSignupBtn.classList.remove('active');
-                loginForm.classList.add('active');
-                showLoginBtn.classList.add('active');
-            };
-            const goToSignup = () => {
-                loginForm.classList.remove('active');
-                showLoginBtn.classList.remove('active');
-                signupForm.classList.add('active');
-                showSignupBtn.classList.add('active');
-            };
-            
-            showLoginBtn.addEventListener('click', goToLogin);
-            showSignupBtn.addEventListener('click', goToSignup);
-            document.querySelector('.switch-to-login').addEventListener('click', goToLogin);
-            document.querySelector('.switch-to-signup').addEventListener('click', goToSignup);
 
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -274,7 +252,6 @@
                 try {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(userCredential.user, { displayName: username });
-                    await handleUser(userCredential.user);
                 } catch (error) {
                     if (error.code === 'auth/email-already-in-use') {
                         showToast('This email is already registered.', 'error');
@@ -297,6 +274,25 @@
                     hideLoader();
                 }
             });
+
+            const showLoginBtn = document.getElementById('show-login-btn');
+            const showSignupBtn = document.getElementById('show-signup-btn');
+            const goToLogin = () => {
+                signupForm.classList.remove('active');
+                showSignupBtn.classList.remove('active');
+                loginForm.classList.add('active');
+                showLoginBtn.classList.add('active');
+            };
+            const goToSignup = () => {
+                loginForm.classList.remove('active');
+                showLoginBtn.classList.remove('active');
+                signupForm.classList.add('active');
+                showSignupBtn.classList.add('active');
+            };
+            showLoginBtn.addEventListener('click', goToLogin);
+            showSignupBtn.addEventListener('click', goToSignup);
+            document.querySelector('.switch-to-login').addEventListener('click', goToLogin);
+            document.querySelector('.switch-to-signup').addEventListener('click', goToSignup);
         });
     </script>
 </body>
