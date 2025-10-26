@@ -88,6 +88,11 @@
         #questions-list .question-item:last-child { border-bottom: none; }
         .question-content h3 { font-size: 1.1rem; margin: 0 0 0.5rem 0; }
         .question-content p { color: var(--text-light); line-height: 1.6; margin: 0; white-space: pre-wrap; }
+        .question-image-preview {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
         .question-actions { margin-top: 1rem; display: flex; gap: 0.5rem; }
         .btn-action {
             background: none; border: 1px solid var(--border-gray); border-radius: 6px;
@@ -131,6 +136,10 @@
                     <div class="input-group">
                         <label for="question-answer">Answer</label>
                         <textarea id="question-answer" placeholder="Enter the answer" required></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="question-image-link">Image Link (Optional)</label>
+                        <input type="url" id="question-image-link" placeholder="https://example.com/image.png">
                     </div>
                     <button type="submit" class="btn-submit">Add Question</button>
                 </form>
@@ -190,12 +199,14 @@
             }
             deleteAllBtn.style.display = 'block';
             allQuestions.forEach((q) => {
+                const imageHtml = q.imageUrl ? `<img src="${q.imageUrl}" alt="Preview" class="question-image-preview">` : '';
                 const item = document.createElement('div');
                 item.className = 'question-item';
                 item.innerHTML = `
                     <div class="question-content">
                         <h3>${q.question}</h3>
                         <p>${q.answer}</p>
+                        ${imageHtml}
                     </div>
                     <div class="question-actions">
                         <button class="btn-action edit" data-id="${q.id}">Edit</button>
@@ -227,21 +238,22 @@
             e.preventDefault();
             const questionText = form['question-title'].value;
             const answerText = form['question-answer'].value;
+            const imageUrl = form['question-image-link'].value;
             const editingId = editIdInput.value;
 
             if (editingId) {
-                // Update existing question
                 const questionIndex = allQuestions.findIndex(q => q.id == editingId);
                 if (questionIndex > -1) {
                     allQuestions[questionIndex].question = questionText;
                     allQuestions[questionIndex].answer = answerText;
+                    allQuestions[questionIndex].imageUrl = imageUrl;
                 }
             } else {
-                // Add new question
                 const newQuestion = {
-                    id: Date.now(), // Simple unique ID
+                    id: Date.now(),
                     question: questionText,
                     answer: answerText,
+                    imageUrl: imageUrl,
                     createdAt: new Date().toISOString()
                 };
                 allQuestions.push(newQuestion);
@@ -268,6 +280,7 @@
                 if (questionToEdit) {
                     form['question-title'].value = questionToEdit.question;
                     form['question-answer'].value = questionToEdit.answer;
+                    form['question-image-link'].value = questionToEdit.imageUrl || '';
                     editIdInput.value = questionToEdit.id;
                     submitBtn.textContent = 'Update Question';
                     submitBtn.classList.add('editing');
