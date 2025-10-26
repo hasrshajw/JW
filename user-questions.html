@@ -6,13 +6,12 @@
     <title>Q&A - Deeps Beer Cafe</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
             --primary-color: #4a6da7;
             --header-bg: #292929;
-            --body-bg: #FFFFFF; 
             --text-color: #333;
             --text-light: #555;
             --menu-new-bg: #ffffff;
@@ -23,7 +22,7 @@
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'IBM Plex Sans', sans-serif; background-color: var(--body-bg); color: var(--text-color);
+            font-family: 'IBM Plex Sans', sans-serif; background-color: #FFFFFF; color: var(--text-color);
             visibility: hidden; opacity: 0; transition: opacity 0.3s ease-in; padding-top: 56px;
         }
         body.auth-ready { visibility: visible; opacity: 1; }
@@ -54,39 +53,75 @@
         .logout-button { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
         .logout-button:hover { background-color: #e0e0e0; }
         .logout-button .fas { margin-right: 8px; }
-        
-        /* New Header Styles */
-        .article-top-bar {
-            height: 40px;
+
+        .article-color-bar {
             width: 100%;
-            background-color: var(--primary-color); /* Default color */
-            color: white;
+            height: 40px;
+            margin-top: 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 0 1rem;
+        }
+        .article-number-text {
+            color: white;
+            font-family: 'Noto Sans Telugu', sans-serif;
             font-size: 16px;
             line-height: 26px;
             font-weight: 700;
             font-style: normal;
         }
-        .page-title {
+        .main-content {
+            padding: 2rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .article-title {
+            font-family: 'Noto Sans Telugu', sans-serif;
             font-size: 28px;
             line-height: 41px;
-            font-weight: 700;
             font-style: normal;
+            font-weight: 700;
             color: var(--text-color);
-            margin-bottom: 2.5rem;
-            padding: 0 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-gray);
         }
-        .main-content { padding: 2rem 0; max-width: 900px; margin: 0 auto; }
-        .qa-list-container { padding: 0 2rem; }
-
-        /* Flat Q&A Styles */
-        .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
-        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1rem; }
-        .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light); white-space: pre-wrap; }
-        .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
+        .qa-item {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .qa-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .qa-question {
+            font-family: 'Noto Sans Telugu', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        .qa-answer {
+            font-family: 'Noto Sans Telugu', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--text-light);
+            white-space: pre-wrap;
+        }
+        .qa-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        @media (min-width: 768px) {
+            .article-color-bar { padding: 0 2rem; }
+            .main-content { padding: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -122,11 +157,13 @@
         </div>
     </div>
     
-    <div id="article-top-bar" class="article-top-bar"></div>
+    <div class="article-color-bar" id="article-color-bar">
+        <span class="article-number-text" id="article-number-text"></span>
+    </div>
 
-    <main class="main-content">
-        <h1 id="page-title" class="page-title"></h1>
-        <div id="qa-list" class="qa-list-container">
+    <main class="main-content" id="qa-container">
+        <h1 class="article-title" id="article-title"></h1>
+        <div id="qa-list">
             <p>Loading...</p>
         </div>
     </main>
@@ -152,30 +189,29 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const articleTopBar = document.getElementById('article-top-bar');
-        const pageTitle = document.getElementById('page-title');
+        const articleColorBar = document.getElementById('article-color-bar');
+        const articleNumberText = document.getElementById('article-number-text');
+        const articleTitle = document.getElementById('article-title');
         const qaListDiv = document.getElementById('qa-list');
         const qaDocRef = doc(db, "qanda", "main");
         const logoutButton = document.querySelector('.logout-button');
 
         const displayData = async () => {
             const docSnap = await getDoc(qaDocRef);
+            qaListDiv.innerHTML = '';
             
             if (!docSnap.exists()) {
-                pageTitle.textContent = 'Content Not Available';
+                articleTitle.textContent = 'Content Not Available';
                 qaListDiv.innerHTML = '<p>No content has been added yet.</p>';
                 return;
             }
 
             const data = docSnap.data();
             
-            // Populate Header
-            articleTopBar.style.backgroundColor = data.articleColor || '#4a6da7';
-            articleTopBar.textContent = data.articleNumber ? `Article ${data.articleNumber}` : '';
-            pageTitle.textContent = data.articleTitle || 'Questions & Answers';
-
-            // Populate Q&A List
-            qaListDiv.innerHTML = '';
+            articleColorBar.style.backgroundColor = data.articleColor || '#4a6da7';
+            articleNumberText.textContent = data.articleNumber || '';
+            articleTitle.textContent = data.articleTitle || 'Questions & Answers';
+            
             const questions = data.questions || [];
             if (questions.length > 0) {
                 questions.forEach(q_data => {
