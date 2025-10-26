@@ -54,18 +54,42 @@
         .logout-button { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
         .logout-button:hover { background-color: #e0e0e0; }
         .logout-button .fas { margin-right: 8px; }
+        
+        /* Page Content Styles */
         .page-title-header { padding: 2rem 2rem 0; max-width: 900px; margin: 0 auto; }
         .page-title-header h1 { font-size: 2rem; color: var(--primary-color); }
         .main-content { padding: 2rem; max-width: 900px; margin: 0 auto; }
-        .accordion-item { background-color: var(--card-bg); border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid transparent; transition: border-color 0.3s; }
-        .accordion-item.open { border-color: var(--primary-color); }
-        .accordion-header { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; font-weight: 600; }
-        .accordion-header i { transition: transform 0.3s ease; color: var(--primary-color); }
-        .accordion-item.open .accordion-header i { transform: rotate(180deg); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; color: var(--text-light); }
-        .accordion-content p { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; white-space: pre-wrap; margin: 0; }
-        .answer-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
-        .accordion-item.open .accordion-content { max-height: 1000px; padding: 0 1.5rem 1.5rem; }
+
+        .qa-item {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .qa-question {
+            font-family: 'Noto Sans Telugu', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--text-color);
+            margin: 0 0 1rem 0;
+        }
+        .qa-answer {
+            font-family: 'Noto Sans Telugu', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 26px;
+            color: var(--text-light);
+            white-space: pre-wrap;
+            margin: 0;
+        }
+        .qa-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -107,6 +131,7 @@
     <main class="main-content" id="qa-container"><p>Loading...</p></main>
 
     <script>
+        // --- Menu Toggle Script ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
@@ -128,51 +153,42 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
+        // --- Firebase Init ---
         const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr", storageBucket: "jwhelperr.appspot.com", messagingSenderId: "760897937861", appId: "1:760897937861:web:1b869f5b5da0c4eed96bac" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- DOM Elements ---
         const qaContainer = document.getElementById('qa-container');
         const qaDocRef = doc(db, "qanda", "main");
         const logoutButton = document.querySelector('.logout-button');
 
+        // --- Functions ---
         const displayQuestions = async () => {
             const docSnap = await getDoc(qaDocRef);
             qaContainer.innerHTML = '';
             if (docSnap.exists() && docSnap.data().questions && docSnap.data().questions.length > 0) {
                 const questions = docSnap.data().questions;
                 questions.forEach(data => {
-                    const imageHtml = data.imageUrl ? `<img src="${data.imageUrl}" alt="Related image" class="answer-image">` : '';
+                    const imageHtml = data.imageUrl ? `<img src="${data.imageUrl}" alt="Related image" class="qa-image">` : '';
                     const item = document.createElement('div');
-                    item.className = 'accordion-item';
+                    item.className = 'qa-item';
                     item.innerHTML = `
-                        <div class="accordion-header">
-                            <span>${data.question}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="accordion-content">
-                            ${imageHtml}
-                            <p>${data.answer.replace(/\n/g, '<br>')}</p>
-                        </div>`;
+                        <h3 class="qa-question">${data.question}</h3>
+                        ${imageHtml}
+                        <p class="qa-answer">${data.answer.replace(/\n/g, '<br>')}</p>
+                    `;
                     qaContainer.appendChild(item);
                 });
             } else {
                 qaContainer.innerHTML = '<p>No questions have been added yet.</p>';
             }
         };
-
-        qaContainer.addEventListener('click', (e) => {
-            const header = e.target.closest('.accordion-header');
-            if (header) {
-                const currentlyOpen = qaContainer.querySelector('.accordion-item.open');
-                const item = header.parentElement;
-                if (currentlyOpen && currentlyOpen !== item) currentlyOpen.classList.remove('open');
-                item.classList.toggle('open');
-            }
-        });
+        
         logoutButton.addEventListener('click', () => signOut(auth));
 
+        // --- Auth & Init ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
