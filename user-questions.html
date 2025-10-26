@@ -13,17 +13,17 @@
             --primary-color: #4a6da7;
             --header-bg: #292929;
             --body-bg: #f4f7f9;
-            --card-bg: #ffffff;
             --text-color: #333;
-            --text-light: #6c757d;
+            --text-light: #555; /* Darkened for better contrast on white */
             --menu-new-bg: #ffffff;
             --menu-new-border: #eeeeee;
             --menu-new-hover: #f5f5f5;
             --icon-color: #757575;
+            --border-gray: #e0e0e0;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'IBM Plex Sans', sans-serif; background-color: var(--body-bg); color: var(--text-color);
+            font-family: 'IBM Plex Sans', sans-serif; background-color: #FFFFFF; /* Changed to white */ color: var(--text-color);
             visibility: hidden; opacity: 0; transition: opacity 0.3s ease-in; padding-top: 56px;
         }
         body.auth-ready { visibility: visible; opacity: 1; }
@@ -55,17 +55,25 @@
         .logout-button:hover { background-color: #e0e0e0; }
         .logout-button .fas { margin-right: 8px; }
         
-        /* Page Content Styles */
-        .page-title-header { padding: 2rem 2rem 0; max-width: 900px; margin: 0 auto; }
-        .page-title-header h1 { font-size: 2rem; color: var(--primary-color); }
+        /* New Flat Layout Styles */
         .main-content { padding: 2rem; max-width: 900px; margin: 0 auto; }
-
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
+        }
         .qa-item {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .qa-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
         }
         .qa-question {
             font-family: 'Noto Sans Telugu', sans-serif;
@@ -73,7 +81,7 @@
             font-size: 16px;
             line-height: 26px;
             color: var(--text-color);
-            margin: 0 0 1rem 0;
+            margin-bottom: 1rem;
         }
         .qa-answer {
             font-family: 'Noto Sans Telugu', sans-serif;
@@ -82,7 +90,6 @@
             line-height: 26px;
             color: var(--text-light);
             white-space: pre-wrap;
-            margin: 0;
         }
         .qa-image {
             max-width: 100%;
@@ -90,6 +97,7 @@
             border-radius: 8px;
             margin-bottom: 1rem;
         }
+
     </style>
 </head>
 <body>
@@ -125,13 +133,14 @@
         </div>
     </div>
     
-    <header class="page-title-header">
-        <h1>Questions & Answers</h1>
-    </header>
-    <main class="main-content" id="qa-container"><p>Loading...</p></main>
+    <main class="main-content" id="qa-container">
+        <h1 class="page-title">Questions & Answers</h1>
+        <div id="qa-list">
+            <p>Loading...</p>
+        </div>
+    </main>
 
     <script>
-        // --- Menu Toggle Script ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
@@ -153,21 +162,18 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
-        // --- Firebase Init ---
         const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr", storageBucket: "jwhelperr.appspot.com", messagingSenderId: "760897937861", appId: "1:760897937861:web:1b869f5b5da0c4eed96bac" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- DOM Elements ---
-        const qaContainer = document.getElementById('qa-container');
+        const qaListDiv = document.getElementById('qa-list');
         const qaDocRef = doc(db, "qanda", "main");
         const logoutButton = document.querySelector('.logout-button');
 
-        // --- Functions ---
         const displayQuestions = async () => {
             const docSnap = await getDoc(qaDocRef);
-            qaContainer.innerHTML = '';
+            qaListDiv.innerHTML = '';
             if (docSnap.exists() && docSnap.data().questions && docSnap.data().questions.length > 0) {
                 const questions = docSnap.data().questions;
                 questions.forEach(data => {
@@ -175,20 +181,19 @@
                     const item = document.createElement('div');
                     item.className = 'qa-item';
                     item.innerHTML = `
-                        <h3 class="qa-question">${data.question}</h3>
+                        <h2 class="qa-question">${data.question}</h2>
                         ${imageHtml}
                         <p class="qa-answer">${data.answer.replace(/\n/g, '<br>')}</p>
                     `;
-                    qaContainer.appendChild(item);
+                    qaListDiv.appendChild(item);
                 });
             } else {
-                qaContainer.innerHTML = '<p>No questions have been added yet.</p>';
+                qaListDiv.innerHTML = '<p>No questions have been added yet.</p>';
             }
         };
-        
+
         logoutButton.addEventListener('click', () => signOut(auth));
 
-        // --- Auth & Init ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
