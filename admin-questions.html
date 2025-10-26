@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Q&A Management - Deeps Beer Cafe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6da7;
+            --header-bg: #292929;
+            --text-light-header: #fff;
+            --body-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --text-light: #6c757d;
+            --border-gray: #e0e0e0;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+            padding-top: 56px;
+        }
+        body.auth-ready { visibility: visible; opacity: 1; }
+        .site-header {
+            background-color: var(--header-bg);
+            padding: 0;
+            color: var(--text-light-header);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 900;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+            padding: 0 15px; 
+        }
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .logout-button {
+            display: flex; align-items: center; justify-content: center;
+            padding: 8px 12px; font-weight: bold; font-size: 0.9rem; color: #fff;
+            background-color: rgba(255,255,255,0.1); border: none; border-radius: 8px; cursor: pointer;
+            transition: background-color 0.2s; gap: 8px;
+        }
+        .logout-button:hover { background-color: rgba(255,255,255,0.2); }
+        .main-content { padding: 2rem; max-width: 900px; margin: 0 auto; }
+        .card {
+            background-color: var(--card-bg); border-radius: 12px;
+            box-shadow: 0 4px R12px rgba(0,0,0,0.05); overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .card-header { padding: 1.5rem; border-bottom: 1px solid var(--border-gray); }
+        .card-header h2 { font-size: 1.25rem; margin: 0; }
+        .card-body { padding: 1.5rem; }
+        .input-group { margin-bottom: 1.25rem; }
+        .input-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
+        .input-group input, .input-group textarea {
+            width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-gray);
+            background-color: #f8f9fa; border-radius: 12px; font-size: 1rem;
+            font-family: 'IBM Plex Sans', sans-serif; transition: all 0.3s ease;
+        }
+        .input-group textarea { resize: vertical; min-height: 120px; }
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none; border-color: var(--primary-color); background-color: var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(74, 109, 167, 0.2);
+        }
+        .btn-submit {
+            width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600;
+            color: #fff; background-color: var(--primary-color); border: none;
+            border-radius: 12px; cursor: pointer; margin-top: 0.5rem; transition: all 0.3s;
+        }
+        .btn-submit:hover { background-color: #3e5a8e; }
+        #questions-list .question-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        #questions-list .question-item:last-child { border-bottom: none; }
+        .question-item h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .question-item p { color: var(--text-light); line-height: 1.6; margin: 0; }
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: bottom 0.5s ease-out;
+            z-index: 1001; background-color: var(--primary-color);
+        }
+        #toast.show { bottom: 30px; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="top-bar">
+            <div class="header-title">Q&A Management</div>
+            <a href="/admin.html" style="color:white; text-decoration: none; margin-right: auto; margin-left: 20px;">User Management</a>
+            <button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="card">
+            <div class="card-header"><h2>Add New Question</h2></div>
+            <div class="card-body">
+                <form id="add-question-form">
+                    <div class="input-group">
+                        <label for="question-title">Question</label>
+                        <input type="text" id="question-title" placeholder="Enter the question" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="question-answer">Answer</label>
+                        <textarea id="question-answer" placeholder="Enter the answer" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Add Question</button>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h2>Existing Questions</h2></div>
+            <div class="card-body" id="questions-list">
+                <p>Loading questions...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, addDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
+            authDomain: "jwhelperr.firebaseapp.com",
+            projectId: "jwhelperr",
+            storageBucket: "jwhelperr.appspot.com",
+            messagingSenderId: "760897937861",
+            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac",
+            measurementId: "G-TDJZWN95BC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const addQuestionForm = document.getElementById('add-question-form');
+        const questionsListDiv = document.getElementById('questions-list');
+        const logoutButton = document.querySelector('.logout-button');
+
+        const showToast = (message) => {
+            const t = document.getElementById('toast');
+            t.textContent = message;
+            t.classList.add('show');
+            setTimeout(() => { t.classList.remove('show'); }, 3000);
+        };
+
+        const fetchQuestions = async () => {
+            const q = query(collection(db, "questions"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(q);
+            questionsListDiv.innerHTML = '';
+            if (querySnapshot.empty) {
+                questionsListDiv.innerHTML = '<p>No questions added yet.</p>';
+                return;
+            }
+            querySnapshot.forEach((doc) => {
+                const questionData = doc.data();
+                const item = document.createElement('div');
+                item.className = 'question-item';
+                item.innerHTML = `<h3>${questionData.question}</h3><p>${questionData.answer}</p>`;
+                questionsListDiv.appendChild(item);
+            });
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    document.body.classList.add('auth-ready');
+                    fetchQuestions();
+                } else {
+                    window.location.href = '/home.html';
+                }
+            } else {
+                window.location.href = '/';
+            }
+        });
+
+        addQuestionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = addQuestionForm['question-title'].value;
+            const answer = addQuestionForm['question-answer'].value;
+            
+            try {
+                await addDoc(collection(db, "questions"), {
+                    question: question,
+                    answer: answer,
+                    createdAt: serverTimestamp()
+                });
+                addQuestionForm.reset();
+                showToast("Question added successfully!");
+                fetchQuestions();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                showToast("Failed to add question.");
+            }
+        });
+
+        logoutButton.addEventListener('click', () => signOut(auth));
+    </script>
+</body>
+</html>
