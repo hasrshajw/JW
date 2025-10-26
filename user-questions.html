@@ -14,7 +14,7 @@
             --header-bg: #292929;
             --body-bg: #f4f7f9;
             --text-color: #333;
-            --text-light: #555; /* Darkened for better contrast on white */
+            --text-light: #555;
             --menu-new-bg: #ffffff;
             --menu-new-border: #eeeeee;
             --menu-new-hover: #f5f5f5;
@@ -23,7 +23,7 @@
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'IBM Plex Sans', sans-serif; background-color: #FFFFFF; /* Changed to white */ color: var(--text-color);
+            font-family: 'IBM Plex Sans', sans-serif; background-color: #FFFFFF; color: var(--text-color);
             visibility: hidden; opacity: 0; transition: opacity 0.3s ease-in; padding-top: 56px;
         }
         body.auth-ready { visibility: visible; opacity: 1; }
@@ -54,50 +54,15 @@
         .logout-button { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
         .logout-button:hover { background-color: #e0e0e0; }
         .logout-button .fas { margin-right: 8px; }
-        
-        /* New Flat Layout Styles */
         .main-content { padding: 2rem; max-width: 900px; margin: 0 auto; }
-        .page-title {
-            font-size: 2.5rem;
-            color: var(--text-color);
-            font-weight: 700;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 1rem;
-        }
-        .qa-item {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2.5rem;
-            border-bottom: 1px solid var(--border-gray);
-        }
-        .qa-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        .qa-question {
-            font-family: 'Noto Sans Telugu', sans-serif;
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 26px;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-        }
-        .qa-answer {
-            font-family: 'Noto Sans Telugu', sans-serif;
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 26px;
-            color: var(--text-light);
-            white-space: pre-wrap;
-        }
-        .qa-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
+        .article-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-gray); padding-bottom: 2rem; }
+        .article-number-badge { flex-shrink: 0; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: #fff; background-color: var(--primary-color); }
+        .article-title { font-size: 2.5rem; color: var(--text-color); font-weight: 700; line-height: 1.2; }
+        .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
+        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1rem; }
+        .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light); white-space: pre-wrap; }
+        .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
@@ -134,10 +99,7 @@
     </div>
     
     <main class="main-content" id="qa-container">
-        <h1 class="page-title">Questions & Answers</h1>
-        <div id="qa-list">
-            <p>Loading...</p>
-        </div>
+        <div id="qa-list"><p>Loading...</p></div>
     </main>
 
     <script>
@@ -146,14 +108,8 @@
         const menuOverlay = document.getElementById('menu-overlay');
         const body = document.body;
         
-        function closeMenu() {
-            slideMenu.classList.remove('is-open');
-            menuOverlay.classList.remove('is-open');
-            body.classList.remove('menu-open');
-        }
-        menuToggleButton.addEventListener('click', () => {
-            body.classList.contains('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open'));
-        });
+        function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
+        menuToggleButton.addEventListener('click', () => { body.classList.contains('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
         menuOverlay.addEventListener('click', closeMenu);
     </script>
 
@@ -167,28 +123,40 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        const qaContainer = document.getElementById('qa-container');
         const qaListDiv = document.getElementById('qa-list');
         const qaDocRef = doc(db, "qanda", "main");
         const logoutButton = document.querySelector('.logout-button');
 
-        const displayQuestions = async () => {
+        const displayData = async () => {
             const docSnap = await getDoc(qaDocRef);
-            qaListDiv.innerHTML = '';
-            if (docSnap.exists() && docSnap.data().questions && docSnap.data().questions.length > 0) {
-                const questions = docSnap.data().questions;
-                questions.forEach(data => {
-                    const imageHtml = data.imageUrl ? `<img src="${data.imageUrl}" alt="Related image" class="qa-image">` : '';
+            qaListDiv.innerHTML = ''; // Clear previous content
+            
+            if (!docSnap.exists()) {
+                qaListDiv.innerHTML = '<p>No content has been added yet.</p>';
+                return;
+            }
+
+            const data = docSnap.data();
+            const articleHeader = document.createElement('div');
+            articleHeader.className = 'article-header';
+            articleHeader.innerHTML = `
+                <div class="article-number-badge" style="background-color: ${data.articleColor || '#4a6da7'};">${data.articleNumber || ''}</div>
+                <h1 class="article-title">${data.articleTitle || 'Questions & Answers'}</h1>
+            `;
+            qaContainer.prepend(articleHeader); // Add header at the top
+
+            const questions = data.questions || [];
+            if (questions.length > 0) {
+                questions.forEach(q_data => {
+                    const imageHtml = q_data.imageUrl ? `<img src="${q_data.imageUrl}" alt="Related image" class="qa-image">` : '';
                     const item = document.createElement('div');
                     item.className = 'qa-item';
-                    item.innerHTML = `
-                        <h2 class="qa-question">${data.question}</h2>
-                        ${imageHtml}
-                        <p class="qa-answer">${data.answer.replace(/\n/g, '<br>')}</p>
-                    `;
+                    item.innerHTML = `<h2 class="qa-question">${q_data.question}</h2>${imageHtml}<p class="qa-answer">${q_data.answer.replace(/\n/g, '<br>')}</p>`;
                     qaListDiv.appendChild(item);
                 });
             } else {
-                qaListDiv.innerHTML = '<p>No questions have been added yet.</p>';
+                qaListDiv.innerHTML = '<p>No questions have been added for this article yet.</p>';
             }
         };
 
@@ -205,7 +173,7 @@
                     profileImage.src = user.photoURL || 'https://placehold.co/44x44/666/fff?text=' + (user.displayName || user.email)[0].toUpperCase();
                     profileName.textContent = user.displayName || 'No Name';
                     profileEmail.textContent = user.email;
-                    displayQuestions();
+                    displayData();
                 } else { window.location.href = '/pending.html'; }
             } else { window.location.href = '/'; }
         });
