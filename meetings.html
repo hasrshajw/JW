@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meetings - Deeps Beer Cafe</title>
     
-    <!-- ADDED: Google Fonts Import for Noto Sans Telugu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
@@ -22,7 +21,7 @@
             --menu-new-hover: #f5f5f5;
             --submenu-bg: #f1f1f1;
             --icon-color: #757575;
-            --dc-button-borderColor: rgba(18, 18, 18, 0.1);
+            --border-gray: #e0e0e0;
         }
         
         @font-face {
@@ -41,13 +40,8 @@
             opacity: 0;
             transition: opacity 0.3s ease-in;
         }
-        body.auth-ready {
-            visibility: visible;
-            opacity: 1;
-        }
-        body.menu-open {
-            overflow: hidden;
-        }
+        body.auth-ready { visibility: visible; opacity: 1; }
+        body.menu-open { overflow: hidden; }
         .site-header {
             background-color: var(--header-bg);
             padding: 0;
@@ -87,10 +81,7 @@
         .admin-button {
             display: flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.1);
             color: var(--text-light); text-decoration: none; padding: 6px 12px; border-radius: 6px;
-            font-size: 0.9rem; font-weight: 500; transition: background-color 0.2s;
-        }
-        .admin-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem; font-weight: 500;
         }
         .header-icons { display: flex; align-items: center; height: 56px; cursor: pointer; }
         .header-icons svg { height: 24px; width: 24px; color: var(--text-light); }
@@ -100,7 +91,6 @@
         .menu-overlay {
             position: fixed; top: 56px; left: 0; width: 100%; height: calc(100% - 56px);
             background-color: rgba(0, 0, 0, 0.6); z-index: 998; opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
         }
         .menu-overlay.is-open { opacity: 1; visibility: visible; }
         .slide-menu {
@@ -136,60 +126,49 @@
         }
         main { padding-top: 56px; }
         
-        /* JW Icon Styles */
         .jwIcon {
-            font-family: "jw-icons-external";
-            font-size: 24px; display: inline-block; color: var(--icon-color);
+            font-family: "jw-icons-external"; font-size: 24px; display: inline-block;
             width: 30px; height: 24px; -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale; margin-right: 10px; text-align: center;
         }
+        .menu-links .jwIcon { color: var(--icon-color); }
         .mid1011200::before { content: "\e661"; }
-        .mid1011201::before { content: "\e625"; }
-        .mid1011207::before { content: "\e695"; }
-        .mid1011216::before { content: "\e610"; }
-        .mid1011529::before { content: "\e679"; } /* CLM Meeting */
-        .mid1011209::before { content: "\e675"; } /* Watchtower Study */
+        .mid1011529::before { content: "\e679"; } 
+        .mid1011209::before { content: "\e675"; } 
         
-        /* New Pill Navigation Styles */
-        .pill-nav {
-            background-color: #f0f0f0;
-            display: flex;
-            padding: 8px;
-            gap: 8px;
+        .sub-nav {
+            display: flex; justify-content: space-between; align-items: center; padding: 0 16px;
+            height: 56px; background-color: #f5f5f5; border-bottom: 1px solid var(--border-gray);
         }
-        .pill-button {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px;
-            border: none;
-            background-color: transparent;
-            border-radius: 8px;
-            font-family: 'Noto Sans Telugu', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
+        .sub-nav-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
+        
+        /* Custom Dropdown Styles */
+        .custom-dropdown { position: relative; display: inline-block; }
+        .dropdown-button {
+            background-color: var(--body-bg); border: 1px solid var(--border-gray); border-radius: 8px;
+            padding: 8px 12px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 1rem;
+            font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+            min-width: 250px;
         }
-        .pill-button .jwIcon { color: var(--text-light); transition: color 0.2s; }
-        .pill-button.active {
-            background-color: var(--body-bg);
-            color: var(--menu-new-text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        .dropdown-button:after { content: '▼'; font-size: 0.7rem; margin-left: 10px; }
+        .dropdown-content {
+            display: none; position: absolute; background-color: white; min-width: 250px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); border-radius: 8px;
+            border: 1px solid var(--border-gray); z-index: 1; margin-top: 4px;
         }
-        .pill-button.active .jwIcon { color: var(--menu-new-text); }
+        .dropdown-content.is-open { display: block; }
+        .dropdown-item {
+            color: var(--text-color); padding: 12px 16px; text-decoration: none;
+            display: flex; align-items: center; cursor: pointer;
+        }
+        .dropdown-item:hover { background-color: #f1f1f1; }
+        .dropdown-item .jwIcon { color: var(--menu-new-text); }
+
         .content-panes { padding: 2rem; }
         .content-pane { display: none; }
         .content-pane.active { display: block; }
         .meeting-body-text p {
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 26px;
-            text-align: left;
-            margin: 0;
+            font-weight: 400; font-size: 16px; line-height: 26px; text-align: left; margin: 0;
         }
 
     </style>
@@ -201,8 +180,8 @@
             <div class="header-right-controls">
                 <a href="/admin.html" id="admin-dashboard-link" class="admin-button" style="display: none;"><i class="fas fa-user-shield"></i><span>Admin</span></a>
                 <div class="header-icons" id="menu-toggle-button">
-                    <svg class="hamburger-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
-                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
+                    <svg class="hamburger-icon" aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
+                    <svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
                 </div>
             </div>
         </div>
@@ -214,13 +193,10 @@
             <li><a href="/home.html"><span class="jwIcon mid1011200"></span><span>హోమ్</span></a></li>
             <li><a href="/user-questions.html"><i class="fas fa-question-circle" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Simple Q&A</span></a></li>
             <li><a href="/user-multi-answer.html"><i class="fas fa-list-ol" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Multi-Answer Q&A</span></a></li>
-            <li><a href="#"><span class="jwIcon mid1011201"></span><span>బైబిలు బోధలు</span></a></li>
-            <li><a href="#"><span class="jwIcon mid1011207"></span><span>లైబ్రరీ</span></a></li>
-            <li><a href="#"><span class="jwIcon mid1011216"></span><span>వార్తలు</span></a></li>
         </ul>
         <div class="profile-section">
             <div class="profile-info">
-                 <img class="profile-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Profile">
+                 <img class="profile-image" alt="Profile">
                  <div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div>
             </div>
             <button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button>
@@ -228,32 +204,36 @@
     </div>
 
     <main>
-        <nav class="pill-nav">
-            <button class="pill-button active" data-target="clm">
-                <span class="jwIcon mid1011529"></span>
-                <span>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌</span>
-            </button>
-            <button class="pill-button" data-target="wt">
-                <span class="jwIcon mid1011209"></span>
-                <span>కావలికోట—అధ్యయనం</span>
-            </button>
-        </nav>
-        <div class="content-panes">
-            <div id="clm" class="content-pane active">
-                <div class="meeting-body-text">
-                    <p>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌ కోసం కంటెంట్ ఇక్కడ ప్రదర్శించబడుతుంది. ఈ టెక్స్ట్ ఫాంట్ బరువు 400, పరిమాణం 16px మరియు పంక్తి ఎత్తు 26px కలిగి ఉంటుంది.</p>
+        <div class="sub-nav">
+            <h1 class="sub-nav-title">మీటింగ్‌</h1>
+            <div class="custom-dropdown" id="meeting-dropdown">
+                <button class="dropdown-button" id="dropdown-button">
+                    <span></span>
+                </button>
+                <div class="dropdown-content" id="dropdown-content">
+                    <a class="dropdown-item" data-target="clm">
+                        <span class="jwIcon mid1011529"></span>
+                        <span>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌</span>
+                    </a>
+                    <a class="dropdown-item" data-target="wt">
+                        <span class="jwIcon mid1011209"></span>
+                        <span>కావలికోట—అధ్యయనం</span>
+                    </a>
                 </div>
             </div>
+        </div>
+        <div class="content-panes">
+            <div id="clm" class="content-pane active">
+                <div class="meeting-body-text"><p>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌ కోసం కంటెంట్ ఇక్కడ ప్రదర్శించబడుతుంది. ఈ టెక్స్ట్ ఫాంట్ బరువు 400, పరిమాణం 16px మరియు పంక్తి ఎత్తు 26px కలిగి ఉంటుంది.</p></div>
+            </div>
             <div id="wt" class="content-pane">
-                 <div class="meeting-body-text">
-                    <p>కావలికోట—అధ్యయనం కోసం కంటెంట్ ఇక్కడ ప్రదర్శించబడుతుంది. ఈ టెక్స్ట్ ఫాంట్ బరువు 400, పరిమాణం 16px మరియు పంక్తి ఎత్తు 26px కలిగి ఉంటుంది.</p>
-                </div>
+                 <div class="meeting-body-text"><p>కావలికోట—అధ్యయనం కోసం కంటెంట్ ఇక్కడ ప్రదర్శించబడుతుంది. ఈ టెక్స్ట్ ఫాంట్ బరువు 400, పరిమాణం 16px మరియు పంక్తి ఎత్తు 26px కలిగి ఉంటుంది.</p></div>
             </div>
         </div>
     </main>
 
     <script>
-        // Menu Toggle Script
+        // --- Menu Toggle Script ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
@@ -265,31 +245,51 @@
             body.classList.remove('menu-open');
         }
         menuToggleButton.addEventListener('click', () => {
-            if (body.classList.contains('menu-open')) closeMenu();
-            else {
-                slideMenu.classList.add('is-open');
-                menuOverlay.classList.add('is-open');
-                body.classList.add('menu-open');
-            }
+            body.classList.contains('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open'));
         });
         menuOverlay.addEventListener('click', closeMenu);
 
-        // Pill Navigation Script
-        const pillNav = document.querySelector('.pill-nav');
-        const pillButtons = document.querySelectorAll('.pill-button');
+        // --- Custom Dropdown Script ---
+        const dropdown = document.getElementById('meeting-dropdown');
+        const dropdownButton = document.getElementById('dropdown-button');
+        const dropdownContent = document.getElementById('dropdown-content');
         const contentPanes = document.querySelectorAll('.content-pane');
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-        pillNav.addEventListener('click', (e) => {
-            const clickedButton = e.target.closest('.pill-button');
-            if (!clickedButton) return;
+        // Function to switch content
+        function switchPane(targetId) {
+            contentPanes.forEach(pane => {
+                pane.classList.toggle('active', pane.id === targetId);
+            });
+        }
+        
+        // Set initial state
+        const initialItem = dropdownItems[0];
+        dropdownButton.querySelector('span').textContent = initialItem.querySelector('span:last-child').textContent;
+        switchPane(initialItem.dataset.target);
 
-            pillButtons.forEach(button => button.classList.remove('active'));
-            contentPanes.forEach(pane => pane.classList.remove('active'));
-
-            clickedButton.classList.add('active');
-            const targetId = clickedButton.dataset.target;
-            document.getElementById(targetId).classList.add('active');
+        // Toggle dropdown display
+        dropdownButton.addEventListener('click', () => {
+            dropdownContent.classList.toggle('is-open');
         });
+
+        // Handle item selection
+        dropdownContent.addEventListener('click', (e) => {
+            const selectedItem = e.target.closest('.dropdown-item');
+            if (!selectedItem) return;
+
+            dropdownButton.querySelector('span').textContent = selectedItem.querySelector('span:last-child').textContent;
+            switchPane(selectedItem.dataset.target);
+            dropdownContent.classList.remove('is-open');
+        });
+
+        // Close dropdown if clicked outside
+        window.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdownContent.classList.remove('is-open');
+            }
+        });
+
     </script>
 
     <script type="module">
