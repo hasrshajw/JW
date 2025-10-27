@@ -150,9 +150,15 @@
             font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
             min-width: 250px;
         }
-        .dropdown-button:after { content: '▼'; font-size: 0.7rem; margin-left: 10px; }
+        .dropdown-button .dropdown-arrow {
+            margin-left: 10px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .dropdown-button.is-open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
         .dropdown-content {
-            display: none; position: absolute; background-color: white; min-width: 250px;
+            display: none; position: absolute; right:0; background-color: white; min-width: 250px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); border-radius: 8px;
             border: 1px solid var(--border-gray); z-index: 1; margin-top: 4px;
         }
@@ -208,7 +214,8 @@
             <h1 class="sub-nav-title">మీటింగ్‌</h1>
             <div class="custom-dropdown" id="meeting-dropdown">
                 <button class="dropdown-button" id="dropdown-button">
-                    <span></span>
+                    <span id="dropdown-button-text"></span>
+                    <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </button>
                 <div class="dropdown-content" id="dropdown-content">
                     <a class="dropdown-item" data-target="clm">
@@ -252,41 +259,40 @@
         // --- Custom Dropdown Script ---
         const dropdown = document.getElementById('meeting-dropdown');
         const dropdownButton = document.getElementById('dropdown-button');
+        const dropdownButtonText = document.getElementById('dropdown-button-text');
         const dropdownContent = document.getElementById('dropdown-content');
         const contentPanes = document.querySelectorAll('.content-pane');
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-        // Function to switch content
         function switchPane(targetId) {
             contentPanes.forEach(pane => {
                 pane.classList.toggle('active', pane.id === targetId);
             });
         }
         
-        // Set initial state
         const initialItem = dropdownItems[0];
-        dropdownButton.querySelector('span').textContent = initialItem.querySelector('span:last-child').textContent;
+        dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
         switchPane(initialItem.dataset.target);
 
-        // Toggle dropdown display
         dropdownButton.addEventListener('click', () => {
             dropdownContent.classList.toggle('is-open');
+            dropdownButton.classList.toggle('is-open');
         });
 
-        // Handle item selection
         dropdownContent.addEventListener('click', (e) => {
             const selectedItem = e.target.closest('.dropdown-item');
             if (!selectedItem) return;
 
-            dropdownButton.querySelector('span').textContent = selectedItem.querySelector('span:last-child').textContent;
+            dropdownButtonText.textContent = selectedItem.querySelector('span:last-child').textContent;
             switchPane(selectedItem.dataset.target);
             dropdownContent.classList.remove('is-open');
+            dropdownButton.classList.remove('is-open');
         });
 
-        // Close dropdown if clicked outside
         window.addEventListener('click', (e) => {
             if (!dropdown.contains(e.target)) {
                 dropdownContent.classList.remove('is-open');
+                dropdownButton.classList.remove('is-open');
             }
         });
 
