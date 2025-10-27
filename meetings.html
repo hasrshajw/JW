@@ -86,7 +86,6 @@
         .mid1011529::before { content: "\e679"; } 
         .mid1011209::before { content: "\e675"; } 
         
-        
         .sub-nav { display: flex; justify-content: space-between; align-items: center; padding: 2px 32px; height: 56px; background-color: #ffffff; border-bottom: 1px solid var(--border-gray); }
         .sub-nav-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
         
@@ -107,27 +106,30 @@
         .content-pane { display: none; }
         .content-pane.active { display: block; }
         
+        /* Styles for Simple Q&A */
         .simple-qa-content .article-color-bar { height: 56px; display: flex; align-items: center; padding: 0 1rem; margin-top: 0rem; }
         .simple-qa-content .article-number-text { color: white; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; line-height: 26px; font-weight: 700; }
-        .simple-qa-content .main-content { padding: 2rem 1rem; max-width: 900px; margin: 0 auto; }
+        .simple-qa-content .main-content { padding: 0 1rem; max-width: 900px; margin: 0 auto; }
         .simple-qa-content .article-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 28px; line-height: 41px; font-weight: 700; color: var(--text-color); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
-        .simple-qa-content .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
+        .simple-qa-content .qa-item { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid var(--border-gray); }
         .simple-qa-content .qa-item:last-child { border-bottom: none; }
         .simple-qa-content .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1rem; }
         .simple-qa-content .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
         .simple-qa-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
         
+        /* Styles for Multi-Answer Q&A */
         .multi-answer-content { max-width: 900px; margin: 0 auto; }
         .multi-answer-content .heading-bar { height: 56px; display: flex; align-items: center; padding: 0 16px; color: white; }
         .multi-answer-content .heading-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 18px; font-weight: 700; }
         .multi-answer-content .heading-content { padding: 1.5rem 16px; }
-        .multi-answer-content .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
         .multi-answer-content .qa-item:last-child { border-bottom: none; }
         .multi-answer-content .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1.5rem; }
-        .multi-answer-content .qa-answer-list { list-style-type: decimal; padding-left: 20px; }
-        .multi-answer-content .qa-answer-list li { margin-bottom: 1.5rem; }
-        .multi-answer-content .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
-        .multi-answer-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem; }
+        .multi-answer-content .qa-answer-list { list-style: none; padding: 0; }
+        .multi-answer-content .qa-answer-item { margin-bottom: 1.5rem; }
+        .multi-answer-content .qa-answer-text-block { display: flex; align-items: flex-start; gap: 10px; }
+        .multi-answer-content .qa-answer-number { font-weight: 600; color: var(--text-color); min-width: 20px; }
+        .multi-answer-content .qa-answer { margin-top: 0px; font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
+        .multi-answer-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
         
         @media (min-width: 768px) {
             .simple-qa-content .article-color-bar { padding: 0 2rem; }
@@ -140,12 +142,7 @@
     <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
             <a href="/home.html" class="mobileLogo" title="Home"></a>
-            <div class="header-right-controls">
-                <div class="header-icons" id="menu-toggle-button">
-                    <svg class="hamburger-icon" aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
-                    <svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
-                </div>
-            </div>
+            <div class="header-right-controls"><div class="header-icons" id="menu-toggle-button"><svg class="hamburger-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg><svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg></div></div>
         </div>
     </header>
     <div class="menu-overlay" id="menu-overlay"></div>
@@ -188,56 +185,46 @@
     </main>
 
     <script>
-        // --- Menu Toggle Script (Restored) ---
-        const menuToggleButton = document.getElementById('menu-toggle-button');
-        const slideMenu = document.getElementById('slide-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-        const body = document.body;
-        
-        function openMenu() {
-            slideMenu.classList.add('is-open');
-            menuOverlay.classList.add('is-open');
-            body.classList.add('menu-open');
-        }
+        // --- Menu Toggle Script (Corrected) ---
+const menuToggleButton = document.getElementById('menu-toggle-button');
+const slideMenu = document.getElementById('slide-menu');
+const menuOverlay = document.getElementById('menu-overlay');
+const body = document.body;
 
-        function closeMenu() {
-            slideMenu.classList.remove('is-open');
-            menuOverlay.classList.remove('is-open');
-            body.classList.remove('menu-open');
-        }
-        
-        menuToggleButton.addEventListener('click', () => {
-            if (body.classList.contains('menu-open')) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        });
-        menuOverlay.addEventListener('click', closeMenu);
+function openMenu() {
+    slideMenu.classList.add('is-open');
+    menuOverlay.classList.add('is-open');
+    body.classList.add('menu-open');
+}
 
-        // --- Custom Dropdown Script ---
+function closeMenu() {
+    slideMenu.classList.remove('is-open');
+    menuOverlay.classList.remove('is-open');
+    body.classList.remove('menu-open');
+}
+
+menuToggleButton.addEventListener('click', () => {
+    if (body.classList.contains('menu-open')) {
+        closeMenu();
+    } else {
+        openMenu();
+    }
+});
+menuOverlay.addEventListener('click', closeMenu);
+
+
+
         const dropdown = document.getElementById('meeting-dropdown');
         const dropdownButton = document.getElementById('dropdown-button');
         const dropdownButtonText = document.getElementById('dropdown-button-text');
         const dropdownContent = document.getElementById('dropdown-content');
         const contentPanes = document.querySelectorAll('.content-pane');
         const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-        function switchPane(targetId) {
-            contentPanes.forEach(pane => {
-                pane.classList.toggle('active', pane.id === targetId);
-            });
-        }
-        
+        function switchPane(targetId) { contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId)); }
         const initialItem = dropdownItems[0];
         dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
         switchPane(initialItem.dataset.target);
-
-        dropdownButton.addEventListener('click', () => {
-            dropdownContent.classList.toggle('is-open');
-            dropdownButton.classList.toggle('is-open');
-        });
-
+        dropdownButton.addEventListener('click', () => { dropdownContent.classList.toggle('is-open'); dropdownButton.classList.toggle('is-open'); });
         dropdownContent.addEventListener('click', (e) => {
             const selectedItem = e.target.closest('.dropdown-item');
             if (!selectedItem) return;
@@ -246,13 +233,7 @@
             dropdownContent.classList.remove('is-open');
             dropdownButton.classList.remove('is-open');
         });
-
-        window.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target)) {
-                dropdownContent.classList.remove('is-open');
-                dropdownButton.classList.remove('is-open');
-            }
-        });
+        window.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) { dropdownContent.classList.remove('is-open'); dropdownButton.classList.remove('is-open'); } });
     </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -290,9 +271,7 @@
                     item.innerHTML = `<h2 class="qa-question">${q_data.question}</h2>${imageHtml}<p class="qa-answer">${q_data.answer.replace(/\n/g, '<br>')}</p>`;
                     qaListDiv.appendChild(item);
                 });
-            } else {
-                qaListDiv.innerHTML = '<p>No questions have been added yet.</p>';
-            }
+            } else { qaListDiv.innerHTML = '<p>No questions have been added yet.</p>'; }
         };
 
         const displayMultiAnswerData = async () => {
@@ -312,10 +291,17 @@
                 const questions = heading.questions || [];
                 if (questions.length > 0) {
                     questions.forEach(q_data => {
-                        const answersHtml = q_data.answers.map(ans => `<li>${ans.imageUrl ? `<img src="${ans.imageUrl}" alt="" class="qa-image">` : ''}<p class="qa-answer">${ans.text.replace(/\n/g, '<br>')}</p></li>`).join('');
+                        const answersHtml = q_data.answers.map((ans, index) => `
+                            <div class="qa-answer-item">
+                                ${ans.imageUrl ? `<img src="${ans.imageUrl}" alt="" class="qa-image">` : ''}
+                                <div class="qa-answer-text-block">
+                                    <span class="qa-answer-number">${index + 1}.</span>
+                                    <p class="qa-answer">${ans.text.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>`).join('');
                         const item = document.createElement('div');
                         item.className = 'qa-item';
-                        item.innerHTML = `<h3 class="qa-question">${q_data.question}</h3><ol class="qa-answer-list">${answersHtml}</ol>`;
+                        item.innerHTML = `<h3 class="qa-question">${q_data.question}</h3><div class="qa-answer-list">${answersHtml}</div>`;
                         headingContent.appendChild(item);
                     });
                 } else {
