@@ -45,7 +45,7 @@
         .btn-danger { background-color: var(--color-danger); color: white; border: none; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .article-details-section { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-gray); }
         #article-details-display-container { display: none; }
-        .article-bar-display { height: 56px; background-color: var(--primary-color); display: flex; align-items: center; padding: 0 16px; margin: 0 -16px; /* Extend to full width on mobile */ }
+        .article-bar-display { height: 56px; background-color: var(--primary-color); display: flex; align-items: center; padding: 0 16px; margin: 0 -16px; }
         .article-bar-number { font-family: 'Noto Sans Telugu', sans-serif; color: #FFFFFF; font-size: 16px; line-height: 26px; font-weight: 700; }
         .article-title-wrapper { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 1.5rem; }
         .article-title-display { font-family: 'Noto Sans Telugu', sans-serif; font-size: 28px; line-height: 41px; font-weight: 700; padding-right: 1rem; }
@@ -57,17 +57,24 @@
         .btn-submit { padding: 0.75rem 1.5rem; font-size: 0.9rem; font-weight: 600; color: #fff; background-color: var(--primary-color); border: none; border-radius: 8px; cursor: pointer; }
         .questions-section h3 { font-size: 1.5rem; margin-bottom: 1.5rem; }
         .question-item { position: relative; border-bottom: 1px solid var(--border-gray); padding: 1.5rem 0; }
-        .question-content h3, .question-content p { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; padding-right: 60px; /* Space for icons */ }
-        .question-content p { color: var(--text-light); white-space: pre-wrap; }
+        .question-header { height: 28px; } /* New row for icons */
         .question-actions { position: absolute; top: 1.5rem; right: 0; display: flex; gap: 0.5rem; }
         .btn-action { background: none; border: none; cursor: pointer; padding: 5px; color: var(--text-light); }
         .btn-action:hover { color: var(--primary-color); }
+        .btn-action.delete:hover { color: var(--color-danger); }
         .btn-action svg { width: 18px; height: 18px; }
+        .question-content h3, .question-content p { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; }
+        .question-content p { color: var(--text-light); white-space: pre-wrap; }
         .fab-add { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: var(--primary-color); color: white; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; display: none; align-items: center; justify-content: center; padding: 1rem; }
-        .modal-container { background: white; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; }
-        .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border-gray); }
+        .modal-container { background: white; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-gray); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 1.2rem; }
+        .modal-close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light); }
         .modal-body { padding: 1.5rem; overflow-y: auto; }
+        #confirm-modal .modal-body { text-align: center; }
+        #confirm-modal p { color: var(--text-light); margin-bottom: 1.5rem; }
+        .confirm-actions { display: flex; gap: 1rem; justify-content: center; }
         #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; z-index: 1002; background-color: var(--primary-color); }
         #toast.show { bottom: 30px; }
         @media (min-width: 768px) {
@@ -78,8 +85,7 @@
             #article-details-form-container { padding: 1.5rem; }
             .article-title-wrapper { padding: 1.5rem; padding-top: 1rem; }
             .questions-section { padding: 1.5rem; border-radius: 12px; background-color: var(--card-bg); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 2rem; }
-            .question-item { padding: 1.5rem; border: 1px solid var(--border-gray); border-radius: 8px; margin-bottom: 1rem; }
-            .question-actions { right: 1.5rem; }
+            .question-item { padding-left: 1.5rem; padding-right: 1.5rem; border-radius: 8px; }
         }
         @media (min-width: 992px) { .nav-link { display: flex; } }
     </style>
@@ -109,20 +115,14 @@
             </div>
             <div id="article-details-form-container">
                 <h2>Article Details</h2>
-                <form id="article-details-form">
-                    <div class="input-group"><label>Article Title</label><input type="text" name="article-title" required></div>
-                    <div class="input-group"><label>Article Number</label><input type="text" name="article-number" required></div>
-                    <div class="input-group"><label>Background Color (HEX)</label><div class="color-input-wrapper"><input type="text" name="article-color" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required><div class="color-preview"></div></div></div>
-                    <button type="submit" class="btn-submit">Save Details</button>
-                </form>
+                <form id="article-details-form"><div class="input-group"><label>Article Title</label><input type="text" name="article-title" required></div><div class="input-group"><label>Article Number</label><input type="text" name="article-number" required></div><div class="input-group"><label>Background Color (HEX)</label><div class="color-input-wrapper"><input type="text" name="article-color" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required><div class="color-preview"></div></div></div><button type="submit" class="btn-submit">Save Details</button></form>
             </div>
         </section>
-        <section class="questions-section">
-            <h3>Questions</h3><div id="questions-list"></div>
-        </section>
+        <section class="questions-section"><h3>Questions</h3><div id="questions-list"></div></section>
     </main>
     <button class="fab-add" id="fab-add-btn" title="Add New Question"><i class="fas fa-plus"></i></button>
-    <div class="modal-overlay" id="question-modal-overlay"><div class="modal-container"><div class="modal-header"><h2 id="modal-title">Add New Question</h2></div><div class="modal-body"><form id="question-modal-form"><input type="hidden" id="edit-question-id"><div class="input-group"><label>Question</label><input type="text" id="question-title-modal" required></div><div class="input-group"><label>Answer</label><textarea id="question-answer-modal" required></textarea></div><div class="input-group"><label>Image Link (Optional)</label><input type="url" id="question-image-link-modal"></div><button type="submit" class="btn-submit">Save Question</button></form></div></div></div>
+    <div class="modal-overlay" id="question-modal-overlay"><div class="modal-container"><div class="modal-header"><h2 id="modal-title">Add New Question</h2><button class="modal-close-btn">&times;</button></div><div class="modal-body"><form id="question-modal-form"><input type="hidden" id="edit-question-id"><div class="input-group"><label>Question</label><input type="text" id="question-title-modal" required></div><div class="input-group"><label>Answer</label><textarea id="question-answer-modal" required></textarea></div><div class="input-group"><label>Image Link (Optional)</label><input type="url" id="question-image-link-modal"></div><button type="submit" class="btn-submit">Save Question</button></form></div></div></div>
+    <div class="modal-overlay" id="confirm-modal"><div class="modal-container"><div class="modal-header"><h2 id="confirm-title">Are you sure?</h2></div><div class="modal-body"><p id="confirm-message"></p><div class="confirm-actions"><button id="cancel-delete-btn" class="btn-submit" style="background-color: #6c757d;">Cancel</button><button id="confirm-delete-btn" class="btn-danger">Confirm Delete</button></div></div></div></div>
     <div id="toast"></div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -134,6 +134,10 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        let allData = { questions: [] };
+        let actionToConfirm = null;
+        const qaDocRef = doc(db, "qanda", "main");
+
         const formContainer = document.getElementById('article-details-form-container');
         const displayContainer = document.getElementById('article-details-display-container');
         const articleDetailsForm = document.getElementById('article-details-form');
@@ -141,15 +145,9 @@
         const deleteAllBtn = document.getElementById('delete-all-btn');
         const fabAddBtn = document.getElementById('fab-add-btn');
         const modalOverlay = document.getElementById('question-modal-overlay');
-        
-        let allData = { questions: [] };
-        const qaDocRef = doc(db, "qanda", "main");
+        const confirmModal = document.getElementById('confirm-modal');
 
-        const showToast = (message) => {
-            const t = document.getElementById('toast');
-            t.textContent = message; t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        };
+        const showToast = (message) => { const t = document.getElementById('toast'); t.textContent = message; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); };
         
         const openModal = (mode = 'add', questionData = null) => {
             const modalForm = document.getElementById('question-modal-form');
@@ -172,7 +170,14 @@
             modalOverlay.style.display = 'flex';
         };
 
-        const closeModal = () => { modalOverlay.style.display = 'none'; };
+        const closeModal = (modal) => { modal.style.display = 'none'; };
+
+        const openConfirmModal = (action) => {
+            actionToConfirm = action;
+            const message = action.type === 'deleteAll' ? 'This will permanently delete all article details and questions.' : 'This will permanently delete this question.';
+            document.getElementById('confirm-message').textContent = message;
+            confirmModal.style.display = 'flex';
+        };
 
         const renderArticleDetails = () => {
             if (allData.articleTitle) {
@@ -190,20 +195,12 @@
         const renderQuestions = () => {
             questionsListDiv.innerHTML = '';
             const questions = allData.questions || [];
-            if (questions.length === 0) {
-                 questionsListDiv.innerHTML = '<p>No questions added yet. Press the + button to get started!</p>';
-                 return;
-            }
+            if (questions.length === 0) { questionsListDiv.innerHTML = '<p>No questions added yet.</p>'; return; }
             questions.forEach((q) => {
                 const imageHtml = q.imageUrl ? `<img src="${q.imageUrl}" alt="Preview" style="max-width:100px;border-radius:8px;margin-top:1rem;">` : '';
                 const item = document.createElement('div');
                 item.className = 'question-item';
-                item.innerHTML = `
-                    <div class="question-actions">
-                        <button class="btn-action edit-question-btn" data-id="${q.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="stroke-[2]"><path d="M18.25 5.75C16.8693 4.36929 14.6307 4.36929 13.25 5.75L10.125 8.875L5.52404 13.476C4.86236 14.1376 4.45361 15.0104 4.36889 15.9423L4 20.0001L8.0578 19.6311C8.98967 19.5464 9.86234 19.1377 10.524 18.476L18.25 10.75C19.6307 9.36929 19.6307 7.13071 18.25 5.75V5.75Z" stroke="currentColor"></path><path d="M12.5 7.5L16.5 11.5" stroke="currentColor"></path></svg></button>
-                        <button class="btn-action delete-question-btn" data-id="${q.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="stroke-[2]"><path d="M2.99561 7H20.9956" stroke="currentColor"></path><path d="M9.99561 11V17M13.9956 11V17" stroke="currentColor"></path><path d="M8 6.5L8.68917 4.08792C8.87315 3.44397 9.46173 3 10.1315 3H13.8685C14.5383 3 15.1268 3.44397 15.3108 4.08792L16 6.5" stroke="currentColor"></path><path d="M5 7L5.80098 18.2137C5.91312 19.7837 7.21944 21 8.79336 21H15.2066C16.7806 21 18.0869 19.7837 18.199 18.2137L19 7" stroke="currentColor"></path></svg></button>
-                    </div>
-                    <div class="question-content"><h3>${q.question}</h3><p>${q.answer}</p>${imageHtml}</div>`;
+                item.innerHTML = `<div class="question-header"><div class="question-actions"><button class="btn-action edit-question-btn" data-id="${q.id}"><svg viewBox="0 0 24 24"><path d="M18.25 5.75C16.8693 4.36929 14.6307 4.36929 13.25 5.75L10.125 8.875L5.52404 13.476C4.86236 14.1376 4.45361 15.0104 4.36889 15.9423L4 20.0001L8.0578 19.6311C8.98967 19.5464 9.86234 19.1377 10.524 18.476L18.25 10.75C19.6307 9.36929 19.6307 7.13071 18.25 5.75V5.75Z" stroke="currentColor" stroke-width="2"></path><path d="M12.5 7.5L16.5 11.5" stroke="currentColor" stroke-width="2"></path></svg></button><button class="btn-action delete-question-btn" data-id="${q.id}"><svg viewBox="0 0 24 24"><path d="M2.99561 7H20.9956" stroke="currentColor" stroke-width="2"></path><path d="M9.99561 11V17M13.9956 11V17" stroke="currentColor" stroke-width="2"></path><path d="M8 6.5L8.68917 4.08792C8.87315 3.44397 9.46173 3 10.1315 3H13.8685C14.5383 3 15.1268 3.44397 15.3108 4.08792L16 6.5" stroke="currentColor" stroke-width="2"></path><path d="M5 7L5.80098 18.2137C5.91312 19.7837 7.21944 21 8.79336 21H15.2066C16.7806 21 18.0869 19.7837 18.199 18.2137L19 7" stroke="currentColor" stroke-width="2"></path></svg></button></div></div><div class="question-content"><h3>${q.question}</h3><p>${q.answer}</p>${imageHtml}</div>`;
                 questionsListDiv.appendChild(item);
             });
         };
@@ -211,8 +208,7 @@
         const fetchAndRenderData = async () => {
             const docSnap = await getDoc(qaDocRef);
             allData = docSnap.exists() && docSnap.data().articleTitle ? docSnap.data() : { questions: [] };
-            renderArticleDetails();
-            renderQuestions();
+            renderArticleDetails(); renderQuestions();
         };
 
         articleDetailsForm.addEventListener('submit', async (e) => {
@@ -221,8 +217,7 @@
             allData.articleNumber = e.target.elements['article-number'].value;
             allData.articleColor = e.target.elements['article-color'].value;
             await setDoc(qaDocRef, allData, { merge: true });
-            showToast('Article details saved!');
-            renderArticleDetails();
+            showToast('Article details saved!'); renderArticleDetails();
         });
 
         document.querySelector('.edit-details-btn').addEventListener('click', () => {
@@ -234,50 +229,46 @@
         });
 
         articleDetailsForm.elements['article-color'].addEventListener('input', (e) => { if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(e.target.value)) e.target.nextElementSibling.style.backgroundColor = e.target.value; });
-
         fabAddBtn.addEventListener('click', () => openModal('add'));
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(modalOverlay); });
+        document.querySelector('#question-modal-overlay .modal-close-btn').addEventListener('click', () => closeModal(modalOverlay));
+        
         document.getElementById('question-modal-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const editingId = document.getElementById('edit-question-id').value;
-            const newQuestion = { 
-                id: editingId ? Number(editingId) : Date.now(), 
-                question: document.getElementById('question-title-modal').value, 
-                answer: document.getElementById('question-answer-modal').value, 
-                imageUrl: document.getElementById('question-image-link-modal').value 
-            };
+            const newQuestion = { id: editingId ? Number(editingId) : Date.now(), question: document.getElementById('question-title-modal').value, answer: document.getElementById('question-answer-modal').value, imageUrl: document.getElementById('question-image-link-modal').value };
             if (editingId) {
                 const qIndex = allData.questions.findIndex(q => q.id == editingId);
                 if (qIndex > -1) allData.questions[qIndex] = newQuestion;
-            } else {
-                allData.questions.push(newQuestion);
-            }
+            } else { allData.questions.push(newQuestion); }
             await setDoc(qaDocRef, allData);
             showToast(`Question ${editingId ? 'updated' : 'added'}!`);
-            closeModal();
-            renderQuestions();
+            closeModal(modalOverlay); renderQuestions();
         });
 
         questionsListDiv.addEventListener('click', (e) => {
             const editBtn = e.target.closest('.edit-question-btn');
             const deleteBtn = e.target.closest('.delete-question-btn');
-            if (editBtn) {
-                openModal('edit', allData.questions.find(q => q.id == editBtn.dataset.id));
-            } else if (deleteBtn) {
-                if (confirm('Delete this question?')) {
-                    allData.questions = allData.questions.filter(q => q.id != deleteBtn.dataset.id);
-                    setDoc(qaDocRef, allData).then(() => { showToast('Question deleted.'); renderQuestions(); });
-                }
-            }
+            if (editBtn) openModal('edit', allData.questions.find(q => q.id == editBtn.dataset.id));
+            else if (deleteBtn) openConfirmModal({ type: 'deleteQuestion', id: deleteBtn.dataset.id });
         });
 
-        deleteAllBtn.addEventListener('click', async () => {
-            if (confirm('ARE YOU SURE? This will delete all article details and questions.')) {
+        deleteAllBtn.addEventListener('click', () => openConfirmModal({ type: 'deleteAll' }));
+        document.getElementById('cancel-delete-btn').addEventListener('click', () => closeModal(confirmModal));
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            if (!actionToConfirm) return;
+            if (actionToConfirm.type === 'deleteAll') {
                 await setDoc(qaDocRef, { questions: [] });
                 showToast("All content has been deleted.");
                 fetchAndRenderData();
+            } else if (actionToConfirm.type === 'deleteQuestion') {
+                allData.questions = allData.questions.filter(q => q.id != actionToConfirm.id);
+                await setDoc(qaDocRef, allData);
+                showToast('Question deleted.');
+                renderQuestions();
             }
+            closeModal(confirmModal);
+            actionToConfirm = null;
         });
         
         const menuToggleButton = document.getElementById('menu-toggle-button');
