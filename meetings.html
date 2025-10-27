@@ -23,7 +23,7 @@
             --icon-color: #757575;
             --border-gray: #e0e0e0;
             --text-color: #333;
-            --text-gray: #555;
+            --text-light-content: #555;
         }
         
         @font-face {
@@ -38,7 +38,6 @@
             padding: 0;
             font-family: 'Noto Sans Telugu', 'IBM Plex Sans', sans-serif;
             background-color: var(--body-bg);
-            color: var(--text-color);
             visibility: hidden;
             opacity: 0;
             transition: opacity 0.3s ease-in;
@@ -46,159 +45,95 @@
         body.auth-ready { visibility: visible; opacity: 1; }
         body.menu-open { overflow: hidden; }
         .site-header {
-            background-color: var(--header-bg);
-            padding: 0;
-            color: var(--text-light);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 900;
+            background-color: var(--header-bg); padding: 0; color: var(--text-light);
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 900;
         }
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 56px;
-            padding: 0 15px 0 0; 
-        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; height: 56px; padding: 0 15px 0 0; }
         #mobileNavTopBar .mobileLogo {
-            display: block;
-            width: 75px;
-            height: 56px;
-            background-image: url(https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg), none;
-            background-repeat: no-repeat;
-            background-size: contain;
-            background-position: center left;
-            flex-shrink: 0;
+            display: block; width: 75px; height: 56px; background-image: url(https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg), none;
+            background-repeat: no-repeat; background-size: contain; background-position: center left; flex-shrink: 0;
         }
-        .srText {
-            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
-        }
-        .header-right-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .admin-button {
-            display: flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-light); text-decoration: none; padding: 6px 12px; border-radius: 6px;
-            font-size: 0.9rem; font-weight: 500;
-        }
+        .header-right-controls { display: flex; align-items: center; gap: 15px; }
         .header-icons { display: flex; align-items: center; height: 56px; cursor: pointer; }
         .header-icons svg { height: 24px; width: 24px; color: var(--text-light); }
         .header-icons .close-icon { display: none; }
         body.menu-open .header-icons .hamburger-icon { display: none; }
         body.menu-open .header-icons .close-icon { display: block; }
-        .menu-overlay {
-            position: fixed; top: 56px; left: 0; width: 100%; height: calc(100% - 56px);
-            background-color: rgba(0, 0, 0, 0.6); z-index: 998; opacity: 0; visibility: hidden;
-        }
+        .menu-overlay { position: fixed; top: 56px; left: 0; width: 100%; height: calc(100% - 56px); background-color: rgba(0, 0, 0, 0.6); z-index: 998; opacity: 0; visibility: hidden; }
         .menu-overlay.is-open { opacity: 1; visibility: visible; }
         .slide-menu {
             position: fixed; top: 56px; right: 0; height: calc(100dvh - 56px); width: 320px; max-width: 90%;
             background-color: var(--menu-new-bg); z-index: 999; transform: translateX(100%);
-            transition: transform 0.3s ease-in-out; display: flex; flex-direction: column;
-            border-left: 1px solid var(--menu-new-border);
+            transition: transform 0.3s ease-in-out; display: flex; flex-direction: column; border-left: 1px solid var(--menu-new-border);
         }
         .slide-menu.is-open { transform: translateX(0); }
         .menu-links { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex-grow: 1; }
         .menu-links li a {
             display: flex; align-items: center; color: var(--menu-new-text); background-color: var(--menu-new-bg);
             height: 52px; padding: 12px 5px 12px 12px; box-sizing: border-box; text-decoration: none;
-            font-size: 1rem; transition: background-color 0.2s; border-top: 1px dotted #a7a7a7;
+            font-size: 1rem; border-top: 1px dotted #a7a7a7;
         }
         .menu-links li:first-child a { border-top: none; }
-        .menu-links li a:hover { background-color: var(--menu-new-hover); }
-        .profile-section {
-            padding: 16px; border-top: 1px solid var(--menu-new-border); flex-shrink: 0;
-            background-color: #fafafa; margin-top: auto;
-        }
+        .profile-section { padding: 16px; border-top: 1px solid var(--menu-new-border); flex-shrink: 0; background-color: #fafafa; margin-top: auto; }
         .profile-info { display: flex; align-items: center; margin-bottom: 16px; }
-        .profile-image {
-            width: 44px; height: 44px; border-radius: 50%; margin-right: 12px; object-fit: cover;
-            border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); background-color: #e0e0e0;
-        }
-        .profile-name { font-weight: bold; font-size: 0.95rem; color: #333; }
-        .profile-email { font-size: 0.85rem; color: #888; word-break: break-all; }
-        .logout-button {
-            display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px;
-            font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0;
-            border: none; border-radius: 8px; cursor: pointer; text-align: center;
-        }
+        .profile-image { width: 44px; height: 44px; border-radius: 50%; margin-right: 12px; object-fit: cover; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); background-color: #e0e0e0; }
+        .logout-button { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; }
         main { padding-top: 56px; }
         
-        .jwIcon {
-            font-family: "jw-icons-external"; font-size: 24px; display: inline-block; color: var(--icon-color);
-            width: 30px; height: 24px; -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale; margin-right: 10px; text-align: center;
-        }
+        .jwIcon { font-family: "jw-icons-external"; font-size: 24px; display: inline-block; width: 30px; height: 24px; -webkit-font-smoothing: antialiased; margin-right: 10px; text-align: center; }
         .menu-links .jwIcon { color: var(--icon-color); }
         .mid1011200::before { content: "\e661"; }
-        .mid1011201::before { content: "\e625"; }
-        .mid1011207::before { content: "\e695"; }
-        .mid1011216::before { content: "\e610"; }
         .mid1011529::before { content: "\e679"; } 
         .mid1011209::before { content: "\e675"; } 
         
-        /* Navigation & Dropdown */
-        .sub-nav {
-            display: flex; justify-content: space-between; align-items: center; padding: 0 16px;
-            height: 56px; background-color: #f5f5f5; border-bottom: 1px solid var(--border-gray);
-        }
+        .sub-nav { display: flex; justify-content: space-between; align-items: center; padding: 2px 32px; height: 56px; background-color: #ffffff; border-bottom: 1px solid var(--border-gray); }
         .sub-nav-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
+        
         .custom-dropdown { position: relative; display: inline-block; }
         .dropdown-button {
-            background-color: var(--body-bg); border: 1px solid var(--border-gray); border-radius: 8px;
-            padding: 8px 12px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 1rem;
-            font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-            min-width: 250px;
+            background-color: var(--body-bg); border: 2px solid var(--border-gray); border-radius: 8px; padding: 10px;
+            font-family: 'Noto Sans Telugu', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; min-width: 250px;
         }
         .dropdown-button .dropdown-arrow { margin-left: 10px; transition: transform 0.2s ease-in-out; }
         .dropdown-button.is-open .dropdown-arrow { transform: rotate(180deg); }
-        .dropdown-content {
-            display: none; position: absolute; right:0; background-color: white; min-width: 250px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); border-radius: 8px;
-            border: 1px solid var(--border-gray); z-index: 1; margin-top: 4px;
-        }
+        .dropdown-content { display: none; position: absolute; right:0; background-color: white; min-width: 250px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-gray); z-index: 1; margin-top: 4px; }
         .dropdown-content.is-open { display: block; }
-        .dropdown-item {
-            color: var(--text-color); padding: 12px 16px; text-decoration: none;
-            display: flex; align-items: center; cursor: pointer;
-        }
+        .dropdown-item { color: var(--text-color); padding: 12px 16px; text-decoration: none; display: flex; align-items: center; cursor: pointer; }
         .dropdown-item:hover { background-color: #f1f1f1; }
         .dropdown-item .jwIcon { color: var(--menu-new-text); }
-
-        /* Content Styles */
+        
         .content-pane { display: none; }
         .content-pane.active { display: block; }
-
-        /* Styles merged from user-multi-answer.html (CLM) */
-        .heading-bar { height: 56px; background-color: var(--primary-color); display: flex; align-items: center; padding: 0 16px; color: white; }
-        .heading-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 18px; font-weight: 700; }
-        .heading-content { padding: 1.5rem 16px; max-width: 900px; margin: 0 auto; }
-        .qa-answer-list { list-style-type: decimal; padding-left: 20px; }
-        .qa-answer-list li { margin-bottom: 1.5rem; }
-
-        /* Styles merged from user-questions.html (WT) */
-        .article-color-bar { width: 100%; height: 56px; margin-top: 0; display: flex; align-items: center; padding: 0 1rem; }
-        .article-number-text { color: white; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; font-weight: 700; }
-        .wt-content-wrapper { padding: 2rem 1rem; max-width: 900px; margin: 0 auto; }
-        .article-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 28px; line-height: 41px; font-weight: 700; color: var(--text-color); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
-
-        /* Shared QA Styles */
-        .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
-        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1rem; }
-        .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-gray); white-space: pre-wrap; }
-        .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
-
+        
+        /* Styles for Simple Q&A (user-questions.html) */
+        .simple-qa-content .article-color-bar { height: 56px; display: flex; align-items: center; padding: 0 1rem; margin-top: 1.5rem; }
+        .simple-qa-content .article-number-text { color: white; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; line-height: 26px; font-weight: 700; }
+        .simple-qa-content .main-content { padding: 2rem 1rem; max-width: 900px; margin: 0 auto; }
+        .simple-qa-content .article-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 28px; line-height: 41px; font-weight: 700; color: var(--text-color); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
+        .simple-qa-content .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
+        .simple-qa-content .qa-item:last-child { border-bottom: none; }
+        .simple-qa-content .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1rem; }
+        .simple-qa-content .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
+        .simple-qa-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
+        
+        /* Styles for Multi-Answer Q&A (user-multi-answer.html) */
+        .multi-answer-content { max-width: 900px; margin: 0 auto; }
+        .multi-answer-content .heading-bar { height: 56px; display: flex; align-items: center; padding: 0 16px; color: white; }
+        .multi-answer-content .heading-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 18px; font-weight: 700; }
+        .multi-answer-content .heading-content { padding: 1.5rem 16px; }
+        .multi-answer-content .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
+        .multi-answer-content .qa-item:last-child { border-bottom: none; }
+        .multi-answer-content .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1.5rem; }
+        .multi-answer-content .qa-answer-list { list-style-type: decimal; padding-left: 20px; }
+        .multi-answer-content .qa-answer-list li { margin-bottom: 1.5rem; }
+        .multi-answer-content .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
+        .multi-answer-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem; }
+        
         @media (min-width: 768px) {
-            .sub-nav { padding: 0 32px; }
-            .heading-bar, .heading-content { padding-left: 32px; padding-right: 32px; }
-            .article-color-bar { padding: 0 32px; }
-            .wt-content-wrapper { padding: 2rem 32px; }
+            .simple-qa-content .article-color-bar { padding: 0 2rem; }
+            .simple-qa-content .main-content { padding: 2rem; }
+            .multi-answer-content .heading-bar, .multi-answer-content .heading-content { padding-left: 32px; padding-right: 32px; }
         }
     </style>
 </head>
@@ -206,30 +141,16 @@
     <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
             <a href="/home.html" class="mobileLogo" title="Home"><span class="srText">Home</span></a>
-            <div class="header-right-controls">
-                <a href="/admin.html" id="admin-dashboard-link" class="admin-button" style="display: none;"><i class="fas fa-user-shield"></i><span>Admin</span></a>
-                <div class="header-icons" id="menu-toggle-button">
-                    <svg class="hamburger-icon" aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
-                    <svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
-                </div>
-            </div>
+            <div class="header-right-controls"><div class="header-icons" id="menu-toggle-button"><svg class="hamburger-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg><svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg></div></div>
         </div>
     </header>
-    
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
             <li><a href="/home.html"><span class="jwIcon mid1011200"></span><span>హోమ్</span></a></li>
-            <li><a href="/user-questions.html"><i class="fas fa-question-circle" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Simple Q&A</span></a></li>
-            <li><a href="/user-multi-answer.html"><i class="fas fa-list-ol" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Multi-Answer Q&A</span></a></li>
+            <li><a href="/meetings.html"><i class="fas fa-users" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Meetings</span></a></li>
         </ul>
-        <div class="profile-section">
-            <div class="profile-info">
-                 <img class="profile-image" alt="Profile">
-                 <div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div>
-            </div>
-            <button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button>
-        </div>
+        <div class="profile-section"><div class="profile-info"><img class="profile-image" alt="Profile"><div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div></div><button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button></div>
     </div>
 
     <main>
@@ -241,43 +162,49 @@
                     <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </button>
                 <div class="dropdown-content" id="dropdown-content">
-                    <a class="dropdown-item" data-target="clm">
-                        <span class="jwIcon mid1011529"></span>
-                        <span>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌</span>
-                    </a>
-                    <a class="dropdown-item" data-target="wt">
-                        <span class="jwIcon mid1011209"></span>
-                        <span>కావలికోట—అధ్యయనం</span>
-                    </a>
+                    <a class="dropdown-item" data-target="clm"><span class="jwIcon mid1011529"></span><span>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌</span></a>
+                    <a class="dropdown-item" data-target="wt"><span class="jwIcon mid1011209"></span><span>కావలికోట—అధ్యయనం</span></a>
                 </div>
             </div>
         </div>
-        
-        <!-- Content Panes -->
-        <div id="clm" class="content-pane active">
-             <div id="clm-container"><p style="padding: 2rem;">Loading...</p></div>
-        </div>
-        <div id="wt" class="content-pane">
-             <div id="wt-container">
-                 <div class="article-color-bar" id="article-color-bar"><span class="article-number-text" id="article-number-text"></span></div>
-                 <div class="wt-content-wrapper">
-                     <h1 class="article-title" id="article-title"></h1>
-                     <div id="wt-list"><p>Loading...</p></div>
-                 </div>
-             </div>
+        <div class="content-panes">
+            <div id="clm" class="content-pane active">
+                <div class="multi-answer-content" id="multi-answer-container"><p style="padding: 1rem;">Loading...</p></div>
+            </div>
+            <div id="wt" class="content-pane">
+                <div class="simple-qa-content">
+                    <div class="article-color-bar" id="article-color-bar">
+                        <span class="article-number-text" id="article-number-text"></span>
+                    </div>
+                    <div class="main-content" id="qa-container">
+                        <h1 class="article-title" id="article-title"></h1>
+                        <div id="qa-list"><p>Loading...</p></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <script>
-        // --- Menu & Dropdown Scripts ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
         const body = document.body;
         function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
-        menuToggleButton.addEventListener('click', () => { body.classList.contains('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
+        menuToggleButton.addEventListener('click', () => { body.classList.toggle('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
         menuOverlay.addEventListener('click', closeMenu);
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- DOM Elements ---
         const dropdown = document.getElementById('meeting-dropdown');
         const dropdownButton = document.getElementById('dropdown-button');
         const dropdownButtonText = document.getElementById('dropdown-button-text');
@@ -285,12 +212,88 @@
         const contentPanes = document.querySelectorAll('.content-pane');
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-        function switchPane(targetId) { contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId)); }
+        // Simple Q&A elements
+        const articleColorBar = document.getElementById('article-color-bar');
+        const articleNumberText = document.getElementById('article-number-text');
+        const articleTitle = document.getElementById('article-title');
+        const qaListDiv = document.getElementById('qa-list');
+        const simpleQaDocRef = doc(db, "qanda", "main");
+
+        // Multi-Answer Q&A elements
+        const multiAnswerContainer = document.getElementById('multi-answer-container');
+        const multiAnswerDocRef = doc(db, "qanda", "multi");
+
+        // --- Data Fetching and Rendering ---
+        const displaySimpleData = async () => {
+            const docSnap = await getDoc(simpleQaDocRef);
+            if (!docSnap.exists()) {
+                articleTitle.textContent = 'Content Not Available';
+                qaListDiv.innerHTML = '<p>No content has been added yet.</p>';
+                return;
+            }
+            const data = docSnap.data();
+            articleColorBar.style.backgroundColor = data.articleColor || '#4a6da7';
+            articleNumberText.textContent = data.articleNumber || '';
+            articleTitle.textContent = data.articleTitle || 'Questions & Answers';
+            const questions = data.questions || [];
+            qaListDiv.innerHTML = '';
+            if (questions.length > 0) {
+                questions.forEach(q_data => {
+                    const imageHtml = q_data.imageUrl ? `<img src="${q_data.imageUrl}" alt="" class="qa-image">` : '';
+                    const item = document.createElement('div');
+                    item.className = 'qa-item';
+                    item.innerHTML = `<h2 class="qa-question">${q_data.question}</h2>${imageHtml}<p class="qa-answer">${q_data.answer.replace(/\n/g, '<br>')}</p>`;
+                    qaListDiv.appendChild(item);
+                });
+            } else {
+                qaListDiv.innerHTML = '<p>No questions have been added yet.</p>';
+            }
+        };
+
+        const displayMultiAnswerData = async () => {
+            const docSnap = await getDoc(multiAnswerDocRef);
+            multiAnswerContainer.innerHTML = '';
+            if (!docSnap.exists() || !docSnap.data().headings) {
+                multiAnswerContainer.innerHTML = '<p style="padding: 1rem;">Content not available.</p>';
+                return;
+            }
+            const data = docSnap.data();
+            data.headings.forEach(heading => {
+                const headingSection = document.createElement('section');
+                headingSection.innerHTML = `<div class="heading-bar" style="background-color: ${heading.color};"><h2 class="heading-title">${heading.title}</h2></div>`;
+                const headingContent = document.createElement('div');
+                headingContent.className = 'heading-content';
+                const questions = heading.questions || [];
+                if (questions.length > 0) {
+                    questions.forEach(q_data => {
+                        const answersHtml = q_data.answers.map(ans => `<li>${ans.imageUrl ? `<img src="${ans.imageUrl}" alt="" class="qa-image">` : ''}<p class="qa-answer">${ans.text.replace(/\n/g, '<br>')}</p></li>`).join('');
+                        const item = document.createElement('div');
+                        item.className = 'qa-item';
+                        item.innerHTML = `<h3 class="qa-question">${q_data.question}</h3><ol class="qa-answer-list">${answersHtml}</ol>`;
+                        headingContent.appendChild(item);
+                    });
+                } else {
+                    headingContent.innerHTML = '<p>No questions for this heading.</p>';
+                }
+                headingSection.appendChild(headingContent);
+                multiAnswerContainer.appendChild(headingSection);
+            });
+        };
+
+        // --- UI Logic ---
+        function switchPane(targetId) {
+            contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId));
+        }
+        
         const initialItem = dropdownItems[0];
         dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
         switchPane(initialItem.dataset.target);
 
-        dropdownButton.addEventListener('click', () => { dropdownContent.classList.toggle('is-open'); dropdownButton.classList.toggle('is-open'); });
+        dropdownButton.addEventListener('click', () => {
+            dropdownContent.classList.toggle('is-open');
+            dropdownButton.classList.toggle('is-open');
+        });
+
         dropdownContent.addEventListener('click', (e) => {
             const selectedItem = e.target.closest('.dropdown-item');
             if (!selectedItem) return;
@@ -299,80 +302,30 @@
             dropdownContent.classList.remove('is-open');
             dropdownButton.classList.remove('is-open');
         });
-        window.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) { dropdownContent.classList.remove('is-open'); dropdownButton.classList.remove('is-open'); } });
-    </script>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr", storageBucket: "jwhelperr.appspot.com", messagingSenderId: "760897937861", appId: "1:760897937861:web:1b869f5b5da0c4eed96bac" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        const clmContainer = document.getElementById('clm-container');
-        const articleColorBar = document.getElementById('article-color-bar');
-        const articleNumberText = document.getElementById('article-number-text');
-        const articleTitle = document.getElementById('article-title');
-        const wtListDiv = document.getElementById('wt-list');
-        const adminDashboardLink = document.getElementById('admin-dashboard-link');
-
-        // Render Multi-Answer (CLM) content
-        const displayCLM = async () => {
-            const docSnap = await getDoc(doc(db, "qanda", "multi"));
-            clmContainer.innerHTML = '';
-            if (!docSnap.exists() || !docSnap.data().headings) {
-                clmContainer.innerHTML = '<p style="padding: 2rem;">Content not available.</p>'; return;
+        window.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdownContent.classList.remove('is-open');
+                dropdownButton.classList.remove('is-open');
             }
-            docSnap.data().headings.forEach(heading => {
-                const section = document.createElement('section');
-                section.innerHTML = `<div class="heading-bar" style="background-color: ${heading.color};"><h1 class="heading-title">${heading.title}</h1></div>`;
-                const content = document.createElement('div');
-                content.className = 'heading-content';
-                (heading.questions || []).forEach(q => {
-                    const answers = q.answers.map(a => `<li>${a.imageUrl ? `<img src="${a.imageUrl}" class="qa-image">` : ''}<p class="qa-answer">${a.text.replace(/\n/g, '<br>')}</p></li>`).join('');
-                    content.innerHTML += `<div class="qa-item"><h2 class="qa-question">${q.question}</h2><ol class="qa-answer-list">${answers}</ol></div>`;
-                });
-                if (!heading.questions || heading.questions.length === 0) content.innerHTML = '<p>No questions.</p>';
-                section.appendChild(content);
-                clmContainer.appendChild(section);
-            });
-        };
+        });
 
-        // Render Simple Q&A (WT) content
-        const displayWT = async () => {
-            const docSnap = await getDoc(doc(db, "qanda", "main"));
-            wtListDiv.innerHTML = '';
-            if (!docSnap.exists()) {
-                 articleTitle.textContent = 'Content Not Available'; wtListDiv.innerHTML = '<p>No content.</p>'; return;
-            }
-            const data = docSnap.data();
-            articleColorBar.style.backgroundColor = data.articleColor || '#4a6da7';
-            articleNumberText.textContent = data.articleNumber || '';
-            articleTitle.textContent = data.articleTitle || 'Questions & Answers';
-            (data.questions || []).forEach(q => {
-                wtListDiv.innerHTML += `<div class="qa-item"><h2 class="qa-question">${q.question}</h2>${q.imageUrl ? `<img src="${q.imageUrl}" class="qa-image">` : ''}<p class="qa-answer">${q.answer.replace(/\n/g, '<br>')}</p></div>`;
-            });
-            if (!data.questions || data.questions.length === 0) wtListDiv.innerHTML = '<p>No questions yet.</p>';
-        };
-
-        document.querySelector('.logout-button').addEventListener('click', () => signOut(auth));
-
+        // --- Auth & Init ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().status === 'approved') {
                     document.body.classList.add('auth-ready');
-                    if (userDoc.data().role === 'admin') adminDashboardLink.style.display = 'flex';
-                    const profile = { img: user.photoURL || `https://placehold.co/44x44/666/fff?text=${(user.displayName||user.email)[0].toUpperCase()}`, name: user.displayName || 'No Name', email: user.email };
-                    document.querySelector('.profile-image').src = profile.img;
-                    document.querySelector('.profile-name').textContent = profile.name;
-                    document.querySelector('.profile-email').textContent = profile.email;
-                    // Load both content types
-                    displayCLM();
-                    displayWT();
+                    const profileImage = document.querySelector('.profile-image');
+                    const profileName = document.querySelector('.profile-name');
+                    const profileEmail = document.querySelector('.profile-email');
+                    profileImage.src = user.photoURL || `https://placehold.co/44x44/666/fff?text=${(user.displayName || user.email)[0].toUpperCase()}`;
+                    profileName.textContent = user.displayName || 'No Name';
+                    profileEmail.textContent = user.email;
+                    document.querySelector('.logout-button').addEventListener('click', () => signOut(auth));
+                    // Load data for both panes on page load
+                    displayMultiAnswerData();
+                    displaySimpleData();
                 } else { window.location.href = '/pending.html'; }
             } else { window.location.href = '/'; }
         });
