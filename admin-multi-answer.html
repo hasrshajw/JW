@@ -57,9 +57,11 @@
         .input-group textarea { resize: vertical; min-height: 80px; }
         .input-group input:focus, .input-group textarea:focus { outline: none; border-color: var(--primary-color); background-color: var(--card-bg); box-shadow: 0 0 0 4px rgba(74, 109, 167, 0.2); }
         .color-input-wrapper { display: flex; align-items: center; gap: 10px; }
-        .color-preview { width: 30px; height: 30px; border-radius: 50%; background-color: #ccc; border: 2px solid var(--border-gray); }
+        .color-preview { width: 30px; height: 30px; border-radius: 8px; background-color: #ccc; border: 2px solid var(--border-gray); }
         .btn-submit { width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600; color: #fff; background-color: var(--primary-color); border: none; border-radius: 12px; cursor: pointer; margin-top: 0.5rem; transition: background-color 0.3s; }
         .card { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .heading-group { border-bottom: 1px solid var(--border-gray); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+        .heading-group:last-child { border-bottom: none; margin-bottom: 0; }
         .question-item { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .question-content h3 { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin: 0 0 1rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
         .answer-list { list-style-type: decimal; padding-left: 20px; }
@@ -120,18 +122,39 @@
     
     <main class="main-content">
         <div class="card">
-            <h2>Article Details (Multi-Answer)</h2>
-            <form id="article-details-form">
-                <div class="input-group"><label for="article-title">Article Title</label><input type="text" id="article-title" required></div>
-                <div class="input-group"><label for="article-number">Article Number</label><input type="text" id="article-number" required></div>
-                <div class="input-group">
-                    <label for="article-color">Background Color (HEX)</label>
-                    <div class="color-input-wrapper">
-                        <input type="text" id="article-color" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
-                        <div class="color-preview" id="color-preview"></div>
+            <h2>Content Headings</h2>
+            <form id="headings-form">
+                <div class="heading-group">
+                    <div class="input-group"><label>Heading 1 Text</label><input type="text" id="heading-text-1" required></div>
+                    <div class="input-group">
+                        <label>Heading 1 Color (HEX)</label>
+                        <div class="color-input-wrapper">
+                            <input type="text" id="heading-color-1" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
+                            <div class="color-preview"></div>
+                        </div>
                     </div>
                 </div>
-                <button type="submit" class="btn-submit">Save Article Details</button>
+                <div class="heading-group">
+                    <div class="input-group"><label>Heading 2 Text</label><input type="text" id="heading-text-2" required></div>
+                    <div class="input-group">
+                        <label>Heading 2 Color (HEX)</label>
+                        <div class="color-input-wrapper">
+                            <input type="text" id="heading-color-2" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
+                            <div class="color-preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="heading-group">
+                    <div class="input-group"><label>Heading 3 Text</label><input type="text" id="heading-text-3" required></div>
+                    <div class="input-group">
+                        <label>Heading 3 Color (HEX)</label>
+                        <div class="color-input-wrapper">
+                            <input type="text" id="heading-color-3" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
+                            <div class="color-preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Save Headings</button>
             </form>
         </div>
 
@@ -172,9 +195,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const articleDetailsForm = document.getElementById('article-details-form');
-        const colorInput = document.getElementById('article-color');
-        const colorPreview = document.getElementById('color-preview');
+        const headingsForm = document.getElementById('headings-form');
         const questionsListDiv = document.getElementById('questions-list');
         const deleteAllBtn = document.getElementById('delete-all-btn');
         const fabAddBtn = document.getElementById('fab-add-btn');
@@ -198,12 +219,7 @@
         const createAnswerField = (answer = { text: '', imageUrl: '' }) => {
             const div = document.createElement('div');
             div.className = 'input-group';
-            div.innerHTML = `
-                <button type="button" class="btn-remove-answer">&times;</button>
-                <label>Answer Text</label>
-                <textarea required>${answer.text}</textarea>
-                <label style="margin-top: 0.5rem;">Image URL (Optional)</label>
-                <input type="url" value="${answer.imageUrl || ''}">`;
+            div.innerHTML = `<button type="button" class="btn-remove-answer">&times;</button><label>Answer Text</label><textarea required>${answer.text}</textarea><label style="margin-top: 0.5rem;">Image URL (Optional)</label><input type="url" value="${answer.imageUrl || ''}">`;
             answersContainer.appendChild(div);
             div.querySelector('.btn-remove-answer').addEventListener('click', () => div.remove());
         };
@@ -219,7 +235,7 @@
             } else {
                 modalTitle.textContent = 'Add New Question';
                 editIdInput.value = '';
-                createAnswerField(); // Start with one empty answer field
+                createAnswerField();
             }
             modalOverlay.style.display = 'flex';
             setTimeout(() => modalOverlay.classList.add('show'), 10);
@@ -238,16 +254,10 @@
                  return;
             }
             allQuestionBlocks.forEach((q) => {
-                const answersHtml = q.answers.map(ans => `
-                    <li>
-                        <p class="answer-text">${ans.text}</p>
-                        ${ans.imageUrl ? `<img src="${ans.imageUrl}" class="answer-image-preview">` : ''}
-                    </li>`).join('');
+                const answersHtml = q.answers.map(ans => `<li><p class="answer-text">${ans.text}</p>${ans.imageUrl ? `<img src="${ans.imageUrl}" class="answer-image-preview">` : ''}</li>`).join('');
                 const item = document.createElement('div');
                 item.className = 'question-item';
-                item.innerHTML = `
-                    <div class="question-content"><h3>${q.question}</h3><ol class="answer-list">${answersHtml}</ol></div>
-                    <div class="question-actions"><button class="btn-action edit" data-id="${q.id}">Edit</button><button class="btn-action delete" data-id="${q.id}">Delete</button></div>`;
+                item.innerHTML = `<div class="question-content"><h3>${q.question}</h3><ol class="answer-list">${answersHtml}</ol></div><div class="question-actions"><button class="btn-action edit" data-id="${q.id}">Edit</button><button class="btn-action delete" data-id="${q.id}">Delete</button></div>`;
                 questionsListDiv.appendChild(item);
             });
         };
@@ -256,25 +266,39 @@
             const docSnap = await getDoc(qaDocRef);
             const data = docSnap.exists() ? docSnap.data() : {};
             allQuestionBlocks = data.questions || [];
-            articleDetailsForm['article-title'].value = data.articleTitle || '';
-            articleDetailsForm['article-number'].value = data.articleNumber || '';
-            articleDetailsForm['article-color'].value = data.articleColor || '#4a6da7';
-            colorPreview.style.backgroundColor = colorInput.value;
+            const headings = data.headings || [{}, {}, {}];
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`heading-text-${i+1}`).value = headings[i]?.text || '';
+                const colorInput = document.getElementById(`heading-color-${i+1}`);
+                colorInput.value = headings[i]?.color || '#000000';
+                colorInput.dispatchEvent(new Event('input')); // Trigger preview update
+            }
             renderQuestions();
         };
 
-        articleDetailsForm.addEventListener('submit', async (e) => {
+        headingsForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const articleTitle = articleDetailsForm['article-title'].value;
-            const articleNumber = articleDetailsForm['article-number'].value;
-            const articleColor = articleDetailsForm['article-color'].value;
+            const headings = [];
+            for (let i = 0; i < 3; i++) {
+                headings.push({
+                    text: document.getElementById(`heading-text-${i+1}`).value,
+                    color: document.getElementById(`heading-color-${i+1}`).value
+                });
+            }
             try {
-                await setDoc(qaDocRef, { articleTitle, articleNumber, articleColor }, { merge: true });
-                showToast('Article details saved!');
-            } catch (error) { showToast('Error saving details.'); }
+                await setDoc(qaDocRef, { headings }, { merge: true });
+                showToast('Headings saved!');
+            } catch (error) { showToast('Error saving headings.'); }
         });
 
-        colorInput.addEventListener('input', () => { if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(colorInput.value)) colorPreview.style.backgroundColor = colorInput.value; });
+        document.querySelectorAll('input[id^="heading-color-"]').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const preview = e.target.nextElementSibling;
+                if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(e.target.value)) {
+                    preview.style.backgroundColor = e.target.value;
+                }
+            });
+        });
         
         fabAddBtn.addEventListener('click', () => openModal('add'));
         addAnswerBtn.addEventListener('click', () => createAnswerField());
@@ -287,12 +311,8 @@
             const editingId = editIdInput.value;
             const answers = [];
             answersContainer.querySelectorAll('.input-group').forEach(group => {
-                answers.push({
-                    text: group.querySelector('textarea').value,
-                    imageUrl: group.querySelector('input[type="url"]').value
-                });
+                answers.push({ text: group.querySelector('textarea').value, imageUrl: group.querySelector('input[type="url"]').value });
             });
-
             if (answers.length === 0) { showToast('You must add at least one answer.'); return; }
 
             if (editingId) {
