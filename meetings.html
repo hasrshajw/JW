@@ -86,6 +86,7 @@
         .mid1011529::before { content: "\e679"; } 
         .mid1011209::before { content: "\e675"; } 
         
+        
         .sub-nav { display: flex; justify-content: space-between; align-items: center; padding: 2px 32px; height: 56px; background-color: #ffffff; border-bottom: 1px solid var(--border-gray); }
         .sub-nav-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
         
@@ -106,8 +107,7 @@
         .content-pane { display: none; }
         .content-pane.active { display: block; }
         
-        /* Styles for Simple Q&A (user-questions.html) */
-        .simple-qa-content .article-color-bar { height: 56px; display: flex; align-items: center; padding: 0 1rem; margin-top: 1.5rem; }
+        .simple-qa-content .article-color-bar { height: 56px; display: flex; align-items: center; padding: 0 1rem; margin-top: 0rem; }
         .simple-qa-content .article-number-text { color: white; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; line-height: 26px; font-weight: 700; }
         .simple-qa-content .main-content { padding: 2rem 1rem; max-width: 900px; margin: 0 auto; }
         .simple-qa-content .article-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 28px; line-height: 41px; font-weight: 700; color: var(--text-color); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
@@ -117,7 +117,6 @@
         .simple-qa-content .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
         .simple-qa-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
         
-        /* Styles for Multi-Answer Q&A (user-multi-answer.html) */
         .multi-answer-content { max-width: 900px; margin: 0 auto; }
         .multi-answer-content .heading-bar { height: 56px; display: flex; align-items: center; padding: 0 16px; color: white; }
         .multi-answer-content .heading-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 18px; font-weight: 700; }
@@ -140,15 +139,20 @@
 <body>
     <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
-            <a href="/home.html" class="mobileLogo" title="Home"><span class="srText">Home</span></a>
-            <div class="header-right-controls"><div class="header-icons" id="menu-toggle-button"><svg class="hamburger-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg><svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg></div></div>
+            <a href="/home.html" class="mobileLogo" title="Home"></a>
+            <div class="header-right-controls">
+                <div class="header-icons" id="menu-toggle-button">
+                    <svg class="hamburger-icon" aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
+                    <svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
+                </div>
+            </div>
         </div>
     </header>
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
             <li><a href="/home.html"><span class="jwIcon mid1011200"></span><span>హోమ్</span></a></li>
-            <li><a href="/meetings.html"><i class="fas fa-users" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Meetings</span></a></li>
+            <li><a href="/meetings.html"><span class="jwIcon mid1011529"></span><span>Meetings</span></a></li>
         </ul>
         <div class="profile-section"><div class="profile-info"><img class="profile-image" alt="Profile"><div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div></div><button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button></div>
     </div>
@@ -173,9 +177,7 @@
             </div>
             <div id="wt" class="content-pane">
                 <div class="simple-qa-content">
-                    <div class="article-color-bar" id="article-color-bar">
-                        <span class="article-number-text" id="article-number-text"></span>
-                    </div>
+                    <div class="article-color-bar" id="article-color-bar"><span class="article-number-text" id="article-number-text"></span></div>
                     <div class="main-content" id="qa-container">
                         <h1 class="article-title" id="article-title"></h1>
                         <div id="qa-list"><p>Loading...</p></div>
@@ -186,25 +188,34 @@
     </main>
 
     <script>
+        // --- Menu Toggle Script (Restored) ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
         const body = document.body;
-        function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
-        menuToggleButton.addEventListener('click', () => { body.classList.toggle('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
+        
+        function openMenu() {
+            slideMenu.classList.add('is-open');
+            menuOverlay.classList.add('is-open');
+            body.classList.add('menu-open');
+        }
+
+        function closeMenu() {
+            slideMenu.classList.remove('is-open');
+            menuOverlay.classList.remove('is-open');
+            body.classList.remove('menu-open');
+        }
+        
+        menuToggleButton.addEventListener('click', () => {
+            if (body.classList.contains('menu-open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
         menuOverlay.addEventListener('click', closeMenu);
-    </script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // --- DOM Elements ---
+        // --- Custom Dropdown Script ---
         const dropdown = document.getElementById('meeting-dropdown');
         const dropdownButton = document.getElementById('dropdown-button');
         const dropdownButtonText = document.getElementById('dropdown-button-text');
@@ -212,28 +223,62 @@
         const contentPanes = document.querySelectorAll('.content-pane');
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-        // Simple Q&A elements
-        const articleColorBar = document.getElementById('article-color-bar');
-        const articleNumberText = document.getElementById('article-number-text');
-        const articleTitle = document.getElementById('article-title');
-        const qaListDiv = document.getElementById('qa-list');
-        const simpleQaDocRef = doc(db, "qanda", "main");
+        function switchPane(targetId) {
+            contentPanes.forEach(pane => {
+                pane.classList.toggle('active', pane.id === targetId);
+            });
+        }
+        
+        const initialItem = dropdownItems[0];
+        dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
+        switchPane(initialItem.dataset.target);
 
-        // Multi-Answer Q&A elements
-        const multiAnswerContainer = document.getElementById('multi-answer-container');
+        dropdownButton.addEventListener('click', () => {
+            dropdownContent.classList.toggle('is-open');
+            dropdownButton.classList.toggle('is-open');
+        });
+
+        dropdownContent.addEventListener('click', (e) => {
+            const selectedItem = e.target.closest('.dropdown-item');
+            if (!selectedItem) return;
+            dropdownButtonText.textContent = selectedItem.querySelector('span:last-child').textContent;
+            switchPane(selectedItem.dataset.target);
+            dropdownContent.classList.remove('is-open');
+            dropdownButton.classList.remove('is-open');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdownContent.classList.remove('is-open');
+                dropdownButton.classList.remove('is-open');
+            }
+        });
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        
+        const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const simpleQaDocRef = doc(db, "qanda", "main");
         const multiAnswerDocRef = doc(db, "qanda", "multi");
 
-        // --- Data Fetching and Rendering ---
         const displaySimpleData = async () => {
             const docSnap = await getDoc(simpleQaDocRef);
+            const qaListDiv = document.getElementById('qa-list');
+            const articleTitle = document.getElementById('article-title');
             if (!docSnap.exists()) {
                 articleTitle.textContent = 'Content Not Available';
                 qaListDiv.innerHTML = '<p>No content has been added yet.</p>';
                 return;
             }
             const data = docSnap.data();
-            articleColorBar.style.backgroundColor = data.articleColor || '#4a6da7';
-            articleNumberText.textContent = data.articleNumber || '';
+            document.getElementById('article-color-bar').style.backgroundColor = data.articleColor || '#4a6da7';
+            document.getElementById('article-number-text').textContent = data.articleNumber || '';
             articleTitle.textContent = data.articleTitle || 'Questions & Answers';
             const questions = data.questions || [];
             qaListDiv.innerHTML = '';
@@ -252,6 +297,7 @@
 
         const displayMultiAnswerData = async () => {
             const docSnap = await getDoc(multiAnswerDocRef);
+            const multiAnswerContainer = document.getElementById('multi-answer-container');
             multiAnswerContainer.innerHTML = '';
             if (!docSnap.exists() || !docSnap.data().headings) {
                 multiAnswerContainer.innerHTML = '<p style="padding: 1rem;">Content not available.</p>';
@@ -280,37 +326,6 @@
             });
         };
 
-        // --- UI Logic ---
-        function switchPane(targetId) {
-            contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId));
-        }
-        
-        const initialItem = dropdownItems[0];
-        dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
-        switchPane(initialItem.dataset.target);
-
-        dropdownButton.addEventListener('click', () => {
-            dropdownContent.classList.toggle('is-open');
-            dropdownButton.classList.toggle('is-open');
-        });
-
-        dropdownContent.addEventListener('click', (e) => {
-            const selectedItem = e.target.closest('.dropdown-item');
-            if (!selectedItem) return;
-            dropdownButtonText.textContent = selectedItem.querySelector('span:last-child').textContent;
-            switchPane(selectedItem.dataset.target);
-            dropdownContent.classList.remove('is-open');
-            dropdownButton.classList.remove('is-open');
-        });
-
-        window.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target)) {
-                dropdownContent.classList.remove('is-open');
-                dropdownButton.classList.remove('is-open');
-            }
-        });
-
-        // --- Auth & Init ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -323,7 +338,6 @@
                     profileName.textContent = user.displayName || 'No Name';
                     profileEmail.textContent = user.email;
                     document.querySelector('.logout-button').addEventListener('click', () => signOut(auth));
-                    // Load data for both panes on page load
                     displayMultiAnswerData();
                     displaySimpleData();
                 } else { window.location.href = '/pending.html'; }
