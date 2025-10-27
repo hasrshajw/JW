@@ -22,6 +22,8 @@
             --submenu-bg: #f1f1f1;
             --icon-color: #757575;
             --border-gray: #e0e0e0;
+            --text-color: #333;
+            --text-gray: #555;
         }
         
         @font-face {
@@ -36,6 +38,7 @@
             padding: 0;
             font-family: 'Noto Sans Telugu', 'IBM Plex Sans', sans-serif;
             background-color: var(--body-bg);
+            color: var(--text-color);
             visibility: hidden;
             opacity: 0;
             transition: opacity 0.3s ease-in;
@@ -127,36 +130,33 @@
         main { padding-top: 56px; }
         
         .jwIcon {
-            font-family: "jw-icons-external"; font-size: 24px; display: inline-block;
+            font-family: "jw-icons-external"; font-size: 24px; display: inline-block; color: var(--icon-color);
             width: 30px; height: 24px; -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale; margin-right: 10px; text-align: center;
         }
         .menu-links .jwIcon { color: var(--icon-color); }
         .mid1011200::before { content: "\e661"; }
+        .mid1011201::before { content: "\e625"; }
+        .mid1011207::before { content: "\e695"; }
+        .mid1011216::before { content: "\e610"; }
         .mid1011529::before { content: "\e679"; } 
         .mid1011209::before { content: "\e675"; } 
         
+        /* Navigation & Dropdown */
         .sub-nav {
-            display: flex; justify-content: space-between; align-items: center; padding: 2px 32px;
-            height: 56px; background-color: #ffffff; border-bottom: 1px solid var(--border-gray);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 16px;
+            height: 56px; background-color: #f5f5f5; border-bottom: 1px solid var(--border-gray);
         }
         .sub-nav-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
-        
-        /* Custom Dropdown Styles */
         .custom-dropdown { position: relative; display: inline-block; }
         .dropdown-button {
-            background-color: var(--body-bg); border: 2px solid var(--border-gray); border-radius: 8px;
-            padding: 10px 10px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 1rem;
+            background-color: var(--body-bg); border: 1px solid var(--border-gray); border-radius: 8px;
+            padding: 8px 12px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 1rem;
             font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
             min-width: 250px;
         }
-        .dropdown-button .dropdown-arrow {
-            margin-left: 10px;
-            transition: transform 0.2s ease-in-out;
-        }
-        .dropdown-button.is-open .dropdown-arrow {
-            transform: rotate(180deg);
-        }
+        .dropdown-button .dropdown-arrow { margin-left: 10px; transition: transform 0.2s ease-in-out; }
+        .dropdown-button.is-open .dropdown-arrow { transform: rotate(180deg); }
         .dropdown-content {
             display: none; position: absolute; right:0; background-color: white; min-width: 250px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); border-radius: 8px;
@@ -170,13 +170,36 @@
         .dropdown-item:hover { background-color: #f1f1f1; }
         .dropdown-item .jwIcon { color: var(--menu-new-text); }
 
-        .content-panes { padding: 1rem; }
+        /* Content Styles */
         .content-pane { display: none; }
         .content-pane.active { display: block; }
-        .meeting-body-text p {
-            font-weight: 400; font-size: 16px; line-height: 26px; text-align: left; margin: 0;
-        }
 
+        /* Styles merged from user-multi-answer.html (CLM) */
+        .heading-bar { height: 56px; background-color: var(--primary-color); display: flex; align-items: center; padding: 0 16px; color: white; }
+        .heading-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 18px; font-weight: 700; }
+        .heading-content { padding: 1.5rem 16px; max-width: 900px; margin: 0 auto; }
+        .qa-answer-list { list-style-type: decimal; padding-left: 20px; }
+        .qa-answer-list li { margin-bottom: 1.5rem; }
+
+        /* Styles merged from user-questions.html (WT) */
+        .article-color-bar { width: 100%; height: 56px; margin-top: 0; display: flex; align-items: center; padding: 0 1rem; }
+        .article-number-text { color: white; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; font-weight: 700; }
+        .wt-content-wrapper { padding: 2rem 1rem; max-width: 900px; margin: 0 auto; }
+        .article-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 28px; line-height: 41px; font-weight: 700; color: var(--text-color); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
+
+        /* Shared QA Styles */
+        .qa-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-gray); }
+        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .qa-question { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; color: var(--text-color); margin-bottom: 1rem; }
+        .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-gray); white-space: pre-wrap; }
+        .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
+
+        @media (min-width: 768px) {
+            .sub-nav { padding: 0 32px; }
+            .heading-bar, .heading-content { padding-left: 32px; padding-right: 32px; }
+            .article-color-bar { padding: 0 32px; }
+            .wt-content-wrapper { padding: 2rem 32px; }
+        }
     </style>
 </head>
 <body>
@@ -229,34 +252,32 @@
                 </div>
             </div>
         </div>
-        <div class="content-panes">
-            <div id="clm" class="content-pane active">
-                <div class="meeting-body-text"><p>క్రైస్తవ జీవితం, పరిచర్య మీటింగ్‌ కోసం కంటెంట్ ఇక్కడ ప్రదర్శించబడుతుంది. ఈ టెక్స్ట్ ఫాంట్ బరువు 400, పరిమాణం 16px మరియు పంక్తి ఎత్తు 26px కలిగి ఉంటుంది.</p></div>
-            </div>
-            <div id="wt" class="content-pane">
-                 <div class="meeting-body-text"><p>కావలికోట—అధ్యయనం కోసం కంటెంట్ ఇక్కడ ప్రదర్శించబడుతుంది. ఈ టెక్స్ట్ ఫాంట్ బరువు 400, పరిమాణం 16px మరియు పంక్తి ఎత్తు 26px కలిగి ఉంటుంది.</p></div>
-            </div>
+        
+        <!-- Content Panes -->
+        <div id="clm" class="content-pane active">
+             <div id="clm-container"><p style="padding: 2rem;">Loading...</p></div>
+        </div>
+        <div id="wt" class="content-pane">
+             <div id="wt-container">
+                 <div class="article-color-bar" id="article-color-bar"><span class="article-number-text" id="article-number-text"></span></div>
+                 <div class="wt-content-wrapper">
+                     <h1 class="article-title" id="article-title"></h1>
+                     <div id="wt-list"><p>Loading...</p></div>
+                 </div>
+             </div>
         </div>
     </main>
 
     <script>
-        // --- Menu Toggle Script ---
+        // --- Menu & Dropdown Scripts ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
         const body = document.body;
-        
-        function closeMenu() {
-            slideMenu.classList.remove('is-open');
-            menuOverlay.classList.remove('is-open');
-            body.classList.remove('menu-open');
-        }
-        menuToggleButton.addEventListener('click', () => {
-            body.classList.contains('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open'));
-        });
+        function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
+        menuToggleButton.addEventListener('click', () => { body.classList.contains('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
         menuOverlay.addEventListener('click', closeMenu);
 
-        // --- Custom Dropdown Script ---
         const dropdown = document.getElementById('meeting-dropdown');
         const dropdownButton = document.getElementById('dropdown-button');
         const dropdownButtonText = document.getElementById('dropdown-button-text');
@@ -264,38 +285,21 @@
         const contentPanes = document.querySelectorAll('.content-pane');
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-        function switchPane(targetId) {
-            contentPanes.forEach(pane => {
-                pane.classList.toggle('active', pane.id === targetId);
-            });
-        }
-        
+        function switchPane(targetId) { contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId)); }
         const initialItem = dropdownItems[0];
         dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
         switchPane(initialItem.dataset.target);
 
-        dropdownButton.addEventListener('click', () => {
-            dropdownContent.classList.toggle('is-open');
-            dropdownButton.classList.toggle('is-open');
-        });
-
+        dropdownButton.addEventListener('click', () => { dropdownContent.classList.toggle('is-open'); dropdownButton.classList.toggle('is-open'); });
         dropdownContent.addEventListener('click', (e) => {
             const selectedItem = e.target.closest('.dropdown-item');
             if (!selectedItem) return;
-
             dropdownButtonText.textContent = selectedItem.querySelector('span:last-child').textContent;
             switchPane(selectedItem.dataset.target);
             dropdownContent.classList.remove('is-open');
             dropdownButton.classList.remove('is-open');
         });
-
-        window.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target)) {
-                dropdownContent.classList.remove('is-open');
-                dropdownButton.classList.remove('is-open');
-            }
-        });
-
+        window.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) { dropdownContent.classList.remove('is-open'); dropdownButton.classList.remove('is-open'); } });
     </script>
 
     <script type="module">
@@ -303,46 +307,75 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
-            authDomain: "jwhelperr.firebaseapp.com",
-            projectId: "jwhelperr",
-            storageBucket: "jwhelperr.appspot.com",
-            messagingSenderId: "760897937861",
-            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac"
-        };
-
+        const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr", storageBucket: "jwhelperr.appspot.com", messagingSenderId: "760897937861", appId: "1:760897937861:web:1b869f5b5da0c4eed96bac" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const profileImage = document.querySelector('.profile-image');
-        const profileName = document.querySelector('.profile-name');
-        const profileEmail = document.querySelector('.profile-email');
-        const logoutButton = document.querySelector('.logout-button');
+        const clmContainer = document.getElementById('clm-container');
+        const articleColorBar = document.getElementById('article-color-bar');
+        const articleNumberText = document.getElementById('article-number-text');
+        const articleTitle = document.getElementById('article-title');
+        const wtListDiv = document.getElementById('wt-list');
         const adminDashboardLink = document.getElementById('admin-dashboard-link');
+
+        // Render Multi-Answer (CLM) content
+        const displayCLM = async () => {
+            const docSnap = await getDoc(doc(db, "qanda", "multi"));
+            clmContainer.innerHTML = '';
+            if (!docSnap.exists() || !docSnap.data().headings) {
+                clmContainer.innerHTML = '<p style="padding: 2rem;">Content not available.</p>'; return;
+            }
+            docSnap.data().headings.forEach(heading => {
+                const section = document.createElement('section');
+                section.innerHTML = `<div class="heading-bar" style="background-color: ${heading.color};"><h1 class="heading-title">${heading.title}</h1></div>`;
+                const content = document.createElement('div');
+                content.className = 'heading-content';
+                (heading.questions || []).forEach(q => {
+                    const answers = q.answers.map(a => `<li>${a.imageUrl ? `<img src="${a.imageUrl}" class="qa-image">` : ''}<p class="qa-answer">${a.text.replace(/\n/g, '<br>')}</p></li>`).join('');
+                    content.innerHTML += `<div class="qa-item"><h2 class="qa-question">${q.question}</h2><ol class="qa-answer-list">${answers}</ol></div>`;
+                });
+                if (!heading.questions || heading.questions.length === 0) content.innerHTML = '<p>No questions.</p>';
+                section.appendChild(content);
+                clmContainer.appendChild(section);
+            });
+        };
+
+        // Render Simple Q&A (WT) content
+        const displayWT = async () => {
+            const docSnap = await getDoc(doc(db, "qanda", "main"));
+            wtListDiv.innerHTML = '';
+            if (!docSnap.exists()) {
+                 articleTitle.textContent = 'Content Not Available'; wtListDiv.innerHTML = '<p>No content.</p>'; return;
+            }
+            const data = docSnap.data();
+            articleColorBar.style.backgroundColor = data.articleColor || '#4a6da7';
+            articleNumberText.textContent = data.articleNumber || '';
+            articleTitle.textContent = data.articleTitle || 'Questions & Answers';
+            (data.questions || []).forEach(q => {
+                wtListDiv.innerHTML += `<div class="qa-item"><h2 class="qa-question">${q.question}</h2>${q.imageUrl ? `<img src="${q.imageUrl}" class="qa-image">` : ''}<p class="qa-answer">${q.answer.replace(/\n/g, '<br>')}</p></div>`;
+            });
+            if (!data.questions || data.questions.length === 0) wtListDiv.innerHTML = '<p>No questions yet.</p>';
+        };
+
+        document.querySelector('.logout-button').addEventListener('click', () => signOut(auth));
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userRef);
+                const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().status === 'approved') {
                     document.body.classList.add('auth-ready');
-                    const userData = userDoc.data();
-                    if (userData.role === 'admin') {
-                        adminDashboardLink.style.display = 'flex';
-                    }
-                    profileImage.src = user.photoURL || 'https://placehold.co/44x44/666/fff?text=' + (user.displayName || user.email)[0].toUpperCase();
-                    profileName.textContent = user.displayName || 'No Name';
-                    profileEmail.textContent = user.email;
-                } else {
-                    window.location.href = '/pending.html'; 
-                }
-            } else {
-                window.location.href = '/';
-            }
+                    if (userDoc.data().role === 'admin') adminDashboardLink.style.display = 'flex';
+                    const profile = { img: user.photoURL || `https://placehold.co/44x44/666/fff?text=${(user.displayName||user.email)[0].toUpperCase()}`, name: user.displayName || 'No Name', email: user.email };
+                    document.querySelector('.profile-image').src = profile.img;
+                    document.querySelector('.profile-name').textContent = profile.name;
+                    document.querySelector('.profile-email').textContent = profile.email;
+                    // Load both content types
+                    displayCLM();
+                    displayWT();
+                } else { window.location.href = '/pending.html'; }
+            } else { window.location.href = '/'; }
         });
-        logoutButton.addEventListener('click', () => signOut(auth));
     </script>
 </body>
 </html>
