@@ -168,6 +168,10 @@
             text-decoration: none;
             font-size: 1rem;
             transition: background-color 0.2s;
+            border-top: 1px dotted #a7a7a7; /* Added border */
+        }
+        .menu-links li:first-child a {
+            border-top: none; /* Remove border from the first item */
         }
         .menu-links li a:hover {
             background-color: var(--menu-new-hover);
@@ -277,9 +281,9 @@
             text-align: center;
         }
         /* Codepoints for each icon */
-        .mid1011200::before { content: "\e661"; } /* హోమ్ - Home */
+        .mid1011200::before { content: "\e600"; } /* హోమ్ - Home */
         .mid1011201::before { content: "\e625"; } /* బైబిలు బోధలు - Bible */
-        .mid1011207::before { content: "\e695"; } /* లైబ్రరీ - Library */
+        .mid1011207::before { content: "\e607"; } /* లైబ్రరీ - Library */
         .mid1011216::before { content: "\e610"; } /* వార్తలు - News */
 
     </style>
@@ -423,11 +427,9 @@
                         profileEmail.textContent = user.email;
                         document.body.classList.add('auth-ready');
                     } else {
-                        // Redirect if status is not approved, e.g., to a pending page
                         window.location.href = '/pending.html'; 
                     }
                 } else {
-                    // This case might happen if a user is authenticated but has no Firestore record
                     window.location.href = '/'; 
                 }
             } else {
