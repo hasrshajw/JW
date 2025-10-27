@@ -15,7 +15,7 @@
             --menu-new-bg: #ffffff; --menu-new-border: #eeeeee; --menu-new-hover: #f5f5f5; --icon-color: #757575;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--body-bg); color: var(--text-color); visibility: hidden; opacity: 0; transition: opacity 0.3s ease-in; padding-top: 56px; }
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--card-bg); color: var(--text-color); visibility: hidden; opacity: 0; transition: opacity 0.3s ease-in; padding-top: 56px; }
         body.auth-ready { visibility: visible; opacity: 1; }
         body.menu-open { overflow: hidden; }
         .site-header { background-color: var(--header-bg); padding: 0; color: var(--text-light-header); position: fixed; top: 0; left: 0; width: 100%; z-index: 900; }
@@ -42,49 +42,45 @@
         .profile-email { font-size: 0.85rem; color: #888; word-break: break-all; }
         .logout-button { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; }
         .main-content { padding: 1.5rem 16px; max-width: 900px; margin: 0 auto; }
-        .page-header { margin-bottom: 1.5rem; }
-        .page-header h1 { font-size: 1.75rem; color: var(--primary-color); }
         .input-group { margin-bottom: 1.25rem; }
         .input-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
-        .input-group input, .input-group textarea { width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-gray); background-color: #f8f9fa; border-radius: 12px; font-size: 1rem; font-family: 'IBM Plex Sans', sans-serif; }
+        .input-group input, .input-group textarea { width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-gray); background-color: #f8f9fa; border-radius: 12px; font-size: 1rem; }
         .color-input-wrapper { display: flex; align-items: center; gap: 10px; }
         .color-preview { width: 30px; height: 30px; border-radius: 50%; background-color: #ccc; border: 2px solid var(--border-gray); }
         .btn-submit { padding: 0.75rem 1.5rem; font-size: 0.9rem; font-weight: 600; color: #fff; background-color: var(--primary-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
         .btn-submit:hover { background-color: #3e5a8e; }
         .btn-danger { background-color: transparent; color: var(--color-danger); border: 1px solid var(--color-danger); padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn-danger:hover { background-color: var(--color-danger); color: white; }
-        .heading-section { padding-top: 1.5rem; border-top: 1px solid #ccc; }
+        .heading-card { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-gray); }
         .heading-form-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
-        .question-item { border: 1px solid var(--border-gray); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; background: white; }
+        .save-status { font-size: 0.8rem; color: var(--text-light); font-style: italic; }
+        .questions-section { margin-top: 1.5rem; }
+        .question-item { border: 1px solid var(--border-gray); padding: 1rem; border-radius: 12px; margin-top: 1rem; }
         .question-content h3 { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 600; font-size: 16px; margin: 0 0 1rem 0; }
         .answer-list { list-style-type: decimal; padding-left: 20px; }
         .answer-text { font-family: 'Noto Sans Telugu', sans-serif; color: var(--text-light); }
-        .btn-action { background: none; border: 1px solid var(--border-gray); border-radius: 6px; padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-action.edit { color: var(--primary-color); border-color: var(--primary-color); }
-        .btn-action.edit:hover { background-color: var(--primary-color); color: white; }
-        .btn-action.delete { color: var(--color-danger); border-color: var(--color-danger); }
-        .btn-action.delete:hover { background-color: var(--color-danger); color: white; }
-        .add-heading-container { padding: 2rem 0; text-align: center; border-top: 1px solid #ccc; margin-top: 1.5rem; }
+        .btn-action { background: none; border: 1px solid var(--border-gray); border-radius: 6px; padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; display: none; align-items: center; justify-content: center; padding: 1rem; }
         .modal-container { background: white; border-radius: 12px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--border-gray); }
+        .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border-gray); }
         .modal-body { padding: 1.5rem; overflow-y: auto; }
         .answers-container .input-group { border: 1px solid var(--border-gray); border-radius: 12px; padding: 1rem; position: relative; }
         .btn-remove-answer { position: absolute; top: 10px; right: 10px; background: var(--color-danger); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-weight: bold; cursor: pointer; }
+        .add-heading-container { padding: 1rem; text-align: center; }
         #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; z-index: 1002; background-color: var(--primary-color); }
         #toast.show { bottom: 30px; }
         @media (min-width: 768px) {
-            .main-content { padding: 2rem; background-color: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-            .heading-section { background: #fdfdfd; border: 1px solid var(--border-gray); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; }
-            .add-heading-container { border-top: none; }
-            .nav-link { display: flex; }
+            body { background-color: var(--body-bg); }
+            .main-content { padding: 2rem; }
+            .heading-card { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-bottom: none; }
         }
+        @media (min-width: 992px) { .nav-link { display: flex; } }
     </style>
 </head>
 <body>
     <header class="site-header">
         <div class="top-bar">
-            <a href="/admin.html" class="mobileLogo" title="Admin Home"><span class="srText">Admin</span></a>
+            <a href="/admin.html" class="mobileLogo" title="Admin Home"></a>
             <div class="header-right-controls">
                 <a href="/admin.html" class="nav-link"><i class="fas fa-users-cog"></i><span>User Management</span></a>
                 <div class="header-icons" id="menu-toggle-button"><svg class="hamburger-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg><svg class="close-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg></div>
@@ -98,13 +94,10 @@
             <li><a href="/admin-questions.html"><i class="fas fa-question-circle menu-icon"></i><span>Simple Q&A</span></a></li>
             <li><a href="/admin-multi-answer.html"><i class="fas fa-list-ol menu-icon"></i><span>Multi-Answer Q&A</span></a></li>
         </ul>
-        <div class="profile-section">
-            <div class="profile-info"><img class="profile-image" alt="Profile"><div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div></div>
-            <button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button>
-        </div>
+        <div class="profile-section"><div class="profile-info"><img class="profile-image" alt="Profile"><div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div></div><button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button></div>
     </div>
     <main class="main-content">
-        <div class="page-header"><h1>Multi-Answer Content</h1></div>
+        <h1>Multi-Answer Content</h1>
         <div id="headings-container"><p>Loading headings...</p></div>
         <div class="add-heading-container"><button id="add-heading-btn" class="btn-submit">+ Add New Heading</button></div>
     </main>
@@ -149,13 +142,26 @@
         let allData = { headings: [] };
         const qaDocRef = doc(db, "qanda", "multi");
 
-        const showToast = (message) => { const t = document.getElementById('toast'); t.textContent = message; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); };
+        const showToast = (message) => {
+            const t = document.getElementById('toast');
+            t.textContent = message; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
         
-        const pushDataToFirestore = async (showMsg = false) => {
+        let debounceTimer;
+        const debouncedSave = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(saveData, 1500); // Save after 1.5s of inactivity
+        };
+
+        const saveData = async (showMsg = true) => {
             try {
                 await setDoc(qaDocRef, allData);
-                if (showMsg) showToast('Auto-saved!');
-            } catch (error) { showToast('Error saving data.'); }
+                if(showMsg) showToast('Auto-saved!');
+                renderAdminView();
+            } catch (error) {
+                if(showMsg) showToast('Failed to save changes.');
+            }
         };
 
         const createAnswerField = (answer = { text: '', imageUrl: '' }) => {
@@ -188,26 +194,25 @@
         const renderAdminView = () => {
             headingsContainer.innerHTML = '';
             allData.headings.forEach((heading, index) => {
-                const section = document.createElement('section');
-                section.className = 'heading-section';
-                section.innerHTML = `
-                    <form class="heading-form" data-heading-index="${index}">
-                        <div class="input-group"><label>Heading Title</label><input type="text" name="title" value="${heading.title}" required></div>
-                        <div class="input-group"><label>Heading Color (HEX)</label>
-                            <div class="color-input-wrapper">
-                                <input type="text" name="color" value="${heading.color}" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
-                                <div class="color-preview" style="background-color:${heading.color};"></div>
-                            </div>
+                const card = document.createElement('div');
+                card.className = 'heading-card';
+                card.innerHTML = `
+                    <div class="input-group"><label>Heading Title</label><input type="text" name="title" data-heading-index="${index}" value="${heading.title}" required></div>
+                    <div class="input-group"><label>Heading Color (HEX)</label>
+                        <div class="color-input-wrapper">
+                            <input type="text" name="color" data-heading-index="${index}" value="${heading.color}" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
+                            <div class="color-preview" style="background-color:${heading.color};"></div>
                         </div>
-                        <div class="heading-form-controls">
-                             <button type="button" class="btn-danger remove-heading-btn" data-heading-index="${index}">Remove Heading</button>
-                        </div>
-                    </form>
-                    <div class="questions-container">
+                    </div>
+                    <div class="heading-form-controls">
+                        <span class="save-status"></span>
+                        <button type="button" class="btn-danger remove-heading-btn" data-heading-index="${index}">Remove Heading</button>
+                    </div>
+                    <div class="questions-section">
                         <h4>Questions</h4><div class="questions-list"></div>
                         <button type="button" class="btn-action edit add-question-btn" data-heading-index="${index}">+ Add Question</button>
                     </div>`;
-                const questionsList = section.querySelector('.questions-list');
+                const questionsList = card.querySelector('.questions-list');
                 const questions = heading.questions || [];
                 if (questions.length > 0) {
                     questions.forEach(q => {
@@ -221,7 +226,7 @@
                 } else {
                     questionsList.innerHTML = '<p>No questions yet.</p>';
                 }
-                headingsContainer.appendChild(section);
+                headingsContainer.appendChild(card);
             });
         };
         
@@ -234,29 +239,27 @@
             }
             renderAdminView();
         };
-
+        
         addHeadingBtn.addEventListener('click', () => {
             allData.headings.push({ id: Date.now(), title: 'New Heading', color: '#333333', questions: [] });
-            pushDataToFirestore(false).then(renderAdminView);
+            saveData(false);
         });
 
         addAnswerBtn.addEventListener('click', () => createAnswerField());
         modalCloseBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
-        headingsContainer.addEventListener('change', (e) => {
-            const input = e.target;
-            const form = input.closest('.heading-form');
-            if(form) {
-                const index = form.dataset.headingIndex;
-                const newTitle = form.elements.title.value;
-                const newColor = form.elements.color.value;
-                allData.headings[index].title = newTitle;
-                allData.headings[index].color = newColor;
-                if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(newColor)) {
-                    form.querySelector('.color-preview').style.backgroundColor = newColor;
+        headingsContainer.addEventListener('input', (e) => {
+            const target = e.target;
+            const index = target.dataset.headingIndex;
+            if (index !== undefined && (target.name === 'title' || target.name === 'color')) {
+                allData.headings[index][target.name] = target.value;
+                if (target.name === 'color' && /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(target.value)) {
+                    target.nextElementSibling.style.backgroundColor = target.value;
                 }
-                pushDataToFirestore(true);
+                const statusEl = target.closest('.heading-card').querySelector('.save-status');
+                statusEl.textContent = 'Saving...';
+                debouncedSave();
             }
         });
 
@@ -269,14 +272,14 @@
             } else if (target.classList.contains('edit')) {
                 openModal(headingIndex, target.dataset.questionId);
             } else if (target.classList.contains('delete')) {
-                if(confirm('Are you sure you want to delete this question?')){
+                if(confirm('Delete this question?')){
                     allData.headings[headingIndex].questions = allData.headings[headingIndex].questions.filter(q => q.id != target.dataset.questionId);
-                    pushDataToFirestore(false).then(renderAdminView);
+                    saveData(false);
                 }
             } else if (target.classList.contains('remove-heading-btn')) {
-                 if(confirm('ARE YOU SURE you want to delete this entire heading and all its questions?')){
+                 if(confirm('Delete this entire heading and all its questions?')){
                     allData.headings.splice(headingIndex, 1);
-                    pushDataToFirestore(false).then(renderAdminView);
+                    saveData(false);
                 }
             }
         });
@@ -287,7 +290,7 @@
             const headingIndex = editHeadingIndexInput.value;
             const questionId = editQuestionIdInput.value;
             const answers = Array.from(answersContainer.querySelectorAll('.input-group')).map(group => ({ text: group.querySelector('textarea').value, imageUrl: group.querySelector('input[type="url"]').value }));
-            if (answers.length === 0) { showToast('You must add at least one answer.'); return; }
+            if (answers.length === 0) { showToast('Add at least one answer.'); return; }
             if (questionId) {
                 const qIndex = allData.headings[headingIndex].questions.findIndex(q => q.id == questionId);
                 if (qIndex > -1) allData.headings[headingIndex].questions[qIndex] = { ...allData.headings[headingIndex].questions[qIndex], question: questionText, answers: answers };
@@ -295,7 +298,7 @@
                 allData.headings[headingIndex].questions.push({ id: Date.now(), question: questionText, answers: answers });
             }
             closeModal();
-            pushDataToFirestore(false).then(renderAdminView);
+            saveData(false);
         });
         
         const menuToggleButton = document.getElementById('menu-toggle-button');
@@ -322,4 +325,4 @@
         });
     </script>
 </body>
-</html>```
+</html>
