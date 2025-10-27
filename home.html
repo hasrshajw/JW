@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Deeps Beer Cafe</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --header-bg: #292929;
@@ -18,10 +20,33 @@
             --icon-color: #757575;
             --dc-button-borderColor: rgba(18, 18, 18, 0.1);
         }
+        
+        /* JW Icon Font Definition */
+        @font-face {
+            font-family: "jw-icons-external";
+            src: url("https://www.jw.org/assets/fonts/jw-icons-external-7f71755.woff2") format("woff2");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .jwIcon {
+            font-family: "jw-icons-external";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .mid1011200::before { content: "\e600"; } /* Home */
+        .mid1011201::before { content: "\e625"; } /* Bible Teachings */
+        .mid1011207::before { content: "\e607"; } /* Library */
+        .mid1011216::before { content: "\e61a"; } /* News */
+        .mid1011206::before { content: "\e606"; } /* Question Circle */
+        .mid1011218::before { content: "\e618"; } /* List / Multi-Answer */
+
+
         body {
             margin: 0;
             padding: 0;
-            font-family: NotoSansTelugu, NotoSans, Gautami, "Iskoola Pota", Vani, sans-serif;
+            font-family: 'Noto Sans Telugu', sans-serif;
             background-color: var(--body-bg);
             visibility: hidden;
             opacity: 0;
@@ -147,11 +172,6 @@
             padding: 0;
             overflow-y: auto;
             flex-grow: 1;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .menu-links::-webkit-scrollbar {
-            display: none;
         }
         .menu-links li a {
             display: flex;
@@ -170,7 +190,7 @@
         }
         .menu-links .menu-icon {
             width: 30px;
-            font-size: 1.2rem;
+            font-size: 1.5rem; /* Adjusted for icon font */
             text-align: center;
             margin-right: 10px;
             color: var(--icon-color);
@@ -317,16 +337,18 @@
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
-            <li><a href="#"><i class="fas fa-home menu-icon"></i><span>హోమ్</span></a></li>
+            <li><a href="/home.html"><span class="jwIcon mid1011200 menu-icon"></span><span>హోమ్</span></a></li>
+            <li><a href="/user-questions.html"><span class="jwIcon mid1011206 menu-icon"></span><span>Simple Q&A</span></a></li>
+            <li><a href="/user-multi-answer.html"><span class="jwIcon mid1011218 menu-icon"></span><span>Multi-Answer Q&A</span></a></li>
             <li class="has-submenu">
-                <a href="#"><i class="fas fa-book-open menu-icon"></i><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
+                <a href="#"><span class="jwIcon mid1011201 menu-icon"></span><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
                 <ul class="submenu">
                     <li><a href="#"><span>బైబిలు ప్రశ్నలకు జవాబులు</span></a></li>
                     <li><a href="#"><span>బైబిలు వచనాల వివరణ</span></a></li>
                 </ul>
             </li>
-            <li><a href="#"><i class="fas fa-archive menu-icon"></i><span>లైబ్రరీ</span></a></li>
-            <li><a href="#"><i class="fas fa-globe menu-icon"></i><span>వార్తలు</span></a></li>
+            <li><a href="#"><span class="jwIcon mid1011207 menu-icon"></span><span>లైబ్రరీ</span></a></li>
+            <li><a href="#"><span class="jwIcon mid1011216 menu-icon"></span><span>వార్తలు</span></a></li>
         </ul>
         <div class="profile-section">
             <div class="profile-info">
