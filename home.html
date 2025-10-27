@@ -18,7 +18,8 @@
             --icon-color: #757575;
             --dc-button-borderColor: rgba(18, 18, 18, 0.1);
         }
-
+        
+        /* JW Icons Custom Font Face */
         @font-face {
             font-family: "jw-icons-external";
             src: url("./jw-icons-external-d876da3.woff") format("woff");
@@ -29,7 +30,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: NotoSansTelugu, NotoSans, Gautami, "Iskoola Pota", Vani, sans-serif;
+            font-family: 'Noto Sans Telugu', 'IBM Plex Sans', sans-serif;
             background-color: var(--body-bg);
             visibility: hidden;
             opacity: 0;
@@ -155,11 +156,6 @@
             padding: 0;
             overflow-y: auto;
             flex-grow: 1;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .menu-links::-webkit-scrollbar {
-            display: none;
         }
         .menu-links li a {
             display: flex;
@@ -176,28 +172,6 @@
         .menu-links li a:hover {
             background-color: var(--menu-new-hover);
         }
-        .menu-links .menu-icon {
-            width: 30px;
-            text-align: center;
-            margin-right: 10px;
-        }
-        .menu-links .fa, .menu-links .fas {
-             font-size: 1.2rem;
-             color: var(--icon-color);
-        }
-        .jwIcon {
-            font-family: "jw-icons-external";
-            font-size: 24px;
-            display: inline-block;
-            color: var(--icon-color);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .mid1011200::before { content: "\e628"; } /* Home */
-        .mid1011201::before { content: "\e625"; } /* Bible */
-        .mid1011207::before { content: "\e62b"; } /* Library */
-        .mid1011216::before { content: "\e633"; } /* News */
-
         .expandButton-border {
             display: inline-flex;
             align-items: center;
@@ -264,16 +238,8 @@
             box-shadow: 0 1px 4px rgba(0,0,0,0.1);
             background-color: #e0e0e0;
         }
-        .profile-name {
-            font-weight: bold;
-            font-size: 0.95rem;
-            color: #333;
-        }
-        .profile-email {
-            font-size: 0.85rem;
-            color: #888;
-            word-break: break-all;
-        }
+        .profile-name { font-weight: bold; font-size: 0.95rem; color: #333; }
+        .profile-email { font-size: 0.85rem; color: #888; word-break: break-all; }
         .logout-button {
             display: flex;
             align-items: center;
@@ -290,48 +256,43 @@
             text-align: center;
             transition: background-color 0.2s;
         }
-        .logout-button:hover {
-            background-color: #e0e0e0;
-        }
-        .logout-button .fas {
-            margin-right: 8px;
-        }
-        main {
-            padding-top: 56px;
+        .logout-button:hover { background-color: #e0e0e0; }
+        .logout-button .fas { margin-right: 8px; }
+        main { padding-top: 56px; text-align: center; }
+        .welcome-content { padding: 4rem 2rem; }
+        .welcome-content h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #4a6da7; }
+        .welcome-content p { font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto; }
+        
+        /* JW Icon Styles */
+        .iconLink-icon {
+            font-family: "jw-icons-external";
+            font-size: 24px; /* Adjusted size for menu */
+            display: inline-block;
+            color: var(--icon-color);
+            width: 30px;
+            height: 24px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            margin-right: 10px;
             text-align: center;
         }
-        .welcome-content {
-            padding: 4rem 2rem;
-        }
-        .welcome-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #4a6da7;
-        }
-        .welcome-content p {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        /* Codepoints for each icon */
+        .mid1011200::before { content: "\e600"; } /* హోమ్ - Home */
+        .mid1011201::before { content: "\e625"; } /* బైబిలు బోధలు - Bible */
+        .mid1011207::before { content: "\e607"; } /* లైబ్రరీ - Library */
+        .mid1011216::before { content: "\e610"; } /* వార్తలు - News */
+
     </style>
 </head>
 <body>
     <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
-            <a href="/home.html" class="mobileLogo" title="Home">
-                <span class="srText">Home</span>
-            </a>
+            <a href="/home.html" class="mobileLogo" title="Home"><span class="srText">Home</span></a>
             <div class="header-right-controls">
-                <a href="/admin.html" id="admin-dashboard-link" class="admin-button" style="display: none;">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Admin</span>
-                </a>
+                <a href="/admin.html" id="admin-dashboard-link" class="admin-button" style="display: none;"><i class="fas fa-user-shield"></i><span>Admin</span></a>
                 <div class="header-icons" id="menu-toggle-button">
                     <svg class="hamburger-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
-                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path>
-                    </svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
                 </div>
             </div>
         </div>
@@ -340,18 +301,18 @@
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
-            <li><a href="/home.html"><span class="menu-icon jwIcon mid1011200"></span><span>హోమ్</span></a></li>
-            <li><a href="/user-questions.html"><i class="fas fa-question-circle menu-icon"></i><span>Simple Q&A</span></a></li>
-            <li><a href="/user-multi-answer.html"><i class="fas fa-list-ol menu-icon"></i><span>Multi-Answer Q&A</span></a></li>
+            <li><a href="/home.html"><span class="iconLink-icon jwIcon mid1011200"></span><span>హోమ్</span></a></li>
+            <li><a href="/user-questions.html"><i class="fas fa-question-circle" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Simple Q&A</span></a></li>
+            <li><a href="/user-multi-answer.html"><i class="fas fa-list-ol" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Multi-Answer Q&A</span></a></li>
             <li class="has-submenu">
-                <a href="#"><span class="menu-icon jwIcon mid1011201"></span><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
+                <a href="#"><span class="iconLink-icon jwIcon mid1011201"></span><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
                 <ul class="submenu">
                     <li><a href="#"><span>బైబిలు ప్రశ్నలకు జవాబులు</span></a></li>
                     <li><a href="#"><span>బైబిలు వచనాల వివరణ</span></a></li>
                 </ul>
             </li>
-            <li><a href="#"><span class="menu-icon jwIcon mid1011207"></span><span>లైబ్రరీ</span></a></li>
-            <li><a href="#"><span class="menu-icon jwIcon mid1011216"></span><span>వార్తలు</span></a></li>
+            <li><a href="#"><span class="iconLink-icon jwIcon mid1011207"></span><span>లైబ్రరీ</span></a></li>
+            <li><a href="#"><span class="iconLink-icon jwIcon mid1011216"></span><span>వార్తలు</span></a></li>
         </ul>
         <div class="profile-section">
             <div class="profile-info">
@@ -462,9 +423,11 @@
                         profileEmail.textContent = user.email;
                         document.body.classList.add('auth-ready');
                     } else {
-                        window.location.href = '/'; 
+                        // Redirect if status is not approved, e.g., to a pending page
+                        window.location.href = '/pending.html'; 
                     }
                 } else {
+                    // This case might happen if a user is authenticated but has no Firestore record
                     window.location.href = '/'; 
                 }
             } else {
