@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>JW Icon Test</title>
+
+<style>
+    @font-face {
+        font-family: "jw-icons-external";
+        src: url("./jw-icons-external-d876da3.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .jwIcon {
+        font-family: "jw-icons-external";
+        font-size: 32px;
+        display: inline-block;
+        color: #4a6da7;
+        width: 32px;
+        height: 32px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Library icon codepoint (verified) */
+    .mid1011201::before {
+        content: "\e625";
+    }
+
+    .label {
+        font-family: Arial, sans-serif;
+        color: #292929;
+        font-size: 18px;
+        margin-left: 8px;
+    }
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+    }
+</style>
+
+</head>
+<body>
+
+<h2>JW Icon Test</h2>
+
+<a href="#">
+    <span class="jwIcon mid1011201"></span>
+    <span class="label">Library</span>
+</a>
+
+</body>
+</html>
