@@ -162,16 +162,16 @@
             align-items: center;
             color: var(--menu-new-text);
             background-color: var(--menu-new-bg);
-            height: 56px;
-            padding: 8px 5px 8px 8px;
+            height: 52px; /* UPDATED */
+            padding: 12px 5px 12px 12px; /* UPDATED */
             box-sizing: border-box;
             text-decoration: none;
             font-size: 1rem;
             transition: background-color 0.2s;
-            border-top: 1px dotted #a7a7a7; /* Added border */
+            border-top: 1px dotted #a7a7a7;
         }
         .menu-links li:first-child a {
-            border-top: none; /* Remove border from the first item */
+            border-top: none;
         }
         .menu-links li a:hover {
             background-color: var(--menu-new-hover);
@@ -267,10 +267,9 @@
         .welcome-content h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #4a6da7; }
         .welcome-content p { font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto; }
         
-        /* JW Icon Styles */
         .iconLink-icon {
             font-family: "jw-icons-external";
-            font-size: 24px; /* Adjusted size for menu */
+            font-size: 24px;
             display: inline-block;
             color: var(--icon-color);
             width: 30px;
@@ -280,11 +279,10 @@
             margin-right: 10px;
             text-align: center;
         }
-        /* Codepoints for each icon */
-        .mid1011200::before { content: "\e661"; } /* హోమ్ - Home */
-        .mid1011201::before { content: "\e625"; } /* బైబిలు బోధలు - Bible */
-        .mid1011207::before { content: "\e695"; } /* లైబ్రరీ - Library */
-        .mid1011216::before { content: "\e610"; } /* వార్తలు - News */
+        .mid1011200::before { content: "\e661"; }
+        .mid1011201::before { content: "\e625"; }
+        .mid1011207::before { content: "\e695"; }
+        .mid1011216::before { content: "\e610"; }
 
     </style>
 </head>
