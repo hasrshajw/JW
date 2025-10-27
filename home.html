@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Deeps Beer Cafe</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
             --header-bg: #292929;
@@ -21,7 +19,6 @@
             --dc-button-borderColor: rgba(18, 18, 18, 0.1);
         }
 
-        /* JW Icons Font Face */
         @font-face {
             font-family: "jw-icons-external";
             src: url("./jw-icons-external-d876da3.woff") format("woff");
@@ -32,7 +29,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Noto Sans Telugu', sans-serif; /* Global Font Update */
+            font-family: NotoSansTelugu, NotoSans, Gautami, "Iskoola Pota", Vani, sans-serif;
             background-color: var(--body-bg);
             visibility: hidden;
             opacity: 0;
@@ -158,6 +155,11 @@
             padding: 0;
             overflow-y: auto;
             flex-grow: 1;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .menu-links::-webkit-scrollbar {
+            display: none;
         }
         .menu-links li a {
             display: flex;
@@ -174,24 +176,28 @@
         .menu-links li a:hover {
             background-color: var(--menu-new-hover);
         }
-        /* JW Icon Base and Menu Specific Styles */
-        .menu-icon.jwIcon {
-            font-family: "jw-icons-external";
-            font-size: 24px; /* Adjusted for menu */
-            display: inline-block;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        .menu-links .menu-icon {
             width: 30px;
             text-align: center;
             margin-right: 10px;
-            color: var(--icon-color);
         }
-        /* Codepoints for each icon */
-        .mid1011200::before { content: "\e624"; } /* Home (Guess) */
-        .mid1011201::before { content: "\e625"; } /* Bible Teachings */
-        .mid1011207::before { content: "\e626"; } /* Library (Guess) */
-        .mid1011216::before { content: "\e627"; } /* News (Guess) */
-        
+        .menu-links .fa, .menu-links .fas {
+             font-size: 1.2rem;
+             color: var(--icon-color);
+        }
+        .jwIcon {
+            font-family: "jw-icons-external";
+            font-size: 24px;
+            display: inline-block;
+            color: var(--icon-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .mid1011200::before { content: "\e628"; } /* Home */
+        .mid1011201::before { content: "\e625"; } /* Bible */
+        .mid1011207::before { content: "\e62b"; } /* Library */
+        .mid1011216::before { content: "\e633"; } /* News */
+
         .expandButton-border {
             display: inline-flex;
             align-items: center;
@@ -334,7 +340,9 @@
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
-            <li><a href="#"><span class="menu-icon jwIcon mid1011200"></span><span>హోమ్</span></a></li>
+            <li><a href="/home.html"><span class="menu-icon jwIcon mid1011200"></span><span>హోమ్</span></a></li>
+            <li><a href="/user-questions.html"><i class="fas fa-question-circle menu-icon"></i><span>Simple Q&A</span></a></li>
+            <li><a href="/user-multi-answer.html"><i class="fas fa-list-ol menu-icon"></i><span>Multi-Answer Q&A</span></a></li>
             <li class="has-submenu">
                 <a href="#"><span class="menu-icon jwIcon mid1011201"></span><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
                 <ul class="submenu">
@@ -365,7 +373,6 @@
     </main>
 
     <script>
-        // All existing JavaScript for menu toggling and sub-menu expansion remains unchanged.
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const slideMenu = document.getElementById('slide-menu');
         const menuOverlay = document.getElementById('menu-overlay');
@@ -417,7 +424,6 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase configuration and auth logic remains unchanged.
         const firebaseConfig = {
             apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
             authDomain: "jwhelperr.firebaseapp.com",
