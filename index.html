@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Deeps Beer Cafe</title>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <title>JW Helper</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -25,21 +24,34 @@
         .form-panel-wrapper { flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow-y: auto; }
         .info-panel { display: none; }
 
-        #welcome-screen { display: flex; flex-direction: column; height: 100%; }
+        /* Welcome Screen */
+        .screen { display: none; flex-direction: column; height: 100%; }
+        .screen.active { display: flex; }
         .welcome-top { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 2rem; }
         .welcome-top img { width: 75px; height: 56px; object-fit: contain; }
-        .welcome-bottom { text-align: center; flex-shrink: 0; background-color: var(--primary-dark); border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+        .welcome-bottom { text-align: center; flex-shrink: 0; background-color: var(--primary-dark); border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 2.5rem; }
         .welcome-bottom h1 { font-size: 2.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--pure-white); }
         .welcome-bottom p { font-size: 0.9rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; line-height: 1.6; }
-        .btn-google { width: 100%; padding: 0.9rem 1rem; font-size: 1rem; font-weight: 600; color: var(--primary-dark); background-color: var(--pure-white); border: 1px solid var(--border-gray); border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .btn-google, .btn-submit { width: 100%; padding: 0.9rem 1rem; font-size: 1rem; font-weight: 600; border-radius: 16px; cursor: pointer; transition: all 0.3s; }
+        .btn-google { color: var(--primary-dark); background-color: var(--pure-white); border: 1px solid var(--border-gray); display: flex; align-items: center; justify-content: center; }
         .btn-google:hover { background-color: var(--light-gray); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .google-icon { width: 22px; height: 22px; margin-right: 0.75rem; }
+        
+        /* Profile Setup Screen */
+        #profile-setup-screen { padding: 4rem 2rem 2rem; justify-content: center; }
+        #profile-setup-screen h2 { font-size: 1.8rem; font-weight: 600; text-align: center; margin-bottom: 0.5rem; }
+        #profile-setup-screen p { text-align: center; color: var(--text-light); margin-bottom: 2rem; font-size: 0.9rem; }
+        .input-group { margin-bottom: 1.25rem; }
+        .input-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
+        .input-group input { width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-gray); background-color: var(--light-gray); border-radius: 12px; font-size: 1rem; }
+        .btn-submit { color: var(--pure-white); background-color: var(--primary-dark); border: none; }
+        .btn-submit:hover { background-color: #001a19; }
 
-        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(4px); }
+        /* Feedback Elements */
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 9999; }
         .spinner { width: 48px; height: 48px; border: 5px solid rgba(51, 192, 114, 0.2); border-bottom-color: var(--accent-green); border-radius: 50%; animation: rotation 1s linear infinite; }
-        #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1001; }
+        #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); transition: bottom 0.5s; z-index: 1001; }
         #toast.show { bottom: 30px; }
-        #toast.success { background-color: var(--accent-green); color: var(--primary-dark); }
         #toast.error { background-color: var(--color-danger); }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -48,14 +60,15 @@
             body { background-color: #e9eef2; padding: 2rem; min-height: 100vh; }
             .container { flex-direction: row; max-width: 1000px; height: 700px; max-height: 90vh; border-radius: 2rem; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2); }
             .info-panel { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; flex-basis: 55%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1586993451228-098a81de5d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') center center / cover; padding: 4rem; color: var(--pure-white); }
-            .info-panel h2 { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
-            .info-panel p { font-size: 1rem; max-width: 450px; line-height: 1.6; opacity: 0.8; }
-            .form-panel-wrapper { flex-basis: 45%; display: flex; align-items: center; justify-content: center; padding: 3rem; overflow-y: auto; position: static; flex-grow: 0; }
-            #welcome-screen { position: static; height: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+            .info-panel h2 { font-size: 3.5rem; }
+            .info-panel p { font-size: 1rem; max-width: 450px; }
+            .form-panel-wrapper { flex-basis: 45%; display: flex; align-items: center; justify-content: center; padding: 3rem; position: static; }
+            #welcome-screen { position: static; height: auto; align-items: center; text-align: center; }
             .welcome-top { flex-grow: 0; padding: 0; }
             .welcome-bottom { position: static; border-radius: 0; background: none; padding: 0; margin-top: 2rem; }
             .welcome-bottom h1 { color: var(--text-color); }
             .welcome-bottom p { color: var(--text-light); }
+            #profile-setup-screen { position: static; height: auto; padding: 0; width: 100%; max-width: 400px; justify-content: center; }
         }
     </style>
 </head>
@@ -66,10 +79,8 @@
             <p>Join our community to discover exclusive events, new brews, and connect with fellow beer enthusiasts.</p>
         </div>
         <div class="form-panel-wrapper">
-             <div id="welcome-screen">
-                <div class="welcome-top">
-                    <img src="https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg" alt="Site Logo">
-                </div>
+             <div id="welcome-screen" class="screen active">
+                <div class="welcome-top"><img src="https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg" alt="Site Logo"></div>
                 <div class="welcome-bottom">
                     <h1>Welcome</h1>
                     <p>Sign in with your Google account to continue.</p>
@@ -78,6 +89,22 @@
                         Sign in with Google
                     </button>
                 </div>
+            </div>
+
+            <div id="profile-setup-screen" class="screen">
+                <h2>Complete Your Profile</h2>
+                <p>Please provide a few more details to get started.</p>
+                <form id="profile-form">
+                    <div class="input-group">
+                        <label for="profile-name">Name</label>
+                        <input type="text" id="profile-name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="profile-congregation">Congregation</label>
+                        <input type="text" id="profile-congregation" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Submit & Continue</button>
+                </form>
             </div>
         </div>
     </div>
@@ -130,50 +157,63 @@
             } 
         }
 
-        // --- START OF CORRECTED CODE ---
         async function handleUserLoggedIn(user) {
             const userRef = doc(db, "users", user.uid);
             const userDoc = await getDoc(userRef);
 
             if (!userDoc.exists()) {
-                // New user - always set as pending
-                await setDoc(userRef, {
-                    displayName: user.displayName || user.email,
-                    email: user.email,
-                    photoURL: user.photoURL,
-                    role: 'user',
-                    status: 'pending',
-                    createdAt: new Date().toISOString()
-                }, { merge: true });
-                window.location.href = 'pending.html';
+                // NEW USER: Show profile setup form
+                hideLoader();
+                document.getElementById('welcome-screen').classList.remove('active');
+                document.getElementById('profile-setup-screen').classList.add('active');
+                document.getElementById('profile-name').value = user.displayName || '';
             } else {
-                // Existing user - check their role and status
+                // EXISTING USER: Redirect based on status
                 await setDoc(userRef, { lastLogin: new Date().toISOString() }, { merge: true });
                 const userData = userDoc.data();
-                
                 if (userData.role === 'admin') {
                      window.location.href = 'admin.html';
-                     return; // Important: exit after admin redirect
-                }
-
-                // Use a switch for clarity on user statuses
-                switch (userData.status) {
-                    case 'approved':
-                        window.location.href = 'home.html';
-                        break;
-                    case 'denied':
-                        window.location.href = 'denied.html'; // Correctly redirect denied users
-                        break;
-                    case 'pending':
-                    default:
-                        window.location.href = 'pending.html';
-                        break;
+                } else {
+                    switch (userData.status) {
+                        case 'approved': window.location.href = 'home.html'; break;
+                        case 'denied': window.location.href = 'denied.html'; break;
+                        default: window.location.href = 'pending.html'; break;
+                    }
                 }
             }
         }
-        // --- END OF CORRECTED CODE ---
         
         document.getElementById('google-signin-btn').addEventListener('click', handleGoogleLogin);
+
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoader();
+            const user = auth.currentUser;
+            if (!user) {
+                hideLoader();
+                showToast("Authentication error. Please sign in again.");
+                return;
+            }
+
+            const userRef = doc(db, "users", user.uid);
+            const profileData = {
+                displayName: document.getElementById('profile-name').value,
+                congregation: document.getElementById('profile-congregation').value,
+                email: user.email,
+                photoURL: user.photoURL,
+                role: 'user',
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                await setDoc(userRef, profileData);
+                window.location.href = 'pending.html';
+            } catch (error) {
+                hideLoader();
+                showToast("Failed to save profile. Please try again.");
+            }
+        });
     </script>
 </body>
 </html>
