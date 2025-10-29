@@ -25,17 +25,9 @@
         .form-panel-wrapper { flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow-y: auto; }
         .info-panel { display: none; }
 
-        /* Welcome Screen */
         #welcome-screen { display: flex; flex-direction: column; height: 100%; }
         .welcome-top { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 2rem; }
-        
-        /* UPDATED RULE FOR IMAGE SIZE */
-        .welcome-top img {
-            width: 75px;
-            height: 56px;
-            object-fit: contain;
-        }
-
+        .welcome-top img { width: 75px; height: 56px; object-fit: contain; }
         .welcome-bottom { text-align: center; flex-shrink: 0; background-color: var(--primary-dark); border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
         .welcome-bottom h1 { font-size: 2.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--pure-white); }
         .welcome-bottom p { font-size: 1rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; line-height: 1.6; }
@@ -43,7 +35,6 @@
         .btn-google:hover { background-color: var(--light-gray); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .google-icon { width: 22px; height: 22px; margin-right: 0.75rem; }
 
-        /* Feedback Elements */
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(4px); }
         .spinner { width: 48px; height: 48px; border: 5px solid rgba(51, 192, 114, 0.2); border-bottom-color: var(--accent-green); border-radius: 50%; animation: rotation 1s linear infinite; }
         #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1001; }
@@ -52,7 +43,6 @@
         #toast.error { background-color: var(--color-danger); }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Desktop View */
         @media (min-width: 992px) {
             html, body { height: auto; overflow: auto; }
             body { background-color: #e9eef2; padding: 2rem; min-height: 100vh; }
@@ -140,11 +130,13 @@
             } 
         }
 
+        // --- START OF CORRECTED CODE ---
         async function handleUserLoggedIn(user) {
             const userRef = doc(db, "users", user.uid);
             const userDoc = await getDoc(userRef);
 
             if (!userDoc.exists()) {
+                // New user - always set as pending
                 await setDoc(userRef, {
                     displayName: user.displayName || user.email,
                     email: user.email,
@@ -155,17 +147,31 @@
                 }, { merge: true });
                 window.location.href = 'pending.html';
             } else {
+                // Existing user - check their role and status
                 await setDoc(userRef, { lastLogin: new Date().toISOString() }, { merge: true });
                 const userData = userDoc.data();
+                
                 if (userData.role === 'admin') {
                      window.location.href = 'admin.html';
-                } else if (userData.status === 'approved') {
-                    window.location.href = 'home.html';
-                } else {
-                    window.location.href = 'pending.html';
+                     return; // Important: exit after admin redirect
+                }
+
+                // Use a switch for clarity on user statuses
+                switch (userData.status) {
+                    case 'approved':
+                        window.location.href = 'home.html';
+                        break;
+                    case 'denied':
+                        window.location.href = 'denied.html'; // Correctly redirect denied users
+                        break;
+                    case 'pending':
+                    default:
+                        window.location.href = 'pending.html';
+                        break;
                 }
             }
         }
+        // --- END OF CORRECTED CODE ---
         
         document.getElementById('google-signin-btn').addEventListener('click', handleGoogleLogin);
     </script>
