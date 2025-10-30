@@ -148,7 +148,11 @@
             <li><a href="/home.html"><span class="jwIcon mid1011200"></span><span>హోమ్</span></a></li>
             <li><a href="/meetings.html"><i class="fas fa-users" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Meetings</span></a></li>
         </ul>
-        <div class="profile-section"><div class="profile-info"><div class="profile-name">Loading...</div></div></div>
+        <div class="profile-section">
+            <div class="profile-info">
+                 <div class="profile-name">Loading...</div>
+            </div>
+        </div>
     </div>
 
     <main>
@@ -180,14 +184,14 @@
             </div>
         </div>
     </main>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- User Check ---
             const userInfoString = localStorage.getItem('userInfo');
             if (!userInfoString) {
                 window.location.href = '/index.html';
-                return;
+                return; 
             }
             const userInfo = JSON.parse(userInfoString);
             const profileNameEl = document.querySelector('.profile-name');
@@ -201,8 +205,9 @@
             const slideMenu = document.getElementById('slide-menu');
             const menuOverlay = document.getElementById('menu-overlay');
             const body = document.body;
+            function openMenu() { slideMenu.classList.add('is-open'); menuOverlay.classList.add('is-open'); body.classList.add('menu-open'); }
             function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
-            menuToggleButton.addEventListener('click', () => { body.classList.toggle('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
+            menuToggleButton.addEventListener('click', () => { body.classList.contains('menu-open') ? closeMenu() : openMenu(); });
             menuOverlay.addEventListener('click', closeMenu);
 
             // --- Custom Dropdown Script ---
@@ -303,11 +308,9 @@
             });
         };
         
-        // Check for user info before fetching data
-        if (localStorage.getItem('userInfo')) {
-            displayMultiAnswerData();
-            displaySimpleData();
-        }
+        // Load data for both panes on page load
+        displayMultiAnswerData();
+        displaySimpleData();
     </script>
 </body>
 </html>
