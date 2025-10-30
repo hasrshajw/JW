@@ -19,7 +19,6 @@
             --dc-button-borderColor: rgba(18, 18, 18, 0.1);
         }
         
-        /* JW Icons Custom Font Face */
         @font-face {
             font-family: "jw-icons-external";
             src: url("./jw-icons-external-d876da3.woff") format("woff");
@@ -70,37 +69,10 @@
             background-position: center left;
             flex-shrink: 0;
         }
-        .srText {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
         .header-right-controls {
             display: flex;
             align-items: center;
             gap: 15px;
-        }
-        .admin-button {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        .admin-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
         }
         .header-icons {
             display: flex;
@@ -162,8 +134,8 @@
             align-items: center;
             color: var(--menu-new-text);
             background-color: var(--menu-new-bg);
-            height: 50px; /* UPDATED */
-            padding: 12px 5px 12px 12px; /* UPDATED */
+            height: 50px;
+            padding: 12px 5px 12px 12px;
             box-sizing: border-box;
             text-decoration: none;
             font-size: 1rem;
@@ -176,50 +148,6 @@
         .menu-links li a:hover {
             background-color: var(--menu-new-hover);
         }
-        .expandButton-border {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            padding: 2px;
-            min-width: 36px;
-            min-height: 36px;
-            border-width: 1px;
-            border-style: solid;
-            border-color: var(--dc-button-borderColor);
-            cursor: pointer;
-            margin-left: auto;
-            background-color: #f7f7f7;
-        }
-        .expandButton-border svg {
-            width: 24px;
-            height: 24px;
-            color: var(--icon-color);
-            transition: transform 0.3s ease-in-out;
-        }
-        .submenu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            background-color: var(--submenu-bg);
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-in-out;
-        }
-        .has-submenu.is-open > .submenu {
-            max-height: 600px;
-        }
-        .has-submenu.is-open > a {
-            background-color: var(--submenu-bg);
-        }
-        .has-submenu.is-open .expandButton-border svg {
-            transform: rotate(180deg);
-        }
-        .submenu li a {
-            height: 50px;
-            padding: 12px 5px 12px 52px;
-            background-color: var(--submenu-bg);
-        }
         .profile-section {
             padding: 16px;
             border-top: 1px solid var(--menu-new-border);
@@ -230,38 +158,9 @@
         .profile-info {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
         }
-        .profile-image {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            margin-right: 12px;
-            object-fit: cover;
-            border: 2px solid #fff;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            background-color: #e0e0e0;
-        }
-        .profile-name { font-weight: bold; font-size: 0.95rem; color: #333; }
-        .profile-email { font-size: 0.85rem; color: #888; word-break: break-all; }
-        .logout-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 12px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: #444;
-            background-color: #f0f0f0;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-        .logout-button:hover { background-color: #e0e0e0; }
-        .logout-button .fas { margin-right: 8px; }
+        .profile-name { font-weight: bold; font-size: 1.1rem; color: #333; }
+
         main { padding-top: 56px; text-align: center; }
         .welcome-content { padding: 4rem 2rem; }
         .welcome-content h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #4a6da7; }
@@ -289,9 +188,8 @@
 <body>
     <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
-            <a href="/home.html" class="mobileLogo" title="Home"><span class="srText">Home</span></a>
+            <a href="/home.html" class="mobileLogo" title="Home"></a>
             <div class="header-right-controls">
-                <a href="/admin.html" id="admin-dashboard-link" class="admin-button" style="display: none;"><i class="fas fa-user-shield"></i><span>Admin</span></a>
                 <div class="header-icons" id="menu-toggle-button">
                     <svg class="hamburger-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22.5 7h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 13h-21a.5.5 0 010-1h21a.5.5 0 010 1zM22.5 19h-21a.5.5 0 010-1h21a.5.5 0 010 1z"></path></svg>
                     <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12.707 12l6.146-6.146a.5.5 0 00-.707-.707L12 11.293 5.854 5.146a.5.5 0 00-.707.707L11.293 12l-6.147 6.146a.5.5 0 10.707.707L12 12.707l6.146 6.146a.5.5 0 00.707-.707z"></path></svg>
@@ -304,140 +202,70 @@
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
             <li><a href="/home.html"><span class="iconLink-icon jwIcon mid1011200"></span><span>హోమ్</span></a></li>
-            <li><a href="/user-questions.html"><i class="fas fa-question-circle" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Simple Q&A</span></a></li>
-            <li><a href="/user-multi-answer.html"><i class="fas fa-list-ol" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Multi-Answer Q&A</span></a></li>
-            <li class="has-submenu">
-                <a href="#"><span class="iconLink-icon jwIcon mid1011201"></span><span>బైబిలు బోధలు</span><span class="expandButton-border"><svg class="svg-inline--fa jwi-chevron-down fa-w-16" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a.498.498 0 01-.388-.185l-6.5-8a.5.5 0 01.776-.63L12 15.707l6.112-7.522a.5.5 0 11.776.63l-6.5 8A.498.498 0 0112 17z"></path></svg><span class="srText">ఎక్కువ చూపించు</span></span></a>
-                <ul class="submenu">
-                    <li><a href="#"><span>బైబిలు ప్రశ్నలకు జవాబులు</span></a></li>
-                    <li><a href="#"><span>బైబిలు వచనాల వివరణ</span></a></li>
-                </ul>
-            </li>
-            <li><a href="#"><span class="iconLink-icon jwIcon mid1011207"></span><span>లైబ్రరీ</span></a></li>
-            <li><a href="#"><span class="iconLink-icon jwIcon mid1011216"></span><span>వార్తలు</span></a></li>
+            <li><a href="/meetings.html"><i class="fas fa-users" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Meetings</span></a></li>
         </ul>
         <div class="profile-section">
             <div class="profile-info">
-                 <img class="profile-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Profile">
-                 <div class="profile-text">
-                     <div class="profile-name">Loading...</div>
-                     <div class="profile-email"></div>
-                 </div>
+                 <div class="profile-name">Loading...</div>
             </div>
-            <button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button>
         </div>
     </div>
 
     <main>
         <div class="welcome-content">
             <h1>Welcome to the App!</h1>
-            <p>You have successfully logged in and your account is approved. You can now access all features.</p>
+            <p>You can now access all the features available.</p>
         </div>
     </main>
 
     <script>
-        const menuToggleButton = document.getElementById('menu-toggle-button');
-        const slideMenu = document.getElementById('slide-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-        const body = document.body;
-        
-        const submenuTriggers = document.querySelectorAll('.has-submenu > a');
-
-        submenuTriggers.forEach(trigger => {
-            trigger.addEventListener('click', function(event) {
-                event.preventDefault();
-                const parentLi = this.parentElement;
-                const currentlyOpen = document.querySelector('.has-submenu.is-open');
-                if (currentlyOpen && currentlyOpen !== parentLi) {
-                    currentlyOpen.classList.remove('is-open');
-                }
-                parentLi.classList.toggle('is-open');
-            });
-        });
-
-        function openMenu() {
-            slideMenu.classList.add('is-open');
-            menuOverlay.classList.add('is-open');
-            body.classList.add('menu-open');
-        }
-
-        function closeMenu() {
-            slideMenu.classList.remove('is-open');
-            menuOverlay.classList.remove('is-open');
-            body.classList.remove('menu-open');
-            const openSubmenu = document.querySelector('.has-submenu.is-open');
-            if (openSubmenu) {
-                openSubmenu.classList.remove('is-open');
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- User Check ---
+            const userInfoString = localStorage.getItem('userInfo');
+            if (!userInfoString) {
+                // If no user info is found, redirect to the registration page.
+                window.location.href = '/index.html';
+                return; // Stop further execution
             }
-        }
 
-        menuToggleButton.addEventListener('click', () => {
-            if (body.classList.contains('menu-open')) {
-                closeMenu();
-            } else {
-                openMenu();
+            // If user info exists, parse it and make the page visible.
+            const userInfo = JSON.parse(userInfoString);
+            const profileNameEl = document.querySelector('.profile-name');
+            if (profileNameEl && userInfo.displayName) {
+                profileNameEl.textContent = userInfo.displayName;
             }
-        });
-        
-        menuOverlay.addEventListener('click', closeMenu);
-    </script>
+            document.body.classList.add('auth-ready');
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
-            authDomain: "jwhelperr.firebaseapp.com",
-            projectId: "jwhelperr",
-            storageBucket: "jwhelperr.appspot.com",
-            messagingSenderId: "760897937861",
-            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac",
-            measurementId: "G-TDJZWN95BC"
-        };
+            // --- Menu Toggle Script ---
+            const menuToggleButton = document.getElementById('menu-toggle-button');
+            const slideMenu = document.getElementById('slide-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const body = document.body;
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+            function openMenu() {
+                slideMenu.classList.add('is-open');
+                menuOverlay.classList.add('is-open');
+                body.classList.add('menu-open');
+            }
 
-        const profileImage = document.querySelector('.profile-image');
-        const profileName = document.querySelector('.profile-name');
-        const profileEmail = document.querySelector('.profile-email');
-        const logoutButton = document.querySelector('.logout-button');
-        const adminDashboardLink = document.getElementById('admin-dashboard-link');
+            function closeMenu() {
+                slideMenu.classList.remove('is-open');
+                menuOverlay.classList.remove('is-open');
+                body.classList.remove('menu-open');
+            }
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userRef);
-
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    
-                    if (userData.role === 'admin') {
-                        adminDashboardLink.style.display = 'flex';
-                    }
-
-                    if (userData.status === 'approved') {
-                        profileImage.src = user.photoURL || 'https://placehold.co/44x44/666/fff?text=' + (user.displayName || user.email)[0].toUpperCase();
-                        profileName.textContent = user.displayName || 'No Name';
-                        profileEmail.textContent = user.email;
-                        document.body.classList.add('auth-ready');
-                    } else {
-                        window.location.href = '/pending.html'; 
-                    }
+            menuToggleButton.addEventListener('click', () => {
+                if (body.classList.contains('menu-open')) {
+                    closeMenu();
                 } else {
-                    window.location.href = '/'; 
+                    openMenu();
                 }
-            } else {
-                window.location.href = '/';
-            }
-        });
-
-        logoutButton.addEventListener('click', () => {
-            signOut(auth);
+            });
+            
+            menuOverlay.addEventListener('click', closeMenu);
         });
     </script>
+
 </body>
 </html>
