@@ -165,7 +165,7 @@ body.menu-open .header-icons .close-icon { display: block; }
 <body>
 
 <div id="app-container" class="hidden">
-    <header id="app-header">
+    <header class="site-header">
         <div class="top-bar" id="mobileNavTopBar">
         <a href="/home.html" class="mobileLogo" title="Home"></a>
         <div class="header-right-controls">
@@ -695,31 +695,34 @@ ${rawText}`;
         schedule.clearCellSelection();
     }
     
-    onAuthStateChanged(auth, user => {
-        if (user && user.email === ADMIN_EMAIL) {
-            appContainer.classList.remove('hidden');
-            document.querySelector('.profile-name').textContent = user.displayName || 'Admin';
-        document.querySelector('.profile-email').textContent = user.email;
-        document.querySelector('.profile-image').src = user.photoURL || `https://placehold.co/44x44/666/fff?text=${(user.displayName || user.email)[0].toUpperCase()}`;
-        profileSection.style.display = 'block';
-            
-            const q = query(templatesCollection, orderBy("createdAt"));
-            onSnapshot(q, snapshot => {
-                snapshot.docChanges().forEach(change => {
-                    const id = change.doc.id;
-                    const data = change.doc.data();
-                    if (change.type === 'added' && !activeSchedules[id]) activeSchedules[id] = new Schedule(id, data);
-                    if (change.type === 'modified' && activeSchedules[id]) activeSchedules[id].render(data);
-                    if (change.type === 'removed' && activeSchedules[id]) {
-                        activeSchedules[id].destroy();
-                        delete activeSchedules[id];
-                    }
-                });
+// REPLACE WITH THIS BLOCK
+onAuthStateChanged(auth, user => {
+    if (user && user.email === ADMIN_EMAIL) {
+        appContainer.classList.remove('hidden');
+        
+        // Correctly update the elements in the new slide-out menu
+        document.querySelector('.slide-menu .profile-name').textContent = user.displayName || 'Admin';
+        document.querySelector('.slide-menu .profile-email').textContent = user.email;
+        document.querySelector('.slide-menu .profile-image').src = user.photoURL || `https://placehold.co/44x44/666/fff?text=${(user.displayName || user.email)[0].toUpperCase()}`;
+        document.getElementById('profile-section').style.display = 'block';
+
+        const q = query(templatesCollection, orderBy("createdAt"));
+        onSnapshot(q, snapshot => {
+            snapshot.docChanges().forEach(change => {
+                const id = change.doc.id;
+                const data = change.doc.data();
+                if (change.type === 'added' && !activeSchedules[id]) activeSchedules[id] = new Schedule(id, data);
+                if (change.type === 'modified' && activeSchedules[id]) activeSchedules[id].render(data);
+                if (change.type === 'removed' && activeSchedules[id]) {
+                    activeSchedules[id].destroy();
+                    delete activeSchedules[id];
+                }
             });
-        } else {
-             window.location.replace('./login.html');
-        }
-    });
+        });
+    } else {
+         window.location.replace('./login.html');
+    }
+});
 
     setupGlobalUI();
 </script>
