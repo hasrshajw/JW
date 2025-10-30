@@ -75,9 +75,8 @@
         }
         .menu-links li:first-child a { border-top: none; }
         .profile-section { padding: 16px; border-top: 1px solid var(--menu-new-border); flex-shrink: 0; background-color: #fafafa; margin-top: auto; }
-        .profile-info { display: flex; align-items: center; margin-bottom: 16px; }
-        .profile-image { width: 44px; height: 44px; border-radius: 50%; margin-right: 12px; object-fit: cover; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); background-color: #e0e0e0; }
-        .logout-button { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; font-weight: bold; font-size: 0.9rem; color: #444; background-color: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; }
+        .profile-info { display: flex; align-items: center; }
+        .profile-name { font-weight: bold; font-size: 1.1rem; color: #333; }
         main { padding-top: 56px; }
         
         .jwIcon { font-family: "jw-icons-external"; font-size: 24px; display: inline-block; width: 30px; height: 24px; -webkit-font-smoothing: antialiased; margin-right: 10px; text-align: center; }
@@ -106,7 +105,6 @@
         .content-pane { display: none; }
         .content-pane.active { display: block; }
         
-        /* Styles for Simple Q&A */
         .simple-qa-content .article-color-bar { height: 56px; display: flex; align-items: center; padding: 0 1rem; margin-top: 0rem; }
         .simple-qa-content .article-number-text { color: white; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; line-height: 26px; font-weight: 700; }
         .simple-qa-content .main-content { padding: 0 1rem; max-width: 900px; margin: 0 auto; }
@@ -117,7 +115,6 @@
         .simple-qa-content .qa-answer { font-family: 'Noto Sans Telugu', sans-serif; font-weight: 400; font-size: 16px; line-height: 26px; color: var(--text-light-content); white-space: pre-wrap; }
         .simple-qa-content .qa-image { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; }
         
-        /* Styles for Multi-Answer Q&A */
         .multi-answer-content { max-width: 900px; margin: 0 auto; }
         .multi-answer-content .heading-bar { height: 56px; display: flex; align-items: center; padding: 0 16px; color: white; }
         .multi-answer-content .heading-title { font-family: 'Noto Sans Telugu', sans-serif; font-size: 18px; font-weight: 700; }
@@ -149,9 +146,9 @@
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
             <li><a href="/home.html"><span class="jwIcon mid1011200"></span><span>హోమ్</span></a></li>
-            <li><a href="/meetings.html"><span class="jwIcon mid1011529"></span><span>Meetings</span></a></li>
+            <li><a href="/meetings.html"><i class="fas fa-users" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Meetings</span></a></li>
         </ul>
-        <div class="profile-section"><div class="profile-info"><img class="profile-image" alt="Profile"><div class="profile-text"><div class="profile-name">Loading...</div><div class="profile-email"></div></div></div><button class="logout-button"><i class="fas fa-sign-out-alt"></i>Logout</button></div>
+        <div class="profile-section"><div class="profile-info"><div class="profile-name">Loading...</div></div></div>
     </div>
 
     <main>
@@ -183,66 +180,60 @@
             </div>
         </div>
     </main>
-
+    
     <script>
-        // --- Menu Toggle Script (Corrected) ---
-const menuToggleButton = document.getElementById('menu-toggle-button');
-const slideMenu = document.getElementById('slide-menu');
-const menuOverlay = document.getElementById('menu-overlay');
-const body = document.body;
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- User Check ---
+            const userInfoString = localStorage.getItem('userInfo');
+            if (!userInfoString) {
+                window.location.href = '/index.html';
+                return;
+            }
+            const userInfo = JSON.parse(userInfoString);
+            const profileNameEl = document.querySelector('.profile-name');
+            if (profileNameEl && userInfo.displayName) {
+                profileNameEl.textContent = userInfo.displayName;
+            }
+            document.body.classList.add('auth-ready');
 
-function openMenu() {
-    slideMenu.classList.add('is-open');
-    menuOverlay.classList.add('is-open');
-    body.classList.add('menu-open');
-}
+            // --- Menu Toggle Script ---
+            const menuToggleButton = document.getElementById('menu-toggle-button');
+            const slideMenu = document.getElementById('slide-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const body = document.body;
+            function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
+            menuToggleButton.addEventListener('click', () => { body.classList.toggle('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
+            menuOverlay.addEventListener('click', closeMenu);
 
-function closeMenu() {
-    slideMenu.classList.remove('is-open');
-    menuOverlay.classList.remove('is-open');
-    body.classList.remove('menu-open');
-}
-
-menuToggleButton.addEventListener('click', () => {
-    if (body.classList.contains('menu-open')) {
-        closeMenu();
-    } else {
-        openMenu();
-    }
-});
-menuOverlay.addEventListener('click', closeMenu);
-
-
-
-        const dropdown = document.getElementById('meeting-dropdown');
-        const dropdownButton = document.getElementById('dropdown-button');
-        const dropdownButtonText = document.getElementById('dropdown-button-text');
-        const dropdownContent = document.getElementById('dropdown-content');
-        const contentPanes = document.querySelectorAll('.content-pane');
-        const dropdownItems = document.querySelectorAll('.dropdown-item');
-        function switchPane(targetId) { contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId)); }
-        const initialItem = dropdownItems[0];
-        dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
-        switchPane(initialItem.dataset.target);
-        dropdownButton.addEventListener('click', () => { dropdownContent.classList.toggle('is-open'); dropdownButton.classList.toggle('is-open'); });
-        dropdownContent.addEventListener('click', (e) => {
-            const selectedItem = e.target.closest('.dropdown-item');
-            if (!selectedItem) return;
-            dropdownButtonText.textContent = selectedItem.querySelector('span:last-child').textContent;
-            switchPane(selectedItem.dataset.target);
-            dropdownContent.classList.remove('is-open');
-            dropdownButton.classList.remove('is-open');
+            // --- Custom Dropdown Script ---
+            const dropdown = document.getElementById('meeting-dropdown');
+            const dropdownButton = document.getElementById('dropdown-button');
+            const dropdownButtonText = document.getElementById('dropdown-button-text');
+            const dropdownContent = document.getElementById('dropdown-content');
+            const contentPanes = document.querySelectorAll('.content-pane');
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            function switchPane(targetId) { contentPanes.forEach(pane => pane.classList.toggle('active', pane.id === targetId)); }
+            const initialItem = dropdownItems[0];
+            dropdownButtonText.textContent = initialItem.querySelector('span:last-child').textContent;
+            switchPane(initialItem.dataset.target);
+            dropdownButton.addEventListener('click', () => { dropdownContent.classList.toggle('is-open'); dropdownButton.classList.toggle('is-open'); });
+            dropdownContent.addEventListener('click', (e) => {
+                const selectedItem = e.target.closest('.dropdown-item');
+                if (!selectedItem) return;
+                dropdownButtonText.textContent = selectedItem.querySelector('span:last-child').textContent;
+                switchPane(selectedItem.dataset.target);
+                dropdownContent.classList.remove('is-open');
+                dropdownButton.classList.remove('is-open');
+            });
+            window.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) { dropdownContent.classList.remove('is-open'); dropdownButton.classList.remove('is-open'); } });
         });
-        window.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) { dropdownContent.classList.remove('is-open'); dropdownButton.classList.remove('is-open'); } });
     </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
         const firebaseConfig = { apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ", authDomain: "jwhelperr.firebaseapp.com", projectId: "jwhelperr" };
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
 
         const simpleQaDocRef = doc(db, "qanda", "main");
@@ -311,24 +302,12 @@ menuOverlay.addEventListener('click', closeMenu);
                 multiAnswerContainer.appendChild(headingSection);
             });
         };
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().status === 'approved') {
-                    document.body.classList.add('auth-ready');
-                    const profileImage = document.querySelector('.profile-image');
-                    const profileName = document.querySelector('.profile-name');
-                    const profileEmail = document.querySelector('.profile-email');
-                    profileImage.src = user.photoURL || `https://placehold.co/44x44/666/fff?text=${(user.displayName || user.email)[0].toUpperCase()}`;
-                    profileName.textContent = user.displayName || 'No Name';
-                    profileEmail.textContent = user.email;
-                    document.querySelector('.logout-button').addEventListener('click', () => signOut(auth));
-                    displayMultiAnswerData();
-                    displaySimpleData();
-                } else { window.location.href = '/pending.html'; }
-            } else { window.location.href = '/'; }
-        });
+        
+        // Check for user info before fetching data
+        if (localStorage.getItem('userInfo')) {
+            displayMultiAnswerData();
+            displaySimpleData();
+        }
     </script>
 </body>
 </html>
