@@ -6,45 +6,50 @@
 <title>Admin - Mid-Week Schedule Editor</title>
 
 <!-- FIREBASE SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js" type="module"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js" type="module"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js" type="module"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-vertexai.js" type="module"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js"></script> <!-- For AI -->
 
-<!-- FONTS -->
+<!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;700&display=swap" rel="stylesheet">
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 
 <style>
     :root {
         --header-bg: #292929;
         --text-light-header: #fff;
-        --body-bg: #F9FAFB;
-        --widget-bg: #FFFFFF;
+        --body-bg: #f8fafc;
+        --surface-color: #ffffff;
         --menu-new-text: #4a6da7;
         --menu-new-bg: #ffffff;
         --menu-new-border: #eeeeee;
         --icon-color: #757575;
         --primary-color: #012726;
-        --danger-color: #EF4444;
-        --danger-light: #fef2f2;
-        --warning-color: #F59E0B;
+        --primary-hover: #024443;
+        --primary-light: #e6f6f6;
+        --danger-color: #d32f2f;
+        --danger-hover: #b71c1c;
+        --danger-light: #fde8e8;
+        --warning-color: #f59e0b;
         --success-color: #10b981;
         --ai-color: #673ab7;
         --ai-light: #ede7f6;
-        --border-color: #E5E7EB;
+        --border-color: #e5e7eb;
         --text-primary: #1f2937;
-        --text-secondary: #6B7280;
+        --text-secondary: #6b7280;
+        --radius-md: 8px;
+        --radius-lg: 16px;
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
     *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     body {
-        font-family: 'IBM Plex Sans', sans-serif;
+        font-family: 'Noto Sans Telugu', 'IBM Plex Sans', sans-serif;
         background-color: var(--body-bg);
         margin: 0;
         padding-top: 56px;
@@ -53,20 +58,16 @@
     }
     body.auth-ready { visibility: visible; opacity: 1; }
     body.menu-open { overflow: hidden; }
+    .hidden { display: none !important; }
 
-    @font-face {
-        font-family: "jw-icons-external";
-        src: url("./jw-icons-external-d876da3.woff") format("woff");
-        font-weight: normal;
-        font-style: normal;
-    }
+    @font-face { font-family: "jw-icons-external"; src: url("./jw-icons-external-d876da3.woff") format("woff"); }
     .jwIcon { font-family: "jw-icons-external"; font-size: 24px; display: inline-block; width: 30px; height: 24px; margin-right: 10px; text-align: center; color: var(--icon-color); }
     .mid1011200::before { content: "\e661"; }
 
     /* Header & Menu */
     .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 900; background-color: var(--header-bg); color: var(--text-light-header); }
     .top-bar { display: flex; justify-content: space-between; align-items: center; height: 56px; padding: 0 15px 0 0; }
-    .mobileLogo { display: block; width: 75px; height: 56px; background-image: url(https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg), none; background-repeat: no-repeat; background-size: contain; background-position: center left; flex-shrink: 0; }
+    #mobileNavTopBar .mobileLogo { display: block; width: 75px; height: 56px; background-image: url(https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg), none; background-repeat: no-repeat; background-size: contain; background-position: center left; flex-shrink: 0; }
     .header-right-controls { display: flex; align-items: center; gap: 15px; }
     .header-icons { display: flex; align-items: center; height: 56px; cursor: pointer; }
     .header-icons svg { height: 24px; width: 24px; color: var(--text-light-header); }
@@ -80,38 +81,28 @@
     .menu-links { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex-grow: 1; }
     .menu-links li a { display: flex; align-items: center; color: var(--menu-new-text); height: 52px; padding: 12px 5px 12px 12px; box-sizing: border-box; text-decoration: none; font-size: 1rem; border-top: 1px dotted #a7a7a7; }
     .menu-links li:first-child a { border-top: none; }
-    .menu-links .menu-icon { width: 30px; font-size: 1.2rem; text-align: center; margin-right: 10px; color: var(--icon-color); }
     .profile-section { padding: 16px; border-top: 1px solid var(--menu-new-border); flex-shrink: 0; background-color: #fafafa; margin-top: auto; }
     .profile-info { display: flex; align-items: center; margin-bottom: 16px; }
-    .profile-image { width: 44px; height: 44px; border-radius: 50%; margin-right: 12px; object-fit: cover; }
-    .profile-name { font-weight: bold; font-size: 0.95rem; }
-    .profile-email { font-size: 0.85rem; color: #888; }
-    #logout-button { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s ease; width:100%; }
-    #logout-button:hover { background-color: var(--danger-light); color: var(--danger-color); border-color: var(--danger-color); }
+    .profile-name { font-weight: bold; font-size: 1.1rem; color: #333; }
+    #logout-button { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; transition: all 0.2s; }
+    #logout-button:hover { background-color: var(--danger-light); color: var(--danger-hover); border-color: var(--danger-hover); }
 
-    /* Main Content Styles */
-    .master-container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem;}
+    /* Main Content */
+    .master-container { max-width: 1100px; margin: 2rem auto; padding: 24px; }
     .page-title { font-size: 2rem; font-weight: 700; margin: 0 0 24px 0; }
-    .schedule-block { background: var(--widget-bg); padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03); margin-bottom: 32px; border: 1px solid var(--border-color); }
+    .schedule-block { background: var(--surface-color); padding: 24px; border-radius: 16px; box-shadow: var(--shadow-md); margin-bottom: 32px; border: 1px solid var(--border-color); }
     .schedule-header { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; }
-    .schedule-title { font-size: 1.5rem; font-weight: 600; margin: 0; flex-grow: 1; border: none; padding: 4px 8px; margin: -4px -8px; border-radius: 8px; font-family: 'Noto Sans Telugu', sans-serif; color: var(--text-primary); }
+    .schedule-title { font-size: 1.5rem; font-weight: 700; margin: 0; flex-grow: 1; border: none; padding: 4px 8px; margin: -4px -8px; border-radius: 8px; font-family: 'Noto Sans Telugu', sans-serif; color: var(--text-primary); }
+    .schedule-title:focus { outline: 2px solid var(--primary-color); background-color: #f3f4f6; }
     .toolbar { display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 8px;}
-    .toolbar-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-color); background-color: var(--widget-bg); border-radius: 8px; }
-    .toolbar-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+    .toolbar-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-color); background-color: var(--surface-color); border-radius: 8px; transition: all 0.2s ease; }
+    .toolbar-btn:hover:not(:disabled) { background-color: #f9fafb; }
     .toolbar-btn .material-symbols-outlined, .toolbar-btn .bx { font-size: 20px; }
     .delete-btn { margin-left: auto; }
-    .ai-fill-btn { color: var(--ai-color); border-color: #d1c4e9; }
-    table { width: 100%; border-collapse: collapse; border: 2px solid #4B0082; font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; font-weight: 700; }
-    th, td { border: 1px solid #333; padding: 0 8px; text-align: left; vertical-align: middle; position: relative; height: 36px; }
-    [contenteditable="true"]:focus { background-color: #fffbe5; outline: 1px solid var(--warning-color); }
+    .delete-btn:hover:not(:disabled) { background-color: var(--danger-light); color: var(--danger-color); border-color: var(--danger-color); }
+    table { width: 100%; border-collapse: collapse; border: 2px solid #4B0082; font-size: 12px; font-weight: 700; }
+    th, td { border: 1px solid #333; padding: 0 8px; text-align: left; vertical-align: middle; height: 36px; }
     .header-row td { font-size: 14px; color: #ffffff; height: 42px; text-align: center; }
-    .header-row[data-section="treasures"] td { background-color: #3c7f8b; }
-    .header-row[data-section="ministry"] td { background-color: rgb(212, 162, 42); }
-    .header-row[data-section="living"] td { background-color: rgb(192, 66, 53); }
-    .cell-icon { height: 75%; max-height: 24px; object-fit: contain; }
-    
-    #add-schedule-footer { max-width: 1100px; margin: 0 auto; padding: 20px; }
-    #addNewScheduleBtn { width: 100%; padding: 16px; font-size: 16px; font-weight: 600; border-radius: 16px; cursor: pointer; background: var(--primary-light); color: var(--primary-color); border: 2px dashed #b3e0e0; }
 </style>
 </head>
 <body>
@@ -129,137 +120,100 @@
     <div class="menu-overlay" id="menu-overlay"></div>
     <div class="slide-menu" id="slide-menu">
         <ul class="menu-links">
-            <li><a href="/admin.html"><i class="fas fa-users-cog menu-icon"></i><span>User Management</span></a></li>
-            <li><a href="/admin-questions.html"><i class="fas fa-question-circle menu-icon"></i><span>Simple Q&A</span></a></li>
-            <li><a href="/admin-multi-answer.html"><i class="fas fa-list-ol menu-icon"></i><span>Multi-Answer Q&A</span></a></li>
-            <li><a href="/mid-week.html"><i class="fas fa-calendar-alt menu-icon"></i><span>Mid-Week Schedule</span></a></li>
+            <li><a href="/home.html"><span class="jwIcon mid1011200"></span><span>హోమ్</span></a></li>
+            <li><a href="/meetings.html"><i class="fas fa-users" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Meetings</span></a></li>
+            <li><a href="/schedule.html"><i class="fas fa-calendar-alt" style="width:30px; margin-right:10px; text-align:center; font-size: 24px; color: var(--icon-color);"></i><span>Schedule</span></a></li>
         </ul>
         <div class="profile-section">
-            <div class="profile-info">
-                 <img class="profile-image" alt="Profile">
-                 <div class="profile-text"><div class="profile-name"></div><div class="profile-email"></div></div>
-            </div>
-            <button id="logout-button">Logout</button>
+            <div class="profile-info"><div class="profile-name"></div></div>
+            <button id="logout-button">Sign Out Admin</button>
         </div>
     </div>
 
-    <main class="master-container">
-        <h1 class="page-title">Mid-Week Schedule Templates</h1>
-        <div id="schedules-wrapper"></div>
-        <div id="add-schedule-footer">
-            <button id="addNewScheduleBtn">+ Add New Schedule Template</button>
+    <div id="app-container" class="hidden">
+        <div class="master-container">
+            <h1 class="page-title">Mid-Week Schedule Templates</h1>
+            <div id="schedules-wrapper"></div>
+            <button id="addNewScheduleBtn" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 600; border-radius: 16px; cursor: pointer; margin-top: 2rem;">+ Add New Schedule Template</button>
         </div>
-    </main>
+    </div>
     
+    <div id="login-view" style="text-align: center; padding: 4rem 2rem;">
+        <h2>Admin Access Required</h2>
+        <p>Please sign in with an authorized Google account to manage schedules.</p>
+        <button id="google-signin-btn" class="toolbar-btn" style="padding: 12px 24px; font-size: 1rem;">
+             <svg style="width:22px; height:22px; margin-right:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.655-3.344-11.303-7.962l-6.571,4.819C9.656,40.909,16.318,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.089,5.571l6.19,5.238C42.012,36.494,44,30.638,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
+            Sign in with Google
+        </button>
+    </div>
+
     <template id="schedule-template">
         <div class="schedule-block">
             <div class="schedule-header">
                 <h2 class="schedule-title" contenteditable="true"></h2>
-                <div class="status-indicator"></div>
             </div>
             <div class="toolbar">
-                <button class="toolbar-btn ai-fill-btn" title="Auto-fill with AI"><i class='bx bxs-magic-wand'></i></button>
-                <button class="toolbar-btn undo-btn" disabled title="Undo"><i class='bx bx-undo'></i></button>
-                <button class="toolbar-btn redo-btn" disabled title="Redo"><i class='bx bx-redo'></i></button>
-                <button class="toolbar-btn reset-btn" title="Reset to default"><span class="material-symbols-outlined">restart_alt</span></button>
-                <button class="toolbar-btn delete-btn" title="Delete Template"><i class='bx bx-trash'></i></button>
+                <button class="toolbar-btn reset-btn"><span class="material-symbols-outlined">restart_alt</span><span class="btn-text">Reset</span></button>
+                <button class="toolbar-btn delete-btn"><i class='bx bx-trash'></i><span class="btn-text">Delete</span></button>
             </div>
             <table><tbody class="schedule-table-body"></tbody></table>
         </div>
     </template>
-    
-    <!-- Modals will be added here via JS if needed -->
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        // CORRECTED: Added getDoc to the import list
-        import { getFirestore, collection, doc, getDoc, addDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getVertexAI, getGenerativeModel } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-vertexai.js";
-        
+        import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, doc, onSnapshot, query, orderBy, deleteDoc, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
             authDomain: "jwhelperr.firebaseapp.com",
             projectId: "jwhelperr",
             storageBucket: "jwhelperr.appspot.com",
             messagingSenderId: "760897937861",
-            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac"
+            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac",
+            measurementId: "G-TDJZWN95BC"
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const templatesCollection = collection(db, "templates");
 
+        const templatesCollection = collection(db, "templates");
         let activeSchedules = {};
 
-        // RE-INTEGRATED: All helper functions and class definitions
-        const debounce = (func, delay) => {
-            let timeout;
-            return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), delay); };
-        };
-        
-        const DEFAULT_TABLE_HTML = `<tr><td colspan="3">Default Content...</td></tr>`; // Placeholder
+        const appContainer = document.getElementById('app-container');
+        const loginView = document.getElementById('login-view');
+        const schedulesWrapper = document.getElementById('schedules-wrapper');
 
-        class Schedule {
-             constructor(id, initialData) {
-                this.id = id;
-                this.debouncedSaveToFirestore = debounce(() => this.saveToFirestore(), 1500);
-                this.initDOM();
-                this.render(initialData);
-                this.setupEventListeners();
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInfoString = localStorage.getItem('userInfo');
+            if (!userInfoString) {
+                window.location.href = '/index.html';
+                return;
             }
-            initDOM() {
-                const templateClone = document.getElementById('schedule-template').content.cloneNode(true);
-                this.element = templateClone.querySelector('.schedule-block');
-                this.element.dataset.id = this.id;
-                this.titleEl = this.element.querySelector('.schedule-title');
-                this.tableBody = this.element.querySelector('.schedule-table-body');
-                this.statusIndicator = this.element.querySelector('.status-indicator');
-                document.getElementById('schedules-wrapper').appendChild(this.element);
-            }
-            render(data) {
-                this.titleEl.textContent = data.name;
-                this.tableBody.innerHTML = data.content;
-                this.updateStatus('Synced', 'synced');
-            }
-            getContent() {
-                return this.tableBody.innerHTML;
-            }
-            saveToFirestore() {
-                this.updateStatus('Syncing...', 'syncing');
-                const payload = { name: this.titleEl.textContent, content: this.getContent() };
-                setDoc(doc(db, "templates", this.id), payload, { merge: true })
-                    .catch(err => this.updateStatus('Error', 'error'));
-            }
-            updateStatus(text, status) { this.statusIndicator.textContent = text; this.statusIndicator.dataset.status = status; }
+            const userInfo = JSON.parse(userInfoString);
+            document.querySelector('.profile-name').textContent = userInfo.displayName;
+            document.body.classList.add('auth-ready');
             
-            setupEventListeners() {
-                this.titleEl.addEventListener('input', this.debouncedSaveToFirestore);
-                this.tableBody.addEventListener('input', this.debouncedSaveToFirestore);
-                this.element.querySelector('.delete-btn').addEventListener('click', () => this.delete());
-            }
-            delete() {
-                if (confirm('Permanently delete this template?')) {
-                    deleteDoc(doc(db, "templates", this.id));
-                }
-            }
-            destroy() { this.element.remove(); }
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
-                    document.body.classList.add('auth-ready');
-                    document.querySelector('.profile-name').textContent = user.displayName || 'Admin';
-                    document.querySelector('.profile-email').textContent = user.email;
-                    document.querySelector('.profile-image').src = user.photoURL || `https://placehold.co/44x44/666/fff?text=A`;
-                    initAdminDashboard();
-                } else {
-                    window.location.replace('/home.html');
-                }
+            // Menu Script
+            const menuToggleButton = document.getElementById('menu-toggle-button');
+            const slideMenu = document.getElementById('slide-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const body = document.body;
+            function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
+            menuToggleButton.addEventListener('click', () => { body.classList.toggle('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
+            menuOverlay.addEventListener('click', closeMenu);
+        });
+        
+        onAuthStateChanged(auth, user => {
+            if (user && user.email === 'harshavardhanjw@gmail.com') { // Hardcoded admin check
+                appContainer.classList.remove('hidden');
+                loginView.classList.add('hidden');
+                initAdminDashboard();
             } else {
-                window.location.replace('/index.html');
+                appContainer.classList.add('hidden');
+                loginView.classList.remove('hidden');
+                if(user) signOut(auth); // Sign out non-admin users automatically
             }
         });
 
@@ -269,38 +223,57 @@
                 snapshot.docChanges().forEach(change => {
                     const id = change.doc.id;
                     const data = change.doc.data();
-                    if (change.type === 'added') {
-                        if (!activeSchedules[id]) activeSchedules[id] = new Schedule(id, data);
-                    }
-                    if (change.type === 'modified') {
-                        if (activeSchedules[id]) activeSchedules[id].render(data);
-                    }
-                    if (change.type === 'removed') {
-                        if (activeSchedules[id]) {
-                            activeSchedules[id].destroy();
-                            delete activeSchedules[id];
-                        }
+                    if (change.type === 'added' && !activeSchedules[id]) activeSchedules[id] = new Schedule(id, data);
+                    if (change.type === 'modified' && activeSchedules[id]) activeSchedules[id].render(data);
+                    if (change.type === 'removed' && activeSchedules[id]) {
+                        activeSchedules[id].destroy();
+                        delete activeSchedules[id];
                     }
                 });
             });
         }
         
-        // --- UI Listeners ---
-        const menuToggleButton = document.getElementById('menu-toggle-button');
-        const slideMenu = document.getElementById('slide-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-        const body = document.body;
-        function closeMenu() { slideMenu.classList.remove('is-open'); menuOverlay.classList.remove('is-open'); body.classList.remove('menu-open'); }
-        menuToggleButton.addEventListener('click', () => { body.classList.toggle('menu-open') ? closeMenu() : (slideMenu.classList.add('is-open'), menuOverlay.classList.add('is-open'), body.classList.add('menu-open')); });
-        menuOverlay.addEventListener('click', closeMenu);
-        document.getElementById('logout-button').addEventListener('click', () => signOut(auth));
+        class Schedule {
+             constructor(id, initialData) {
+                this.id = id;
+                this.debouncedSave = this.debounce(() => this.saveToFirestore(), 2000);
+                this.initDOM();
+                this.render(initialData);
+                this.setupEventListeners();
+            }
+            debounce = (func, delay) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), delay); }; };
+            initDOM() {
+                const templateClone = document.getElementById('schedule-template').content.cloneNode(true);
+                this.element = templateClone.querySelector('.schedule-block');
+                this.element.dataset.id = this.id;
+                this.titleEl = this.element.querySelector('.schedule-title');
+                this.tableBody = this.element.querySelector('.schedule-table-body');
+                schedulesWrapper.appendChild(this.element);
+            }
+            render(data) {
+                if (document.activeElement !== this.titleEl) this.titleEl.textContent = data.name;
+                if (!this.tableBody.contains(document.activeElement)) this.tableBody.innerHTML = data.content;
+            }
+            getContent() { return this.tableBody.innerHTML; }
+            saveToFirestore() {
+                const payload = { name: this.titleEl.textContent, content: this.getContent() };
+                updateDoc(doc(db, "templates", this.id), payload).catch(err => console.error("Save failed:", err));
+            }
+            setupEventListeners() {
+                this.titleEl.addEventListener('input', this.debouncedSave);
+                this.tableBody.addEventListener('input', this.debouncedSave);
+                this.element.querySelector('.delete-btn').addEventListener('click', () => { if (confirm('Delete this template?')) deleteDoc(doc(db, "templates", this.id)); });
+                this.element.querySelector('.reset-btn').addEventListener('click', () => { if (confirm('Reset this table?')) this.tableBody.innerHTML = '...'; this.saveToFirestore(); });
+            }
+            destroy() { this.element.remove(); }
+        }
 
+        document.getElementById('google-signin-btn').addEventListener('click', () => {
+            signInWithPopup(auth, new GoogleAuthProvider()).catch(error => console.error("Admin Sign-in error:", error));
+        });
+        document.getElementById('logout-button').addEventListener('click', () => signOut(auth));
         document.getElementById('addNewScheduleBtn').addEventListener('click', () => {
-             addDoc(templatesCollection, { 
-                name: "New Mid-Week Schedule", 
-                content: DEFAULT_TABLE_HTML, // Use the full default HTML here
-                createdAt: serverTimestamp() 
-            });
+            addDoc(templatesCollection, { name: "New Schedule", content: "...", createdAt: serverTimestamp() });
         });
     </script>
 </body>
