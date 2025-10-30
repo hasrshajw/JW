@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>JW Helper</title>
+    <title>Deeps Beer Cafe</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,108 +14,54 @@
             --text-color: #333;
             --text-light: #666;
             --border-gray: #e0e0e0;
-            --color-danger: #dc2626;
         }
-
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; overflow: hidden; }
-        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--pure-white); display: flex; justify-content: center; align-items: center; color: var(--text-color); }
-        .container { width: 100%; max-width: 420px; height: 100%; max-height: 900px; background-color: var(--pure-white); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; }
-        .form-panel-wrapper { flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow-y: auto; }
-        .info-panel { display: none; }
-
-        /* Welcome Screen */
-        .screen { display: none; flex-direction: column; height: 100%; }
-        .screen.active { display: flex; }
-        .welcome-top { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 2rem; }
-        .welcome-top img { width: 75px; height: 56px; object-fit: contain; }
-        .welcome-bottom { text-align: center; flex-shrink: 0; background-color: var(--primary-dark); border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 2.5rem; }
-        .welcome-bottom h1 { font-size: 2.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--pure-white); }
-        .welcome-bottom p { font-size: 0.9rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; line-height: 1.6; }
-        .btn-google, .btn-submit { width: 100%; padding: 0.9rem 1rem; font-size: 1rem; font-weight: 600; border-radius: 16px; cursor: pointer; transition: all 0.3s; }
-        .btn-google { color: var(--primary-dark); background-color: var(--pure-white); border: 1px solid var(--border-gray); display: flex; align-items: center; justify-content: center; }
-        .btn-google:hover { background-color: var(--light-gray); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .google-icon { width: 22px; height: 22px; margin-right: 0.75rem; }
-        
-        /* Profile Setup Screen */
-        #profile-setup-screen { padding: 4rem 2rem 2rem; justify-content: center; }
-        #profile-setup-screen h2 { font-size: 1.8rem; font-weight: 600; text-align: center; margin-bottom: 0.5rem; }
-        #profile-setup-screen p { text-align: center; color: var(--text-light); margin-bottom: 2rem; font-size: 0.9rem; }
-        .input-group { margin-bottom: 1.25rem; }
-        .input-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
-        .input-group input { width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-gray); background-color: var(--light-gray); border-radius: 12px; font-size: 1rem; }
-        .btn-submit { color: var(--pure-white); background-color: var(--primary-dark); border: none; }
-        .btn-submit:hover { background-color: #001a19; }
-
-        /* Feedback Elements */
-        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 9999; }
-        .spinner { width: 48px; height: 48px; border: 5px solid rgba(51, 192, 114, 0.2); border-bottom-color: var(--accent-green); border-radius: 50%; animation: rotation 1s linear infinite; }
-        #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 500; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); transition: bottom 0.5s; z-index: 1001; }
-        #toast.show { bottom: 30px; }
-        #toast.error { background-color: var(--color-danger); }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @media (min-width: 992px) {
-            html, body { height: auto; overflow: auto; }
-            body { background-color: #e9eef2; padding: 2rem; min-height: 100vh; }
-            .container { flex-direction: row; max-width: 1000px; height: 700px; max-height: 90vh; border-radius: 2rem; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2); }
-            .info-panel { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; flex-basis: 55%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1586993451228-098a81de5d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80') center center / cover; padding: 4rem; color: var(--pure-white); }
-            .info-panel h2 { font-size: 3.5rem; }
-            .info-panel p { font-size: 1rem; max-width: 450px; }
-            .form-panel-wrapper { flex-basis: 45%; display: flex; align-items: center; justify-content: center; padding: 3rem; position: static; }
-            #welcome-screen { position: static; height: auto; align-items: center; text-align: center; }
-            .welcome-top { flex-grow: 0; padding: 0; }
-            .welcome-bottom { position: static; border-radius: 0; background: none; padding: 0; margin-top: 2rem; }
-            .welcome-bottom h1 { color: var(--text-color); }
-            .welcome-bottom p { color: var(--text-light); }
-            #profile-setup-screen { position: static; height: auto; padding: 0; width: 100%; max-width: 400px; justify-content: center; }
+        body { font-family: 'IBM Plex Sans', sans-serif; background-color: var(--light-gray); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(4px);
         }
+        .modal-overlay.active { display: flex; }
+        .modal-container {
+            background: var(--pure-white); border-radius: 16px; padding: 2rem;
+            width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-container h2 { font-size: 1.8rem; text-align: center; margin-bottom: 0.5rem; }
+        .modal-container p { text-align: center; color: var(--text-light); margin-bottom: 2rem; }
+        .input-group { margin-bottom: 1.25rem; }
+        .input-group label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .input-group input { width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-gray); background-color: var(--light-gray); border-radius: 12px; font-size: 1rem; }
+        .btn-submit { width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600; color: var(--pure-white); background-color: var(--primary-dark); border: none; border-radius: 12px; cursor: pointer; }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 9999; }
+        .spinner { width: 48px; height: 48px; border: 5px solid rgba(255,255,255,0.3); border-bottom-color: var(--pure-white); border-radius: 50%; animation: rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="info-panel">
-            <h2>The best nights are usually unplanned.</h2>
-            <p>Join our community to discover exclusive events, new brews, and connect with fellow beer enthusiasts.</p>
-        </div>
-        <div class="form-panel-wrapper">
-             <div id="welcome-screen" class="screen active">
-                <div class="welcome-top"><img src="https://www.jw.org/assets/ct/46605f23da/images/siteLogo-jworg-mobile.svg" alt="Site Logo"></div>
-                <div class="welcome-bottom">
-                    <h1>Welcome</h1>
-                    <p>Sign in with your Google account to continue.</p>
-                    <button type="button" class="btn-google" id="google-signin-btn">
-                        <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.655-3.344-11.303-7.962l-6.571,4.819C9.656,40.909,16.318,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.089,5.571l6.19,5.238C42.012,36.494,44,30.638,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
-                        Sign in with Google
-                    </button>
+    <div id="profile-setup-screen" class="modal-overlay">
+        <div class="modal-container">
+            <h2>Welcome!</h2>
+            <p>Please tell us a bit about yourself to continue.</p>
+            <form id="profile-form">
+                <div class="input-group">
+                    <label for="profile-name">Name</label>
+                    <input type="text" id="profile-name" required>
                 </div>
-            </div>
-
-            <div id="profile-setup-screen" class="screen">
-                <h2>Complete Your Profile</h2>
-                <p>Please provide a few more details to get started.</p>
-                <form id="profile-form">
-                    <div class="input-group">
-                        <label for="profile-name">Name</label>
-                        <input type="text" id="profile-name" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="profile-congregation">Congregation</label>
-                        <input type="text" id="profile-congregation" required>
-                    </div>
-                    <button type="submit" class="btn-submit">Submit & Continue</button>
-                </form>
-            </div>
+                <div class="input-group">
+                    <label for="profile-congregation">Congregation</label>
+                    <input type="text" id="profile-congregation" required>
+                </div>
+                <button type="submit" class="btn-submit">Save & Continue</button>
+            </form>
         </div>
     </div>
-    
-    <div id="toast"></div>
+
     <div id="loader"><div class="spinner"></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAQY2KDoRkNZTvdb-i_39oytcmBhJX3qVQ",
@@ -123,97 +69,95 @@
             projectId: "jwhelperr",
             storageBucket: "jwhelperr.appspot.com",
             messagingSenderId: "760897937861",
-            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac",
-            measurementId: "G-TDJZWN95BC"
+            appId: "1:760897937861:web:1b869f5b5da0c4eed96bac"
         };
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
-        
+
         const showLoader = () => document.getElementById('loader').style.display = 'flex';
         const hideLoader = () => document.getElementById('loader').style.display = 'none';
-        const showToast = (message, type = 'error') => { const t = document.getElementById('toast'); t.textContent = message; t.className = `show ${type}`; setTimeout(() => { t.className = t.className.replace('show', ''); }, 3000); }
 
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                showLoader();
-                handleUserLoggedIn(user);
-            } else {
-                hideLoader();
-                document.body.style.visibility = 'visible';
-                document.body.style.opacity = '1';
-            }
-        });
-
-        async function handleGoogleLogin() { 
-            const provider = new GoogleAuthProvider(); 
-            try { 
-                showLoader(); 
-                await signInWithPopup(auth, provider);
-            } catch (error) { 
-                showToast("Failed to sign in with Google."); 
-                hideLoader(); 
-            } 
+        function generateUUID() {
+            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
         }
 
-        async function handleUserLoggedIn(user) {
-            const userRef = doc(db, "users", user.uid);
-            const userDoc = await getDoc(userRef);
+        async function handleNewUser() {
+            const newUserId = generateUUID();
+            localStorage.setItem('anonymous_user_id', newUserId);
+            // Show the profile setup form
+            document.getElementById('profile-setup-screen').classList.add('active');
+        }
 
-            if (!userDoc.exists()) {
-                // NEW USER: Show profile setup form
-                hideLoader();
-                document.getElementById('welcome-screen').classList.remove('active');
-                document.getElementById('profile-setup-screen').classList.add('active');
-                document.getElementById('profile-name').value = user.displayName || '';
-            } else {
-                // EXISTING USER: Redirect based on status
-                await setDoc(userRef, { lastLogin: new Date().toISOString() }, { merge: true });
-                const userData = userDoc.data();
-                if (userData.role === 'admin') {
-                     window.location.href = 'admin.html';
-                } else {
-                    switch (userData.status) {
-                        case 'approved': window.location.href = 'home.html'; break;
-                        case 'denied': window.location.href = 'denied.html'; break;
-                        default: window.location.href = 'pending.html'; break;
+        async function handleReturningUser(userId, localStatus) {
+            // Immediately redirect based on local data for speed
+            switch (localStatus) {
+                case 'approved': window.location.href = 'home.html'; break;
+                case 'denied': window.location.href = 'denied.html'; break;
+                case 'pending':
+                default:
+                    window.location.href = 'pending.html'; break;
+            }
+
+            // In the background, silently check Firestore for status updates
+            try {
+                const userRef = doc(db, "anonymous_users", userId);
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists()) {
+                    const firestoreStatus = userDoc.data().status;
+                    if (firestoreStatus !== localStatus) {
+                        localStorage.setItem('user_status', firestoreStatus);
                     }
                 }
+            } catch (error) {
+                console.error("Failed to sync user status:", error);
             }
         }
-        
-        document.getElementById('google-signin-btn').addEventListener('click', handleGoogleLogin);
 
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             showLoader();
-            const user = auth.currentUser;
-            if (!user) {
+            const userId = localStorage.getItem('anonymous_user_id');
+            if (!userId) {
+                // This should not happen, but as a fallback:
                 hideLoader();
-                showToast("Authentication error. Please sign in again.");
+                alert("Error: Could not find user ID. Please refresh the page.");
                 return;
             }
 
-            const userRef = doc(db, "users", user.uid);
+            const userRef = doc(db, "anonymous_users", userId);
             const profileData = {
-                displayName: document.getElementById('profile-name').value,
+                name: document.getElementById('profile-name').value,
                 congregation: document.getElementById('profile-congregation').value,
-                email: user.email,
-                photoURL: user.photoURL,
-                role: 'user',
                 status: 'pending',
                 createdAt: new Date().toISOString()
             };
-            
+
             try {
                 await setDoc(userRef, profileData);
+                localStorage.setItem('user_status', 'pending');
                 window.location.href = 'pending.html';
             } catch (error) {
                 hideLoader();
-                showToast("Failed to save profile. Please try again.");
+                alert("Failed to save profile. Please try again.");
             }
         });
+        
+        // --- Main Initialization Logic ---
+        function init() {
+            const userId = localStorage.getItem('anonymous_user_id');
+            const userStatus = localStorage.getItem('user_status');
+
+            if (!userId) {
+                handleNewUser();
+            } else {
+                handleReturningUser(userId, userStatus);
+            }
+        }
+
+        init();
     </script>
 </body>
 </html>
